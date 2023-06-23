@@ -1,0 +1,1323 @@
+{
+    "Carteira": [
+        {
+            "nome_cheque": "V DE SOUSA FERREIRA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900213",
+            "valor_parcela": "1600.00",
+            "data_parcela": "2023-06-30",
+            "id_representante": "24",
+            "CNPJ": "01.284.213/0001-55",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "V DE SOUSA FERREIRA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900214",
+            "valor_parcela": "1600.00",
+            "data_parcela": "2023-07-30",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "V DE SOUSA FERREIRA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900216",
+            "valor_parcela": "1600.00",
+            "data_parcela": "2023-08-30",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "V DE SOUSA FERREIRA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900215",
+            "valor_parcela": "1600.00",
+            "data_parcela": "2023-09-30",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "V DE SOUSA FERREIRA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900217",
+            "valor_parcela": "1600.00",
+            "data_parcela": "2023-10-30",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "JOSE FABIO DA SILVA",
+            "numero_banco": "341",
+            "numero_cheque": "UA-001122",
+            "valor_parcela": "6900.00",
+            "data_parcela": "2023-06-03",
+            "id_representante": "24",
+            "CPF": "191.252.081-87",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "LEON JOSE DE JESUS LOPES",
+            "numero_banco": "341",
+            "numero_cheque": "UA-000671",
+            "valor_parcela": "950.00",
+            "data_parcela": "2023-06-03",
+            "id_representante": "24",
+            "CNPJ": "01.463.603/0001-92",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "LUIZA MIRANDA DA SILVA NETA",
+            "numero_banco": "1",
+            "numero_cheque": "850899",
+            "valor_parcela": "800.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "24",
+            "CPF": "563.056.803-53",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "LUIZA MIRANDA DA SILVA NETA",
+            "numero_banco": "1",
+            "numero_cheque": "850900",
+            "valor_parcela": "800.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "MARIA DOS REIS M DOS S MONTEIRO",
+            "numero_banco": "237",
+            "numero_cheque": "2478",
+            "valor_parcela": "1100.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "24",
+            "CPF": "720.349.203-68",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "MARIA DOS REIS M DOS S MONTEIRO",
+            "numero_banco": "237",
+            "numero_cheque": "2479",
+            "valor_parcela": "1100.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "MARIA DOS REIS M DOS S MONTEIRO",
+            "numero_banco": "237",
+            "numero_cheque": "2480",
+            "valor_parcela": "1100.00",
+            "data_parcela": "2023-09-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "MARIA DOS REIS M DOS S MONTEIRO",
+            "numero_banco": "237",
+            "numero_cheque": "2481",
+            "valor_parcela": "1100.00",
+            "data_parcela": "2023-10-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "MARIA DOS REIS M DOS S MONTEIRO",
+            "numero_banco": "237",
+            "numero_cheque": "2482",
+            "valor_parcela": "1100.00",
+            "data_parcela": "2023-11-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "RAIMUNDA PINTO DE OLIVEIRA",
+            "numero_banco": "1",
+            "numero_cheque": "851134",
+            "valor_parcela": "1270.00",
+            "data_parcela": "2023-06-10",
+            "id_representante": "24",
+            "CPF": "434.222.921-87",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "RAIMUNDA PINTO DE OLIVEIRA",
+            "numero_banco": "1",
+            "numero_cheque": "851135",
+            "valor_parcela": "1270.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "RAIMUNDA PINTO DE OLIVEIRA",
+            "numero_banco": "1",
+            "numero_cheque": "851136",
+            "valor_parcela": "1270.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "RAIMUNDA PINTO DE OLIVEIRA",
+            "numero_banco": "1",
+            "numero_cheque": "851137",
+            "valor_parcela": "1270.00",
+            "data_parcela": "2023-09-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "RAIMUNDA PINTO DE OLIVEIRA",
+            "numero_banco": "1",
+            "numero_cheque": "851138",
+            "valor_parcela": "1270.00",
+            "data_parcela": "2023-10-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910940",
+            "valor_parcela": "1127.00",
+            "data_parcela": "2023-05-26",
+            "id_representante": "24",
+            "CPF": "086.077.371-04",
+            "TELEFONE": "(62)98111-0184",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910941",
+            "valor_parcela": "1127.00",
+            "data_parcela": "2023-06-26",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910942",
+            "valor_parcela": "1127.00",
+            "data_parcela": "2023-07-26",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910943",
+            "valor_parcela": "1127.00",
+            "data_parcela": "2023-08-26",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910944",
+            "valor_parcela": "1127.00",
+            "data_parcela": "2023-09-26",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910945",
+            "valor_parcela": "1127.00",
+            "data_parcela": "2023-10-26",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ALODIA MARIA BANDEIRA BARROS",
+            "numero_banco": "756",
+            "numero_cheque": "274",
+            "valor_parcela": "2434.00",
+            "data_parcela": "2023-07-05",
+            "id_representante": "24",
+            "CPF": "799.326.571-15",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "ALODIA MARIA BANDEIRA BARROS",
+            "numero_banco": "756",
+            "numero_cheque": "275",
+            "valor_parcela": "2434.00",
+            "data_parcela": "2023-08-05",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ALODIA MARIA BANDEIRA BARROS",
+            "numero_banco": "756",
+            "numero_cheque": "276",
+            "valor_parcela": "2434.00",
+            "data_parcela": "2023-09-05",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ALODIA MARIA BANDEIRA BARROS",
+            "numero_banco": "756",
+            "numero_cheque": "277",
+            "valor_parcela": "2434.00",
+            "data_parcela": "2023-10-05",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "EDILSA MILHOMEM RODRIGUES",
+            "numero_banco": "341",
+            "numero_cheque": "UA-001546",
+            "valor_parcela": "2538.00",
+            "data_parcela": "2023-06-25",
+            "id_representante": "24",
+            "CPF": "815.407.281-53",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "EDILSA MILHOMEM RODRIGUES",
+            "numero_banco": "341",
+            "numero_cheque": "UA-001547",
+            "valor_parcela": "2538.00",
+            "data_parcela": "2023-07-25",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "EDILSA MILHOMEM RODRIGUES",
+            "numero_banco": "341",
+            "numero_cheque": "UA-001548",
+            "valor_parcela": "2538.00",
+            "data_parcela": "2023-08-25",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "EDILSA MILHOMEM RODRIGUES",
+            "numero_banco": "341",
+            "numero_cheque": "UA-001549",
+            "valor_parcela": "2538.00",
+            "data_parcela": "2023-09-25",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "EDILSA MILHOMEM RODRIGUES",
+            "numero_banco": "341",
+            "numero_cheque": "UA-001550",
+            "valor_parcela": "2538.00",
+            "data_parcela": "2023-10-25",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "LUIS HENRIQUE AMENDOLA COUTO",
+            "numero_banco": "237",
+            "numero_cheque": "112",
+            "valor_parcela": "2000.00",
+            "data_parcela": "2023-06-20",
+            "id_representante": "24",
+            "CPF": "077.043.336-74",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "LUIS HENRIQUE AMENDOLA COUTO",
+            "numero_banco": "237",
+            "numero_cheque": "114",
+            "valor_parcela": "2000.00",
+            "data_parcela": "2023-07-20",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "LUIS HENRIQUE AMENDOLA COUTO",
+            "numero_banco": "237",
+            "numero_cheque": "113",
+            "valor_parcela": "2000.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "LUIS HENRIQUE AMENDOLA COUTO",
+            "numero_banco": "237",
+            "numero_cheque": "116",
+            "valor_parcela": "2000.00",
+            "data_parcela": "2023-09-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ROSA MELO REIS",
+            "numero_banco": "237",
+            "numero_cheque": "7",
+            "valor_parcela": "556.00",
+            "data_parcela": "2023-09-12",
+            "id_representante": "24",
+            "CPF": "887.652.023-68",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "ROSA MELO REIS",
+            "numero_banco": "237",
+            "numero_cheque": "6",
+            "valor_parcela": "556.00",
+            "data_parcela": "2023-08-12",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ROSA MELO REIS",
+            "numero_banco": "237",
+            "numero_cheque": "5",
+            "valor_parcela": "556.00",
+            "data_parcela": "2023-07-12",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ROSA MELO REIS",
+            "numero_banco": "237",
+            "numero_cheque": "4",
+            "valor_parcela": "556.00",
+            "data_parcela": "2023-06-12",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "CLEIA DE PINHO SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "1309",
+            "valor_parcela": "1500.00",
+            "data_parcela": "2023-06-30",
+            "id_representante": "24",
+            "CPF": "023.688.863-38",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "CLEIA DE PINHO SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "1310",
+            "valor_parcela": "1500.00",
+            "data_parcela": "2023-07-30",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "CLEIA DE PINHO SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "1311",
+            "valor_parcela": "1500.00",
+            "data_parcela": "2023-08-30",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "CLEIA DE PINHO SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "1312",
+            "valor_parcela": "1500.00",
+            "data_parcela": "2023-09-30",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "CLEIA DE PINHO SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "1313",
+            "valor_parcela": "1500.00",
+            "data_parcela": "2023-10-30",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "EVA FRANCISCO DIAS ALMEIDA",
+            "numero_banco": "1",
+            "numero_cheque": "851684",
+            "valor_parcela": "2800.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "24",
+            "CPF": "297.914.641-20",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "EVA FRANCISCO DIAS ALMEIDA",
+            "numero_banco": "1",
+            "numero_cheque": "851695",
+            "valor_parcela": "2800.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "EVA FRANCISCO DIAS ALMEIDA",
+            "numero_banco": "1",
+            "numero_cheque": "851696",
+            "valor_parcela": "2800.00",
+            "data_parcela": "2023-09-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "EVA FRANCISCO DIAS ALMEIDA",
+            "numero_banco": "1",
+            "numero_cheque": "851697",
+            "valor_parcela": "2800.00",
+            "data_parcela": "2023-10-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "EVA FRANCISCO DIAS ALMEIDA",
+            "numero_banco": "1",
+            "numero_cheque": "851698",
+            "valor_parcela": "2800.00",
+            "data_parcela": "2023-11-10",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910946",
+            "valor_parcela": "890.00",
+            "data_parcela": "2023-06-24",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910947",
+            "valor_parcela": "890.00",
+            "data_parcela": "2023-07-24",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910948",
+            "valor_parcela": "890.00",
+            "data_parcela": "2023-08-24",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910949",
+            "valor_parcela": "890.00",
+            "data_parcela": "2023-09-24",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "DIMAS RODRIGUES DE SIQUEIRA",
+            "numero_banco": "104",
+            "numero_cheque": "910950",
+            "valor_parcela": "890.00",
+            "data_parcela": "2023-10-24",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "NATALIA MATOS DA SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "483",
+            "valor_parcela": "1390.00",
+            "data_parcela": "2023-06-05",
+            "id_representante": "24",
+            "CPF": "007.413.911-80",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "E PEREIRA CUNHA ME",
+            "numero_banco": "33",
+            "numero_cheque": "17",
+            "valor_parcela": "750.00",
+            "data_parcela": "2023-06-18",
+            "id_representante": "24",
+            "CNPJ": "13.795.980/0001-08",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "NATALIA MATOS DA SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "484",
+            "valor_parcela": "1390.00",
+            "data_parcela": "2023-07-05",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "E PEREIRA CUNHA ME",
+            "numero_banco": "33",
+            "numero_cheque": "18",
+            "valor_parcela": "750.00",
+            "data_parcela": "2023-07-18",
+            "id_representante": "24",
+            "observacao": "CLIENTE NATALIA MATOS DA SILVA"
+        },
+        {
+            "nome_cheque": "E PEREIRA CUNHA ME",
+            "numero_banco": "33",
+            "numero_cheque": "19",
+            "valor_parcela": "750.00",
+            "data_parcela": "2023-08-18",
+            "id_representante": "24",
+            "observacao": "CLIENTE NATALIA MATOS DA SILVA"
+        },
+        {
+            "nome_cheque": "E PEREIRA CUNHA ME",
+            "numero_banco": "33",
+            "numero_cheque": "20",
+            "valor_parcela": "750.00",
+            "data_parcela": "2023-09-18",
+            "id_representante": "24",
+            "observacao": "CLIENTE NATALIA MATOS DA SILVA"
+        },
+        {
+            "nome_cheque": "FRANCISCA DA SILVA NASCIMENTO",
+            "numero_banco": "237",
+            "numero_cheque": "189",
+            "valor_parcela": "1070.00",
+            "data_parcela": "2023-06-28",
+            "id_representante": "24",
+            "CPF": "651.022.073-34",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "FRANCISCA DA SILVA NASCIMENTO",
+            "numero_banco": "237",
+            "numero_cheque": "216",
+            "valor_parcela": "1070.00",
+            "data_parcela": "2023-07-28",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ELIZABETH SAMPAIO MARTINS",
+            "numero_banco": "1",
+            "numero_cheque": "850060",
+            "valor_parcela": "3130.00",
+            "data_parcela": "2023-07-20",
+            "id_representante": "24",
+            "CPF": "629.657.433-91",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "ANA MARIA BEZERRA COSTA",
+            "numero_banco": "237",
+            "numero_cheque": "14",
+            "valor_parcela": "3130.00",
+            "data_parcela": "2023-08-20",
+            "id_representante": "24",
+            "CPF": "955.588.963-53",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "ANA MARIA BEZERRA COSTA",
+            "numero_banco": "237",
+            "numero_cheque": "15",
+            "valor_parcela": "3130.00",
+            "data_parcela": "2023-09-20",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ANA MARIA BEZERRA COSTA",
+            "numero_banco": "237",
+            "numero_cheque": "16",
+            "valor_parcela": "3130.00",
+            "data_parcela": "2023-10-20",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "ANA MARIA BEZERRA COSTA",
+            "numero_banco": "237",
+            "numero_cheque": "17",
+            "valor_parcela": "3130.00",
+            "data_parcela": "2023-11-20",
+            "id_representante": "24"
+        },
+        {
+            "nome_cheque": "MARIA DE LURDES GOMES NUNES NE",
+            "numero_banco": "748",
+            "numero_cheque": "47",
+            "valor_parcela": "10225.00",
+            "data_parcela": "2023-07-05",
+            "id_representante": "23",
+            "CPF": "027.386.531-54",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "MARIA ARAUJO DA SILVA PEREIRA",
+            "numero_banco": "748",
+            "numero_cheque": "39",
+            "valor_parcela": "2013.00",
+            "data_parcela": "2023-09-27",
+            "id_representante": "23",
+            "CNPJ": "43.468.469/0001-62",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "MARIA ARAUJO DA SILVA PEREIRA",
+            "numero_banco": "748",
+            "numero_cheque": "38",
+            "valor_parcela": "2013.00",
+            "data_parcela": "2023-08-27",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARIA ARAUJO DA SILVA PEREIRA",
+            "numero_banco": "748",
+            "numero_cheque": "37",
+            "valor_parcela": "2013.00",
+            "data_parcela": "2023-07-27",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MIGUEL BARROS DE CASTRO",
+            "numero_banco": "756",
+            "numero_cheque": "1017",
+            "valor_parcela": "3480.00",
+            "data_parcela": "2023-11-30",
+            "id_representante": "23",
+            "CPF": "199.071.411-00",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "MARIA ARAUJO DA SILVA PEREIRA",
+            "numero_banco": "748",
+            "numero_cheque": "40",
+            "valor_parcela": "2013.00",
+            "data_parcela": "2023-10-27",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MIGUEL BARROS DE CASTRO",
+            "numero_banco": "756",
+            "numero_cheque": "1012",
+            "valor_parcela": "3480.00",
+            "data_parcela": "2023-06-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MIGUEL BARROS DE CASTRO",
+            "numero_banco": "756",
+            "numero_cheque": "1013",
+            "valor_parcela": "3480.00",
+            "data_parcela": "2023-07-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MIGUEL BARROS DE CASTRO",
+            "numero_banco": "756",
+            "numero_cheque": "1014",
+            "valor_parcela": "3480.00",
+            "data_parcela": "2023-08-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MIGUEL BARROS DE CASTRO",
+            "numero_banco": "756",
+            "numero_cheque": "1015",
+            "valor_parcela": "3480.00",
+            "data_parcela": "2023-09-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MIGUEL BARROS DE CASTRO",
+            "numero_banco": "756",
+            "numero_cheque": "1016",
+            "valor_parcela": "3480.00",
+            "data_parcela": "2023-10-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JAQUELINE ALMEIDA DA SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "195",
+            "valor_parcela": "2662.00",
+            "data_parcela": "2023-11-27",
+            "id_representante": "23",
+            "CPF": "716.678.732-53",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "JAQUELINE ALMEIDA DA SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "197",
+            "valor_parcela": "2662.00",
+            "data_parcela": "2023-10-27",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JAQUELINE ALMEIDA DA SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "196",
+            "valor_parcela": "2662.00",
+            "data_parcela": "2023-09-27",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JAQUELINE ALMEIDA DA SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "193",
+            "valor_parcela": "2662.00",
+            "data_parcela": "2023-07-26",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JAQUELINE ALMEIDA DA SILVA",
+            "numero_banco": "237",
+            "numero_cheque": "194",
+            "valor_parcela": "2662.00",
+            "data_parcela": "2023-08-27",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "GARDENIA SILVA CASTRO",
+            "numero_banco": "341",
+            "numero_cheque": "UA-000010",
+            "valor_parcela": "992.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "23",
+            "CPF": "883.651.231-34",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "GARDENIA SILVA CASTRO",
+            "numero_banco": "341",
+            "numero_cheque": "UA-000011",
+            "valor_parcela": "992.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "GARDENIA SILVA CASTRO",
+            "numero_banco": "341",
+            "numero_cheque": "UA-000013",
+            "valor_parcela": "992.00",
+            "data_parcela": "2023-09-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "GARDENIA SILVA CASTRO",
+            "numero_banco": "341",
+            "numero_cheque": "UA-000014",
+            "valor_parcela": "992.00",
+            "data_parcela": "2023-10-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "GARDENIA SILVA CASTRO",
+            "numero_banco": "341",
+            "numero_cheque": "UA-000015",
+            "valor_parcela": "992.00",
+            "data_parcela": "2023-11-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "F M ARAUJO FERREIRA COMERCIO",
+            "numero_banco": "237",
+            "numero_cheque": "883",
+            "valor_parcela": "4110.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "23",
+            "CNPJ": "05.810.713/0001-34",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "F M ARAUJO FERREIRA COMERCIO",
+            "numero_banco": "237",
+            "numero_cheque": "884",
+            "valor_parcela": "4110.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "F M ARAUJO FERREIRA COMERCIO",
+            "numero_banco": "237",
+            "numero_cheque": "893",
+            "valor_parcela": "4110.00",
+            "data_parcela": "2023-09-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "F M ARAUJO FERREIRA COMERCIO",
+            "numero_banco": "237",
+            "numero_cheque": "894",
+            "valor_parcela": "4110.00",
+            "data_parcela": "2023-10-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "F M ARAUJO FERREIRA COMERCIO",
+            "numero_banco": "237",
+            "numero_cheque": "895",
+            "valor_parcela": "4110.00",
+            "data_parcela": "2023-11-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARINALVA PEREIRA DE SANTANA",
+            "numero_banco": "237",
+            "numero_cheque": "141",
+            "valor_parcela": "1792.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARINALVA PEREIRA DE SANTANA",
+            "numero_banco": "237",
+            "numero_cheque": "142",
+            "valor_parcela": "1792.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARINALVA PEREIRA DE SANTANA",
+            "numero_banco": "237",
+            "numero_cheque": "143",
+            "valor_parcela": "1792.00",
+            "data_parcela": "2023-09-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARINALVA PEREIRA DE SANTANA",
+            "numero_banco": "237",
+            "numero_cheque": "144",
+            "valor_parcela": "1792.00",
+            "data_parcela": "2023-10-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARINALVA PEREIRA DE SANTANA",
+            "numero_banco": "237",
+            "numero_cheque": "145",
+            "valor_parcela": "1792.00",
+            "data_parcela": "2023-11-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "RAQUEL GARCIA DA CUNHA ",
+            "numero_banco": "1",
+            "numero_cheque": "850292",
+            "valor_parcela": "3182.00",
+            "data_parcela": "2023-08-15",
+            "id_representante": "23",
+            "CPF": "025.695.211-67",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "RAQUEL GARCIA DA CUNHA ",
+            "numero_banco": "1",
+            "numero_cheque": "850293",
+            "valor_parcela": "3978.00",
+            "data_parcela": "2023-09-15",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "RAQUEL GARCIA DA CUNHA ",
+            "numero_banco": "1",
+            "numero_cheque": "850294",
+            "valor_parcela": "3978.00",
+            "data_parcela": "2023-10-15",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "RAQUEL GARCIA DA CUNHA ",
+            "numero_banco": "1",
+            "numero_cheque": "850295",
+            "valor_parcela": "3978.00",
+            "data_parcela": "2023-11-15",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "RAQUEL GARCIA DA CUNHA ",
+            "numero_banco": "1",
+            "numero_cheque": "850296",
+            "valor_parcela": "3978.00",
+            "data_parcela": "2023-12-15",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CLICIA NANCI BISPO DOS SANTOS",
+            "numero_banco": "1",
+            "numero_cheque": "851949",
+            "valor_parcela": "4692.00",
+            "data_parcela": "2023-06-24",
+            "id_representante": "23",
+            "CPF": "424.953.342-53",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "CLICIA NANCI BISPO DOS SANTOS",
+            "numero_banco": "1",
+            "numero_cheque": "851950",
+            "valor_parcela": "4692.00",
+            "data_parcela": "2023-07-24",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CLICIA NANCI BISPO DOS SANTOS",
+            "numero_banco": "1",
+            "numero_cheque": "851951",
+            "valor_parcela": "4692.00",
+            "data_parcela": "2023-08-24",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CLICIA NANCI BISPO DOS SANTOS",
+            "numero_banco": "1",
+            "numero_cheque": "851952",
+            "valor_parcela": "4692.00",
+            "data_parcela": "2023-09-24",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CLICIA NANCI BISPO DOS SANTOS",
+            "numero_banco": "1",
+            "numero_cheque": "851953",
+            "valor_parcela": "4692.00",
+            "data_parcela": "2023-10-24",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CLICIA NANCI BISPO DOS SANTOS",
+            "numero_banco": "1",
+            "numero_cheque": "851954",
+            "valor_parcela": "4692.00",
+            "data_parcela": "2023-11-24",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JANDIRA AMORIM RODRIGUES",
+            "numero_banco": "237",
+            "numero_cheque": "3936",
+            "valor_parcela": "1156.00",
+            "data_parcela": "2023-06-30",
+            "id_representante": "23",
+            "CPF": "646.246.253-15",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "HELVECIO HELDER FIDELIS",
+            "numero_banco": "237",
+            "numero_cheque": "2837",
+            "valor_parcela": "2736.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "23",
+            "CPF": "280.673.045-72",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "HELVECIO HELDER FIDELIS",
+            "numero_banco": "237",
+            "numero_cheque": "2833",
+            "valor_parcela": "2736.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "HELVECIO HELDER FIDELIS",
+            "numero_banco": "237",
+            "numero_cheque": "2834",
+            "valor_parcela": "2736.00",
+            "data_parcela": "2023-09-09",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "HELVECIO HELDER FIDELIS",
+            "numero_banco": "237",
+            "numero_cheque": "2835",
+            "valor_parcela": "2736.00",
+            "data_parcela": "2023-10-09",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "HELVECIO HELDER FIDELIS",
+            "numero_banco": "237",
+            "numero_cheque": "2836",
+            "valor_parcela": "2736.00",
+            "data_parcela": "2023-11-09",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "HELVECIO HELDER FIDELIS",
+            "numero_banco": "237",
+            "numero_cheque": "2837",
+            "valor_parcela": "2736.00",
+            "data_parcela": "2023-12-09",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "SCALA SERVICOS DE HOTEL LTDA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900001",
+            "valor_parcela": "20332.00",
+            "data_parcela": "2023-07-10",
+            "id_representante": "23",
+            "CNPJ": "44.699.575/0001-90",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "SCALA SERVICOS DE HOTEL LTDA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900002",
+            "valor_parcela": "20332.00",
+            "data_parcela": "2023-08-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "SCALA SERVICOS DE HOTEL LTDA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900003",
+            "valor_parcela": "20332.00",
+            "data_parcela": "2023-09-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "SCALA SERVICOS DE HOTEL LTDA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900004",
+            "valor_parcela": "20332.00",
+            "data_parcela": "2023-10-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "SCALA SERVICOS DE HOTEL LTDA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900005",
+            "valor_parcela": "20332.00",
+            "data_parcela": "2023-11-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "SCALA SERVICOS DE HOTEL LTDA ME",
+            "numero_banco": "104",
+            "numero_cheque": "900006",
+            "valor_parcela": "20332.00",
+            "data_parcela": "2023-12-10",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "ANDREIA MARIA SILVA TRINDADE",
+            "numero_banco": "237",
+            "numero_cheque": "589",
+            "valor_parcela": "2448.00",
+            "data_parcela": "2023-08-30",
+            "id_representante": "23",
+            "CPF": "007.005.795-83",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "ANDREIA MARIA SILVA TRINDADE",
+            "numero_banco": "237",
+            "numero_cheque": "593",
+            "valor_parcela": "2448.00",
+            "data_parcela": "2023-09-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "ANDREIA MARIA SILVA TRINDADE",
+            "numero_banco": "237",
+            "numero_cheque": "594",
+            "valor_parcela": "2448.00",
+            "data_parcela": "2023-10-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "ANDREIA MARIA SILVA TRINDADE",
+            "numero_banco": "237",
+            "numero_cheque": "596",
+            "valor_parcela": "2448.00",
+            "data_parcela": "2023-11-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "ANDREIA MARIA SILVA TRINDADE",
+            "numero_banco": "237",
+            "numero_cheque": "597",
+            "valor_parcela": "2448.00",
+            "data_parcela": "2023-12-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "ANDREIA MARIA SILVA TRINDADE",
+            "numero_banco": "237",
+            "numero_cheque": "595",
+            "valor_parcela": "2448.00",
+            "data_parcela": "2023-01-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "ANDREIA MARIA SILVA TRINDADE",
+            "numero_banco": "237",
+            "numero_cheque": "590",
+            "valor_parcela": "2448.00",
+            "data_parcela": "2023-02-28",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CAROLINE BASTOS BOAVENTURA",
+            "numero_banco": "1",
+            "numero_cheque": "851231",
+            "valor_parcela": "960.00",
+            "data_parcela": "2023-06-20",
+            "id_representante": "23",
+            "CPF": "010.924.525-32",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "CAROLINE BASTOS BOAVENTURA",
+            "numero_banco": "1",
+            "numero_cheque": "851232",
+            "valor_parcela": "960.00",
+            "data_parcela": "2023-07-23",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CAROLINE BASTOS BOAVENTURA",
+            "numero_banco": "1",
+            "numero_cheque": "851233",
+            "valor_parcela": "960.00",
+            "data_parcela": "2023-08-23",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CAROLINE BASTOS BOAVENTURA",
+            "numero_banco": "1",
+            "numero_cheque": "851234",
+            "valor_parcela": "960.00",
+            "data_parcela": "2023-09-23",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CAROLINE BASTOS BOAVENTURA",
+            "numero_banco": "1",
+            "numero_cheque": "851235",
+            "valor_parcela": "960.00",
+            "data_parcela": "2023-10-23",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "CAROLINE BASTOS BOAVENTURA",
+            "numero_banco": "1",
+            "numero_cheque": "851236",
+            "valor_parcela": "960.00",
+            "data_parcela": "2023-11-23",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "PAULO BATISTA MEDEIROS ",
+            "numero_banco": "1",
+            "numero_cheque": "850009",
+            "valor_parcela": "1390.00",
+            "data_parcela": "2023-08-28",
+            "id_representante": "23",
+            "CPF": "009.650.385-80",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "PAULO BATISTA MEDEIROS ",
+            "numero_banco": "1",
+            "numero_cheque": "850010",
+            "valor_parcela": "1390.00",
+            "data_parcela": "2023-09-28",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "PAULO BATISTA MEDEIROS ",
+            "numero_banco": "1",
+            "numero_cheque": "850011",
+            "valor_parcela": "1390.00",
+            "data_parcela": "2023-10-28",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "PAULO BATISTA MEDEIROS ",
+            "numero_banco": "1",
+            "numero_cheque": "850012",
+            "valor_parcela": "1390.00",
+            "data_parcela": "2023-11-28",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARIA APARECIDA TEIXEIRA CALADO",
+            "numero_banco": "748",
+            "numero_cheque": "256",
+            "valor_parcela": "1319.00",
+            "data_parcela": "2023-07-20",
+            "id_representante": "23",
+            "CNPJ": "37.951.663/0001-00"
+        },
+        {
+            "nome_cheque": "MARIA APARECIDA TEIXEIRA CALADO",
+            "numero_banco": "748",
+            "numero_cheque": "257",
+            "valor_parcela": "1319.00",
+            "data_parcela": "2023-08-20",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARIA APARECIDA TEIXEIRA CALADO",
+            "numero_banco": "748",
+            "numero_cheque": "258",
+            "valor_parcela": "1319.00",
+            "data_parcela": "2023-09-20",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARIA APARECIDA TEIXEIRA CALADO",
+            "numero_banco": "748",
+            "numero_cheque": "259",
+            "valor_parcela": "1319.00",
+            "data_parcela": "2023-10-20",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARIA APARECIDA TEIXEIRA CALADO",
+            "numero_banco": "748",
+            "numero_cheque": "260",
+            "valor_parcela": "1319.00",
+            "data_parcela": "2023-11-20",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARIA APARECIDA TEIXEIRA CALADO",
+            "numero_banco": "748",
+            "numero_cheque": "261",
+            "valor_parcela": "1319.00",
+            "data_parcela": "2023-12-20",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JANDIRA AMORIM RODRIGUES",
+            "numero_banco": "237",
+            "numero_cheque": "3961",
+            "valor_parcela": "3624.00",
+            "data_parcela": "2023-07-30",
+            "id_representante": "23",
+            "CPF": "646.246.253-15",
+            "CADASTRAR": "1"
+        },
+        {
+            "nome_cheque": "JANDIRA AMORIM RODRIGUES",
+            "numero_banco": "237",
+            "numero_cheque": "3962",
+            "valor_parcela": "3624.00",
+            "data_parcela": "2023-08-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JANDIRA AMORIM RODRIGUES",
+            "numero_banco": "237",
+            "numero_cheque": "3963",
+            "valor_parcela": "3624.00",
+            "data_parcela": "2023-09-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JANDIRA AMORIM RODRIGUES",
+            "numero_banco": "237",
+            "numero_cheque": "3958",
+            "valor_parcela": "3624.00",
+            "data_parcela": "2023-10-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JANDIRA AMORIM RODRIGUES",
+            "numero_banco": "237",
+            "numero_cheque": "3959",
+            "valor_parcela": "3624.00",
+            "data_parcela": "2023-11-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "JANDIRA AMORIM RODRIGUES",
+            "numero_banco": "237",
+            "numero_cheque": "3960",
+            "valor_parcela": "3624.00",
+            "data_parcela": "2023-12-30",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARIA ARAUJO DA SILVA PEREIRA",
+            "numero_banco": "748",
+            "numero_cheque": "17",
+            "valor_parcela": "2013.00",
+            "data_parcela": "2023-11-27",
+            "id_representante": "23"
+        },
+        {
+            "nome_cheque": "MARIA ARAUJO DA SILVA PEREIRA",
+            "numero_banco": "748",
+            "numero_cheque": "18",
+            "valor_parcela": "2013.00",
+            "data_parcela": "2023-12-27",
+            "id_representante": "23"
+        }
+    ]
+}
