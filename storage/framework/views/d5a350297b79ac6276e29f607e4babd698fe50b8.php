@@ -288,7 +288,6 @@
                     <?php else: ?>
                         <tr>
                             <td class='titular' colspan=2><?php echo e($recebimento->observacao); ?></td>
-                            
                             <td><?php echo e($recebimento->conta->nome); ?></td>
                             <td><?php echo 'R$ ' . number_format($recebimento->valor, 2, ',', '.'); ?></td>
                         </tr>

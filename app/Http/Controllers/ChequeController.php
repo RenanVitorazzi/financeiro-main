@@ -426,17 +426,14 @@ class ChequeController extends Controller
         if ($parcela->venda_id) {
             $venda = Venda::query()
                 ->select('data_venda')
-                ->where('parcela_id', $parcela->id)
-                ->get();
+                ->findOrFail($parcela->venda_id);
 
             $arrayDatas[] = [ 
                 'data' => date('Y-m-d', strtotime($venda->data_venda)), 
                 'desc' => 'Data da venda'
             ];
         
-        } 
-        
-        if ( date('Y-m-d', strtotime($parcela->created_at) ) !== '2023-05-02' ) {
+        } else if ( date('Y-m-d', strtotime($parcela->created_at) ) !== '2023-05-02' ) {
             $arrayDatas[] = [ 
                 'data' => date('Y-m-d', strtotime($parcela->created_at)), 
                 'desc' => 'Lançado no sistema'
