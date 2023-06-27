@@ -119,6 +119,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('historico_parcela', [ChequeController::class, 'historicoParcela'])->name('historico_parcela');
         Route::get('procurarCliente', [ClienteController::class, 'procurarCliente'])->name('procurarCliente');
         Route::get('titularDoUltimoCheque', [ChequeController::class, 'titularDoUltimoCheque'])->name('titularDoUltimoCheque');
+        Route::get('troca_automatizada', [TrocaChequeController::class, 'troca_automatizada'])->name('troca_automatizada');
+        
         // Route::post('adiar_cheque', [AdiamentosController::class, 'adiar_cheque'])->name('adiarCheque');
     });
 });

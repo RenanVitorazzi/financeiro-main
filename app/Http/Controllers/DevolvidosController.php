@@ -224,23 +224,27 @@ class DevolvidosController extends Controller
                 p.motivo
             FROM
                 parcelas p
+                INNER JOIN entrega_parcela ep ON ep.parcela_id = p.id 
             WHERE
-                status LIKE ?
-                    AND p.representante_id = ?
-                    AND p.deleted_at IS NULL
+                p.representante_id = ?
+                AND p.deleted_at IS NULL
+                AND ep.entregue_representante is null
+                AND ep.entregue_parceiro is not null
             ORDER BY data_parcela, valor_parcela, nome_cheque',
-            ['Devolvido', $representante->id]
+            [$representante->id]
         );
 
         $juros_totais = DB::select('SELECT
                 SUM((valor_parcela * 0.03 / 30) * DATEDIFF(CURDATE(), data_parcela)) as juros_totais
             FROM
                 parcelas p
+                INNER JOIN entrega_parcela ep ON ep.parcela_id = p.id 
             WHERE
-                status LIKE ?
-                    AND p.representante_id = ?
-                    AND p.deleted_at IS NULL',
-            ['Devolvido', $representante->id]
+                p.representante_id = ?
+                AND p.deleted_at IS NULL
+                AND ep.entregue_representante is null
+                AND ep.entregue_parceiro is not null',
+            [$representante->id]
         );
 
         $adiamentos = DB::select('SELECT
@@ -280,11 +284,13 @@ class DevolvidosController extends Controller
                 SUM(valor_parcela) as valor_total
             FROM
                 parcelas p
+                INNER JOIN entrega_parcela ep ON ep.parcela_id = p.id 
             WHERE
-                status LIKE ?
-                    AND p.representante_id = ?
-                    AND p.deleted_at IS NULL',
-            ['Devolvido', $representante->id]
+                ep.entregue_representante is null
+                AND ep.entregue_parceiro is not null
+                AND p.representante_id = ?
+                AND p.deleted_at IS NULL',
+            [$representante->id]
         );
 
         $hoje = date('Y-m-d');
