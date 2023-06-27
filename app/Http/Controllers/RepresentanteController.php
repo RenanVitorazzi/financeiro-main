@@ -68,11 +68,11 @@ class RepresentanteController extends Controller {
             ->adiamentos()
             ->findOrFail($id);
 
-        $devolvidos = Parcela::with('parceiro')
-            ->where('status', 'Devolvido')
-            ->where('representante_id', $id)
-            ->orderBy('data_parcela')
-            ->get();
+        $devolvidos = Parcela::where('representante_id', $id)
+            ->whereHas('entrega', function ($query) {
+                $query->whereNull('entregue_representante')
+                    ->whereNotNull('entregue_parceiro');
+            })->get();
 
         return view('representante.show', compact('representante', 'devolvidos'));
     }

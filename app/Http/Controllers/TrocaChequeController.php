@@ -95,14 +95,18 @@ class TrocaChequeController extends Controller
 
             $dataFim = new DateTime($dataDoCheque);
 
-            if ($request->parceiro_id == 3 || $request->parceiro_id == 4) {
+            if ($request->parceiro_id == 3 || $request->parceiro_id == 4 || !$request->parceiro_id ) {
                 //* Confere se é sábado ou domingo ou se o próximo dia útil não é feriado
                 while (in_array($dataFim->format('w'), [0, 6]) || !$this->feriados->where('data_feriado', $dataFim->format('Y-m-d'))->isEmpty()) {
                     $dataFim->modify('+1 weekday');
                 }
             }
 
-            $diferencaDias = $dataInicio->diff($dataFim)->days;
+            if ($dataFim <= $dataInicio) {
+                $diferencaDias = 0;
+            } else {
+                $diferencaDias = $dataInicio->diff($dataFim)->days;
+            }
 
             $juros = ( ($cheque->valor_parcela * $taxa) / 30 ) * $diferencaDias;
             $valorLiquido = $cheque->valor_parcela - $juros;
@@ -163,14 +167,18 @@ class TrocaChequeController extends Controller
 
                 $dataFim = new DateTime($dataDoCheque);
 
-                if ($request->parceiro_id == 3 || $request->parceiro_id == 4) {
+                if ($request->parceiro_id == 3 || $request->parceiro_id == 4 || !$request->parceiro_id ) {
                     //* Confere se é sábado ou domingo ou se o próximo dia útil não é feriado
                     while (in_array($dataFim->format('w'), [0, 6]) || !$this->feriados->where('data_feriado', $dataFim->format('Y-m-d'))->isEmpty()) {
                         $dataFim->modify('+1 weekday');
                     }
                 }
 
-                $diferencaDias = $dataInicio->diff($dataFim)->days;
+                if ($dataFim <= $dataInicio) {
+                    $diferencaDias = 0;
+                } else {
+                    $diferencaDias = $dataInicio->diff($dataFim)->days;
+                }
 
                 $juros = ( ($cheque->parcelas->valor_parcela * $taxa) / 30)  * $diferencaDias;
                 $valorLiquido = $cheque->parcelas->valor_parcela - $juros;
@@ -299,35 +307,39 @@ class TrocaChequeController extends Controller
     {
 
         //! ALTERAR TAXA POR PARCEIRO
-        // $data_inicio = '2023-07-01';
-        // $data_fim = '2023-12-30';
-        // $valorLiquidoTroca = 300000;
-        // $totalMeses = 6;
+        $data_inicio = '2023-07-01';
+        $data_fim = '2023-12-30';
+        $valorLiquidoTroca = 300000;
+        $parceiro_id = 4;
+        
+        $parceiro = Parceiro::findOrFail($parceiro_id);
+        $taxa = $parceiro->porcentagem_padrao / 100;
+        // $prazoMedio = 105;
 
-        // $valorLiquidoPorMes = $valorLiquidoTroca / $totalMeses;
-
-        // for($mes = $mes_inico; $i >= $totalMeses; $i++) {
-        //     $cheques = selecionarAleatoriamenteCheques($i);
-        // }
-
-        // $carteira_liquida = DB::select('SELECT
-        //         nome_cheque,
-        //         data_parcela,
-        //         valor_parcela,
-        //         DATEDIFF(data_parcela,CURDATE()) AS dias,
-        //         (valor_parcela * 0.02 / 30) * DATEDIFF(data_parcela, CURDATE()) as juros,
-        //         (valor_parcela - (valor_parcela * 0.02 / 30) * DATEDIFF(data_parcela,CURDATE()) ) AS valor_liquido,
-        //         (((valor_parcela * 0.02 / 30) * DATEDIFF(data_parcela, CURDATE())) / valor_parcela ) * 100 AS PORCENTAGEM_JUROS
-        //     FROM
-        //         parcelas p
-        //     WHERE
-        //     parceiro_id is null
-        //             AND p.deleted_at IS NULL
-        //         AND p.status like ?
-        //         AND p.data_parcela between ? AND ?
-        //     ORDER BY data_parcela, valor_parcela, nome_cheque', 
-        //     ['Aguardando', $data_inicio, $data_fim]
-        // );
+        $totalMeses = 6;
+        
+        $valorLiquidoPorMes = $valorLiquidoTroca / $totalMeses;
+        $mesInicio = Carbon::create($data_inicio)->addMonth(1)->format('m');
+        
+        $carteira_liquida = DB::select('SELECT
+                nome_cheque,
+                data_parcela,
+                valor_parcela,
+                DATEDIFF(data_parcela,CURDATE()) AS dias,
+                (valor_parcela * ? / 30) * DATEDIFF(data_parcela, CURDATE()) as juros,
+                (valor_parcela - (valor_parcela * ? / 30) * DATEDIFF(data_parcela,CURDATE()) ) AS valor_liquido,
+                (((valor_parcela * ? / 30) * DATEDIFF(data_parcela, CURDATE())) / valor_parcela ) * 100 AS PORCENTAGEM_JUROS
+            FROM
+                parcelas p
+            WHERE
+                parceiro_id is null
+                AND p.deleted_at IS NULL
+                AND p.status like ?
+                AND p.data_parcela between ? AND ?
+            ORDER BY data_parcela, valor_parcela, nome_cheque', 
+            [$taxa, $taxa, $taxa, 'Aguardando', $data_inicio, $data_fim]
+        );
+        dd($carteira_liquida);
 
         //TODO Validação das datas
             //? PRAZO MÉDIO -  REQUIRED
@@ -351,4 +363,5 @@ class TrocaChequeController extends Controller
 
 
     }
+    
 }
