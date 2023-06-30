@@ -277,7 +277,7 @@
             </thead>
             <tbody>
                 @forelse ($recebimentos as $recebimento)
-                    @if ($recebimento->parcela)
+                    @if ($recebimento->parcela->forma_pagamento == 'Cheque')
                         <tr>
                             <td class='titular'>{{$recebimento->parcela->nome_cheque}}</td>
                             <td>{{ $recebimento->parcela->forma_pagamento }} - @moeda($recebimento->parcela->valor_parcela)</td>
@@ -286,7 +286,10 @@
                         </tr>
                     @else
                         <tr>
-                            <td class='titular' colspan=2>{{$recebimento->observacao}}</td>
+                            <td class='titular'>
+                                {{$recebimento->parcela->venda->cliente->pessoa->nome}} 
+                            </td>
+                            <td>{{ $recebimento->parcela->forma_pagamento }} - @moeda($recebimento->parcela->valor_parcela)</td>
                             <td>{{$recebimento->conta->nome}}</td>
                             <td>@moeda($recebimento->valor)</td>
                         </tr>

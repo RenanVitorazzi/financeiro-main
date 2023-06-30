@@ -7,6 +7,7 @@ use App\Http\Requests\RequestFormPessoa;
 use App\Models\Adiamento;
 use App\Models\ContaCorrenteRepresentante;
 use App\Models\EntregaParcela;
+use App\Models\Parceiro;
 use App\Models\Parcela;
 use App\Models\Pessoa;
 use App\Models\Representante;
@@ -248,25 +249,26 @@ class RepresentanteController extends Controller {
             ]
         );
 
-        $ValorTotalChequesNaoEntregues = Parcela::where('representante_id', $representante_id)
+        $chequesNaoEntregues = Parcela::where('representante_id', $representante_id)
             ->whereHas('entrega', function ($query) {
                 $query->whereNull('entregue_representante')
                     ->whereNotNull('entregue_parceiro');
-            })->sum('valor_parcela');
+            })->get();
 
-        $ValorTotalChequesComParceiros = Parcela::where('representante_id', $representante_id)
+        $chequesComParceiros = Parcela::where('representante_id', $representante_id)
             ->whereHas('movimentacoes', function ($query) {
                 $query->whereIn('status', ['Devolvido', 'Resgatado']);
             })
             ->where('data_parcela', '>=', '2023-03-17')
+            ->whereNotNull('parceiro_id')
             ->doesntHave('entrega')
-            ->sum('valor_parcela');
+            ->get();
 
         $saldo_total = $infoRepresentante[$representante_id]['Saldo'];
 
         $pdf = App::make('dompdf.wrapper');
         $hoje = date('Y-m-d');
-        $pdf->loadView('representante.pdf.pdf_cc_representante_novo', compact('ValorTotalChequesComParceiros', 'saldos', 'representante', 'saldo_total', 'hoje', 'infoRepresentante', 'ValorTotalChequesNaoEntregues') );
+        $pdf->loadView('representante.pdf.pdf_cc_representante_novo', compact('chequesComParceiros', 'saldos', 'representante', 'saldo_total', 'hoje', 'infoRepresentante', 'chequesNaoEntregues') );
 
         return $pdf->stream();
     }
@@ -398,6 +400,34 @@ class RepresentanteController extends Controller {
 
         return $pdf->stream();
 
+    }
+    
+    public function pdf_cheques_devolvidos_parceiros ($representante_id) 
+    {
+        $representante = Representante::findOrFail($representante_id);
+        $hoje = date('Y-m-d');
+        
+        // $parceiros = Parceiro::with('pessoa')->get();
+
+        $cheques = Parcela::with('movimentacoes', 'parceiro', 'adiamentos')
+            ->whereHas('movimentacoes', function ($query) {
+                $query->whereNotNull('motivo');
+                $query->orWhere('status', 'LIKE', 'Resgatado');
+            })
+            ->doesnthave('entrega')
+            ->whereNotNull('parceiro_id')
+            ->where('representante_id', $representante->id)
+            ->orderBy('parceiro_id')
+            ->orderBy('data_parcela')
+            ->orderBy('valor_parcela')
+            ->get();
+        
+        $pdf = App::make('dompdf.wrapper');
+
+        $pdf->loadView('representante.pdf.pdf_cheques_devolvidos_parceiros',
+            compact('cheques', 'representante', 'hoje')
+        );
+        return $pdf->stream();
     }
 }
 

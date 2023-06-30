@@ -278,7 +278,7 @@
             </thead>
             <tbody>
                 <?php $__empty_1 = true; $__currentLoopData = $recebimentos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $recebimento): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <?php if($recebimento->parcela): ?>
+                    <?php if($recebimento->parcela->forma_pagamento == 'Cheque'): ?>
                         <tr>
                             <td class='titular'><?php echo e($recebimento->parcela->nome_cheque); ?></td>
                             <td><?php echo e($recebimento->parcela->forma_pagamento); ?> - <?php echo 'R$ ' . number_format($recebimento->parcela->valor_parcela, 2, ',', '.'); ?></td>
@@ -287,7 +287,10 @@
                         </tr>
                     <?php else: ?>
                         <tr>
-                            <td class='titular' colspan=2><?php echo e($recebimento->observacao); ?></td>
+                            <td class='titular'>
+                                <?php echo e($recebimento->parcela->venda->cliente->pessoa->nome); ?> 
+                            </td>
+                            <td><?php echo e($recebimento->parcela->forma_pagamento); ?> - <?php echo 'R$ ' . number_format($recebimento->parcela->valor_parcela, 2, ',', '.'); ?></td>
                             <td><?php echo e($recebimento->conta->nome); ?></td>
                             <td><?php echo 'R$ ' . number_format($recebimento->valor, 2, ',', '.'); ?></td>
                         </tr>
