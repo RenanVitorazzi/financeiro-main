@@ -115,12 +115,20 @@
     <br>
     <table>
         <tr>
-            <td>Total de cheques na empresa</td>
-            <td><?php echo 'R$ ' . number_format($ValorTotalChequesNaoEntregues, 2, ',', '.'); ?></td>
+            <td>
+                <a  target='_blank' href='<?php echo e(route('pdf_cheques_devolvidos_escritorio', ['representante_id' => $representante->id])); ?>'> 
+                    TOTAL DE CHEQUES NA EMPRESA (<?php echo e($chequesNaoEntregues->count()); ?>)
+                </a>
+            </td>
+            <td><?php echo 'R$ ' . number_format($chequesNaoEntregues->sum('valor_parcela'), 2, ',', '.'); ?></td>
         </tr>
         <tr>
-            <td>Total de cheques com parceiros</td>
-            <td><?php echo 'R$ ' . number_format($ValorTotalChequesComParceiros, 2, ',', '.'); ?></td>
+            <td>
+                <a  target='_blank' href='<?php echo e(route('pdf_cheques_devolvidos_parceiros', ['representante_id' => $representante->id])); ?>'> 
+                    TOTAL DE CHEQUES COM PARCEIROS (<?php echo e($chequesComParceiros->count()); ?>)
+                </a>            
+            </td>
+            <td><?php echo 'R$ ' . number_format($chequesComParceiros->sum('valor_parcela'), 2, ',', '.'); ?></td>
         </tr>
     </table>
 </body>

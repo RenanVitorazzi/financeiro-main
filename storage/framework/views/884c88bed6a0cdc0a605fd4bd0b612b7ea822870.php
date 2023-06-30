@@ -273,6 +273,7 @@ Procurar cheque
                     <option value="Adiado">Adiado</option>
                     <option value="Depositado">Depositado</option>
                     <option value="Aguardando">Aguardando</option>
+                    <option value="Aguardando">Aguardando Envio</option>
                  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>

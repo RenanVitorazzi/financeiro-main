@@ -189,6 +189,7 @@ Procurar cheque
                     <option value="Adiado">Adiado</option>
                     <option value="Depositado">Depositado</option>
                     <option value="Aguardando">Aguardando</option>
+                    <option value="Aguardando">Aguardando Envio</option>
                 </x-select>
             `);
             return

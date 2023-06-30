@@ -609,6 +609,7 @@ class FornecedorController extends Controller
         $recebimentos = PagamentosRepresentantes::query()
             ->whereDate('created_at', '=', $hoje)
             ->get();
+        // dd($recebimentos);
 
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView(
