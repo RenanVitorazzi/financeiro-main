@@ -407,8 +407,6 @@ class RepresentanteController extends Controller {
         $representante = Representante::findOrFail($representante_id);
         $hoje = date('Y-m-d');
         
-        // $parceiros = Parceiro::with('pessoa')->get();
-
         $cheques = Parcela::with('movimentacoes', 'parceiro', 'adiamentos')
             ->whereHas('movimentacoes', function ($query) {
                 $query->whereNotNull('motivo');
