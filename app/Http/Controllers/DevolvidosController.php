@@ -228,10 +228,11 @@ class DevolvidosController extends Controller
             WHERE
                 p.representante_id = ?
                 AND p.deleted_at IS NULL
+                AND p.status NOT LIKE ?
                 AND ep.entregue_representante is null
                 AND ep.entregue_parceiro is not null
             ORDER BY data_parcela, valor_parcela, nome_cheque',
-            [$representante->id]
+            [$representante->id, 'Pago']
         );
 
         $juros_totais = DB::select('SELECT
@@ -242,9 +243,10 @@ class DevolvidosController extends Controller
             WHERE
                 p.representante_id = ?
                 AND p.deleted_at IS NULL
+                AND p.status NOT LIKE ?
                 AND ep.entregue_representante is null
                 AND ep.entregue_parceiro is not null',
-            [$representante->id]
+            [$representante->id, 'Pago']
         );
 
         $adiamentos = DB::select('SELECT
@@ -263,8 +265,9 @@ class DevolvidosController extends Controller
                 adiamentos a ON a.parcela_id = p.id AND a.pago IS NULL
             WHERE p.representante_id = ?
                 AND p.deleted_at IS NULL
+                AND p.status NOT LIKE ?
                 AND a.pago IS NULL',
-            [$representante_id]
+            [$representante_id, 'Pago']
         );
 
         $adiamentos_total = DB::select('SELECT
@@ -277,7 +280,7 @@ class DevolvidosController extends Controller
                 AND p.deleted_at IS NULL
                 AND p.status != ?
                 AND a.pago IS NULL',
-            [$representante_id, 'Devolvido']
+            [$representante_id, 'Devolvido', 'Pago']
         );
 
         $totalValorCheques = DB::select('SELECT
@@ -289,8 +292,9 @@ class DevolvidosController extends Controller
                 ep.entregue_representante is null
                 AND ep.entregue_parceiro is not null
                 AND p.representante_id = ?
+                AND p.status NOT LIKE ?
                 AND p.deleted_at IS NULL',
-            [$representante->id]
+            [$representante->id, 'Pago']
         );
 
         $hoje = date('Y-m-d');
