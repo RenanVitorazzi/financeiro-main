@@ -78,6 +78,11 @@ class Parcela extends Model
         return $this->hasMany(PagamentosRepresentantes::class);
     }
 
+    public function pagamentos_parceiros()
+    {
+        return $this->hasMany(PagamentosParceiros::class);
+    }
+
     // public function cliente()
     // {
     //     return $this->hasOneThrough(Cliente::class, Venda::class);

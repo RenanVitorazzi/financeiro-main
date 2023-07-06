@@ -36,8 +36,7 @@ class EntregaParcelaController extends Controller
             WHERE
                 ep.entregue_parceiro is not null
                 AND ep.entregue_representante is null
-                    AND p.representante_id = ?
-
+                AND p.representante_id = ?
             GROUP BY p.id
             ORDER BY data_parcela, valor_parcela',
             [ $representante_id]
@@ -112,7 +111,6 @@ class EntregaParcelaController extends Controller
 
     public function pdf_cheques_entregues($representante_id, $data_entrega)
     {
-        
         $representante = Representante::findOrFail($representante_id);
         // dd($data_entrega);
         if ($data_entrega == 'todos') {

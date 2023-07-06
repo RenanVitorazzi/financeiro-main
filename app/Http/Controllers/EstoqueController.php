@@ -232,7 +232,7 @@ class EstoqueController extends Controller
 
     }
 
-    public function pdf_estoque()
+    public function pdf_estoque($tipo)
     {
         $lancamentos =  DB::select('SELECT
                 e.*,
@@ -263,7 +263,7 @@ class EstoqueController extends Controller
         );
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('estoque.pdf.pdf_estoque', compact('lancamentos') );
+        $pdf->loadView('estoque.pdf.pdf_estoque', compact('lancamentos', 'tipo') );
 
         return $pdf->stream();
     }

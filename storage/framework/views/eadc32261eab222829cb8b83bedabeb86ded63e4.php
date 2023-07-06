@@ -12,7 +12,7 @@ Estoque
 <?php $component->withName('botao-imprimir'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['class' => 'mr-2','href' => ''.e(route('pdf_estoque')).'']); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['class' => 'mr-2','href' => ''.e(route('pdf_estoque', ['tipo' => 1])).'']); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5)): ?>
 <?php $component = $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5; ?>

@@ -50,7 +50,7 @@
             <?php $__empty_1 = true; $__currentLoopData = $cheques; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cheque): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
                     <td><?php echo date('d/m/Y', strtotime($cheque->data_parcela)); ?></td>
-                    <td class='titular'><?php echo e($cheque->nome_cheque); ?></td>
+                    <td class='titular'><?php echo e($cheque->nome_cheque); ?> - <?php echo e($cheque->id); ?></td>
                     <td><?php echo e($cheque->numero_cheque); ?></td>
                     <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>
                     <td>

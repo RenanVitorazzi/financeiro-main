@@ -11,6 +11,7 @@ use App\Models\Parceiro;
 use App\Models\Parcela;
 use App\Models\Pessoa;
 use App\Models\Representante;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -203,6 +204,14 @@ class RepresentanteController extends Controller {
                 'Saldo' => -33974,
                 'Data' => '2023-04-13'
             ],
+            8 => [
+                'Saldo' => 0,
+                'Data' => '2023-07-05'
+            ],
+            12 => [
+                'Saldo' => 0,
+                'Data' => '2023-07-05'
+            ],
             20 => [
                 'Saldo' => -51400,
                 'Data' => '2023-04-13'
@@ -215,9 +224,12 @@ class RepresentanteController extends Controller {
                 'Saldo' => 0,
                 'Data' => '2023-04-13'
             ],
+            26 => [
+                'Saldo' => 0,
+                'Data' => '2023-07-05'
+            ]
         ];
-        // dd($infoRepresentante[$representante_id]['Data'] );
-
+        
         $saldos = DB::select('SELECT
                 (sum(p.valor_parcela) - (SELECT COALESCE(SUM(pr.valor), 0) FROM pagamentos_representantes pr WHERE pr.deleted_at is null  and representante_id = ? AND pr.parcela_id in (SELECT ep1.parcela_id FROM entrega_parcela ep1 where ep1.entregue_representante = ep.entregue_representante) ) ) as valor_total_debito,
                 ep.entregue_representante as data_entrega,
@@ -249,13 +261,24 @@ class RepresentanteController extends Controller {
             ]
         );
 
-        $chequesNaoEntregues = Parcela::where('representante_id', $representante_id)
+        $chequesNaoEntregues = Parcela::withSum('pagamentos_representantes', 'valor')
+            ->where('representante_id', $representante_id)
             ->whereHas('entrega', function ($query) {
                 $query->whereNull('entregue_representante')
                     ->whereNotNull('entregue_parceiro');
-            })->get();
-
-        $chequesComParceiros = Parcela::where('representante_id', $representante_id)
+            })
+            ->orWhere(function (Builder $query) use ($representante_id) {
+                $query->whereNull('parceiro_id')
+                    ->whereHas('movimentacoes', function ($query) {
+                        $query->whereIn('status', ['Resgatado', 'Devolvido']);
+                    })
+                    ->doesnthave('entrega')
+                    ->where('representante_id', $representante_id);
+            })
+            ->get();
+// dd($chequesNaoEntregues);
+        $chequesComParceiros = Parcela::withSum('pagamentos_parceiros', 'valor')
+            ->where('representante_id', $representante_id)
             ->whereHas('movimentacoes', function ($query) {
                 $query->whereIn('status', ['Devolvido', 'Resgatado']);
             })
@@ -277,51 +300,40 @@ class RepresentanteController extends Controller {
     {
         $representante = Representante::findOrFail($representante_id);
 
+        // $cheques = Parcela::with('pagamentos_representantes')
+        //     ->whereHas('entrega', function ($query) {
+        //         $query->whereNull('entregue_representante');
+        //     })
+        //     ->where('representante_id', $representante->id)
+        //     ->orderBy('status')
+        //     ->orderBy('nome_cheque')
+        //     ->orderBy('data_parcela')
+        //     ->get();
+
         $cheques = Parcela::with('pagamentos_representantes')
+            ->where('representante_id', $representante_id)
             ->whereHas('entrega', function ($query) {
                 $query->whereNull('entregue_representante');
+                $query->whereNotNull('entregue_parceiro');
             })
-            // ->where('status', '<>', 'Pago')
-            ->where('representante_id', $representante->id)
+            ->orWhere(function (Builder $query) use ($representante_id) {
+                $query->whereNull('parceiro_id')
+                ->whereHas('movimentacoes', function ($query) {
+                    $query->whereIn('status', ['Resgatado', 'Devolvido']);
+                })
+                ->doesnthave('entrega')
+                ->where('representante_id', $representante_id);
+            })
+
             ->orderBy('status')
             ->orderBy('nome_cheque')
             ->orderBy('data_parcela')
             ->get();
-
-        // dd($cheques);
-
-        // $cheques = DB::select('SELECT
-        //     p.id,
-        //     p.numero_cheque,
-        //     p.numero_banco,
-        //     p.nome_cheque,
-        //     p.data_parcela,
-        //     p.valor_parcela,
-        //     SUM(pr.valor) AS valor_pago
-        // FROM
-        //     parcelas p
-        //         INNER JOIN
-        //     movimentacoes_cheques mc ON p.id = mc.parcela_id
-        //         INNER JOIN
-        //     entrega_parcela e ON e.parcela_id = p.id
-        //         LEFT JOIN
-        //     pagamentos_representantes pr ON pr.parcela_id = p.id
-        // WHERE
-        //     mc.status LIKE ?
-        //         AND p.representante_id = ?
-        //         AND p.status NOT LIKE ?
-        //         AND pr.deleted_at IS NULL
-        //         AND p.deleted_at IS NULL
-        //         AND entregue_parceiro IS NOT NULL
-        //         AND entregue_representante IS NULL
-        // GROUP BY p.id , mc.status , e.parcela_id
-        // ORDER BY p.nome_cheque , data_parcela , valor_parcela',
-        // ['Devolvido', $representante->id, 'Pago']);
-
+            
         $totalPago = $cheques->sum(function ($cheques) {
             return $cheques->pagamentos_representantes->sum('valor');
         });
-        // dd($totalPago);
+        
         $pdf = App::make('dompdf.wrapper');
         $hoje = date('Y-m-d');
         $pdf->loadView('representante.pdf.pdf_cheques_devolvidos_escritorio',
@@ -409,17 +421,19 @@ class RepresentanteController extends Controller {
         
         $cheques = Parcela::with('movimentacoes', 'parceiro', 'adiamentos')
             ->whereHas('movimentacoes', function ($query) {
-                $query->whereNotNull('motivo');
-                $query->orWhere('status', 'LIKE', 'Resgatado');
+                $query->whereIn('status', ['Devolvido', 'Resgatado']);
             })
             ->doesnthave('entrega')
             ->whereNotNull('parceiro_id')
             ->where('representante_id', $representante->id)
+            ->where('data_parcela', '>=', '2023-03-17')
             ->orderBy('parceiro_id')
             ->orderBy('data_parcela')
             ->orderBy('valor_parcela')
             ->get();
         
+
+
         $pdf = App::make('dompdf.wrapper');
 
         $pdf->loadView('representante.pdf.pdf_cheques_devolvidos_parceiros',
