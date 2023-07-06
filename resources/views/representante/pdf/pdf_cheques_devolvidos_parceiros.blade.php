@@ -40,8 +40,9 @@
                 <th>Data</th>
                 <th>Titular</th>
                 <th>Número</th>
-                <th>Valor cheque</th>
                 <th>Parceiro</th>
+                <th>Valor cheque</th>
+                
             </tr>
         </thead>
         <tbody>

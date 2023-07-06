@@ -114,13 +114,16 @@
     </table>
     <br>
     <table>
+        <tr></tr>
         <tr>
             <td>
                 <a  target='_blank' href='{{ route('pdf_cheques_devolvidos_escritorio', ['representante_id' => $representante->id]) }}'> 
                     TOTAL DE CHEQUES NA EMPRESA ({{ $chequesNaoEntregues->count() }})
                 </a>
             </td>
-            <td>@moeda($chequesNaoEntregues->sum('valor_parcela'))</td>
+            <td>Total Devolvido: @moeda($chequesNaoEntregues->sum('valor_parcela'))</td>
+            {{-- <td>Total Pago: @moeda($chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'))</td> --}}
+            <td>Total aberto: @moeda($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'))</td>
         </tr>
         <tr>
             <td>
@@ -128,7 +131,18 @@
                     TOTAL DE CHEQUES COM PARCEIROS ({{ $chequesComParceiros->count() }})
                 </a>            
             </td>
-            <td>@moeda($chequesComParceiros->sum('valor_parcela'))</td>
+            {{-- <td>@moeda($chequesComParceiros->sum('valor_parcela'))</td> --}}
+            <td>Total Devolvido: @moeda($chequesComParceiros->sum('valor_parcela'))</td>
+            {{-- <td>Total Pago: @moeda($chequesComParceiros->sum('pagamentos_parceiros_sum_valor'))</td> --}}
+            <td>Total aberto: @moeda(($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')))</td>
+
+        </tr>
+        <tr>
+            <td>Total Geral</td>
+            <td colspan=2> @moeda(
+                ($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor') ) +
+                ($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor'))
+            )</td>
         </tr>
     </table>
 </body>

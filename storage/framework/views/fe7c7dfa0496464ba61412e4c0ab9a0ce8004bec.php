@@ -35,7 +35,7 @@ Adicionar estoque
             </div>
             <div class="col-4 form-group">
                 <label for="balanco">Peso Bruto (g)</label>
-                <input class="form-control" disabled type="number" value="<?php echo e($conta_corrente->peso_bruto); ?>"></input>
+                <input class="form-control" disabled type="number" value="<?php echo e($conta_corrente->peso_bruto ?? ''); ?>"></input>
             </div>
             
         </div>

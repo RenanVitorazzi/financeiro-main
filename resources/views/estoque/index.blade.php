@@ -8,7 +8,7 @@ Estoque
     <h3> Estoque </h3>
     <div>
 
-        <x-botao-imprimir class='mr-2' href="{{ route('pdf_estoque') }}"></x-botao-imprimir>
+        <x-botao-imprimir class='mr-2' href="{{ route('pdf_estoque', ['tipo' => 1]) }}"></x-botao-imprimir>
         <x-botao-novo href="{{ route('estoque.create') }}"></x-botao-novo>
     </div>
 </div>
