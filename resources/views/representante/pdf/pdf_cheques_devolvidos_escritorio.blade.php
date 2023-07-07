@@ -50,7 +50,7 @@
             @forelse ($cheques as $cheque)
                 <tr>
                     <td>@data($cheque->data_parcela)</td>
-                    <td class='titular'>{{$cheque->nome_cheque}} - {{ $cheque->id }}</td>
+                    <td class='titular'>{{$cheque->nome_cheque}} </td>
                     <td>{{ $cheque->numero_cheque }}</td>
                     <td>@moeda($cheque->valor_parcela)</td>
                     <td>
