@@ -103,12 +103,12 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pdf_despesa_mensal/{mes}', [DespesaController::class, 'pdf_despesa_mensal'])->name('pdf_despesa_mensal');
         Route::get('pdf_cheques_entregues/{representante_id}/{data_entrega}', [EntregaParcelaController::class, 'pdf_cheques_entregues'])->name('pdf_cheques_entregues');
         Route::get('pdf_estoque/{tipo}', [EstoqueController::class, 'pdf_estoque'])->name('pdf_estoque');
-        Route::get('pdf_consignados', [ConsignadoController::class, 'pdf_consignados'])->name('pdf_consignados');
+        Route::get('pdf_consignados/{representante_id}', [ConsignadoController::class, 'pdf_consignados'])->name('pdf_consignados');
         Route::get('pdf_consignados_geral', [ConsignadoController::class, 'pdf_consignados_geral'])->name('pdf_consignados_geral');
         Route::get('pdf_relatorio_mensal/{mes}/{ano}', [FornecedorController::class, 'pdf_relatorio_mensal'])->name('pdf_relatorio_mensal');
         Route::get('pdf_confirmar_depositos', [RecebimentosController::class, 'pdf_confirmar_depositos'])->name('pdf_confirmar_depositos');
         Route::get('pdf_cc_representante_com_cheques_devolvidos/{representante_id}', [RepresentanteController::class, 'pdf_cc_representante_com_cheques_devolvidos'])->name('pdf_cc_representante_com_cheques_devolvidos');
-
+        Route::get('pdf_historico_cliente/{cliente_id}', [ClienteController::class, 'pdf_historico_cliente'])->name('pdf_historico_cliente');
         //? Anexos
         Route::resource('conta_corrente_anexo', ContaCorrenteAnexoController::class)->only([
             'index', 'create', 'store', 'destroy'

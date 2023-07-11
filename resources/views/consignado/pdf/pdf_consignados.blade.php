@@ -30,47 +30,41 @@
     }
 </style>
 <body>
-    <h3>Relação de consignados</h3>
-
-        @foreach ($representantesEmpresa as $representante)
-            <table>
-                <thead>
-                    <tr>
-                        <th class="nomeRepresentante" colspan=4>{{ $representante->pessoa->nome }}</th>
-                    </tr>
-                    <tr>
-                        <th>Data</th>
-                        <th>Nome do cliente</th>
-                        <th>Peso</th>
-                        <th>Fator</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($consignados->where('representante_id', $representante->id) as $consignado)
-                        <tr>
-                            <td>@data($consignado->data)</td>
-                            <td>{{$consignado->cliente->pessoa->nome}}</td>
-                            <td>@peso($consignado->peso)</td>
-                            <td>@fator($consignado->fator)</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan=4> Nenhum registro </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan=2><b>TOTAL</b></td>
-                        <td><b>@peso($consignados->where('representante_id', $representante->id)->sum('peso'))</b></td>
-                        <td><b>@fator($consignados->where('representante_id', $representante->id)->sum('fator'))</b></td>
-                    </tr>
-                </tfoot>
-            </table>
-            <br>
-        @endforeach
-
+    <h3>Relação de consignados {{ $representante->pessoa->nome }}</h3>
+     
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Data</th>
+                <th>Nome do cliente</th>
+                <th>Peso</th>
+                <th>Fator</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($consignados as $consignado)
+                <tr>
+                    <td>{{$loop->iteration}}</td>
+                    <td>@data($consignado->data)</td>
+                    <td>{{$consignado->cliente->pessoa->nome}}</td>
+                    <td>@peso($consignado->peso)</td>
+                    <td>@fator($consignado->fator)</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan=4> Nenhum registro </td>
+                </tr>
+            @endforelse
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan=3><b>TOTAL</b></td>
+                <td><b>@peso($consignados->sum('peso'))</b></td>
+                <td><b>@fator($consignados->sum('fator'))</b></td>
+            </tr>
+        </tfoot>
+    </table>
 </body>
 </html>
 

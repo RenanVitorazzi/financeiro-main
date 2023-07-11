@@ -9,9 +9,7 @@ Consignados
         <a href="<?php echo e(route('pdf_consignados_geral')); ?>" class="btn btn-dark mr-2" target="_blank">
             Relação representante <i class="fas fa-print"></i>
         </a>
-        <a href="<?php echo e(route('pdf_consignados')); ?>" class="btn btn-dark mr-2" target="_blank">
-            Relação cliente <i class="fas fa-print"></i>
-        </a>
+        
         
         <?php if (isset($component)) { $__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoNovo::class, []); ?>

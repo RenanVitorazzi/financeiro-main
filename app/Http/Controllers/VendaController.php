@@ -234,15 +234,18 @@ class VendaController extends Controller
         $vendas = Venda::with('cliente')
             ->whereNull('enviado_conta_corrente')
             ->where('representante_id', '=', $representante_id)
-        ->get();
-
+            ->orderBy('data_venda')
+            ->get();
+            
+        $cheques = Parcela::whereIn('venda_id', $vendas->pluck('id'))->get();
+        
         $pagamentos = Parcela::whereHas('venda', function (Builder $query) use ($representante_id) {
                 $query->whereNull('enviado_conta_corrente')
                     ->where('representante_id', '=', $representante_id);
             })
         ->get();
-
-        $pagamentosPorForma = $pagamentos->groupBy('forma_pagamento')->groupBy('status')->first();
+            // dd($pagamentos->groupBy('forma_pagamento')->groupBy('status'));
+        $pagamentosPorForma = $pagamentos->groupBy('forma_pagamento');
 
         $pagamentosTotal = $pagamentos->sum('valor_parcela');
 
@@ -266,6 +269,7 @@ class VendaController extends Controller
         $comissaoRepresentante = $comissao_array[$representante->id] ?? $comissao_array["Default"];
 
         $pdf = App::make('dompdf.wrapper');
+
         $pdf->loadView('venda.pdf.pdf_conferencia_relatorio_vendas',
             compact(
                 'vendas',
@@ -275,7 +279,8 @@ class VendaController extends Controller
                 'pagamentosPorForma',
                 'totalVendaPesoAVista',
                 'totalVendaFatorAVista',
-                'comissaoRepresentante'
+                'comissaoRepresentante',
+                'cheques'
             )
         );
 

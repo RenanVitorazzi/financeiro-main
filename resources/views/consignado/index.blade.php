@@ -10,9 +10,9 @@ Consignados
         <a href="{{route('pdf_consignados_geral')}}" class="btn btn-dark mr-2" target="_blank">
             Relação representante <i class="fas fa-print"></i>
         </a>
-        <a href="{{route('pdf_consignados')}}" class="btn btn-dark mr-2" target="_blank">
+        {{-- <a href="{{route('pdf_consignados')}}" class="btn btn-dark mr-2" target="_blank">
             Relação cliente <i class="fas fa-print"></i>
-        </a>
+        </a> --}}
         
         <x-botao-novo href="{{ route('consignado.create') }}"></x-botao-novo>
     </div>
