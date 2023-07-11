@@ -133,20 +133,22 @@ class ConsignadoController extends Controller
         return redirect()->route('consignado.index');
     }
 
-    public function pdf_consignados() {
+    public function pdf_consignados($representante_id) {
         $consignados = Consignado::with('cliente')
             ->where('baixado', NULL)
+            ->where('representante_id', $representante_id)
             ->orderBy('representante_id')
             ->orderBy('data')
             ->get();
         
-        $representantesEmpresa = Representante::with('pessoa')->empresa()->get();
+        $representante = Representante::with('pessoa')
+            ->findOrFail($representante_id);
         // $consignados->where('representante_id', 5)->sum('peso');
         // dd($consignados);
         
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('consignado.pdf.pdf_consignados', 
-            compact('consignados', 'representantesEmpresa') 
+            compact('consignados', 'representante') 
         );
         
         return $pdf->stream();
