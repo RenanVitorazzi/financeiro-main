@@ -69,7 +69,7 @@
 <?php endif; ?>
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $lancamentos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lancamento): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                <?php if($lancamento->balanco_estoque == 'Débito'): ?>
+                <?php if($lancamento->balanco_estoque == 'Débito' && $lancamento->peso_agregado != 0): ?>
                     <tr>
                         <td><?php echo date('d/m/Y', strtotime($lancamento->data)); ?></td>
                         <td>
@@ -97,7 +97,7 @@
                         <td><?php echo number_format($lancamento->saldo_peso, 2, ',', '.'); ?></td>
                         
                     </tr>
-                <?php elseif($lancamento->balanco_estoque == 'Crédito'): ?>
+                <?php elseif($lancamento->balanco_estoque == 'Crédito'  && $lancamento->peso_agregado != 0): ?>
                     <tr>
                         <td><?php echo date('d/m/Y', strtotime($lancamento->data)); ?></td>
                         <td>

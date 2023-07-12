@@ -59,7 +59,7 @@
         </x-table-header>
         <tbody>
             @forelse ($lancamentos as $lancamento)
-                @if ($lancamento->balanco_estoque == 'Débito')
+                @if ($lancamento->balanco_estoque == 'Débito' && $lancamento->peso_agregado != 0)
                     <tr>
                         <td>@data($lancamento->data)</td>
                         <td>
@@ -80,7 +80,7 @@
                         <td>@peso($lancamento->saldo_peso)</td>
                         
                     </tr>
-                @elseif ($lancamento->balanco_estoque == 'Crédito')
+                @elseif ($lancamento->balanco_estoque == 'Crédito'  && $lancamento->peso_agregado != 0)
                     <tr>
                         <td>@data($lancamento->data)</td>
                         <td>

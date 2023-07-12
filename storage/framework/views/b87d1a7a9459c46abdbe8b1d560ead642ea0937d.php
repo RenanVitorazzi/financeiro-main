@@ -83,7 +83,7 @@ Vendas - <?php echo e($representante->pessoa->nome); ?>
                 <?php $__currentLoopData = $venda->parcela; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $parcela): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <br>
                 <small class="text-muted">
-                    <?php echo date('d/m/Y', strtotime($parcela->data_parcela)); ?> - <?php echo 'R$ ' . number_format($parcela->valor_parcela, 2, ',', '.'); ?> (<?php echo e($parcela->status); ?>)
+                    <?php echo date('d/m/Y', strtotime($parcela->data_parcela)); ?> - <?php echo 'R$ ' . number_format($parcela->valor_parcela, 2, ',', '.'); ?> (<?php echo e($parcela->forma_pagamento); ?>)
                 </small> 
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </td>

@@ -8,6 +8,7 @@ use App\Models\Parcela;
 use App\Models\Representante;
 use App\Models\EntregaParcela;
 use App\Models\PagamentosRepresentantes;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
@@ -25,22 +26,42 @@ class EntregaParcelaController extends Controller
     {
         $representante = Representante::findOrFail($representante_id);
 
-        $cheques = DB::select('SELECT
-                p.data_parcela, nome_cheque, numero_cheque, valor_parcela, mc.motivo, mc.status, p.id
-            FROM
-                parcelas p
-                    INNER JOIN
-                entrega_parcela ep ON ep.parcela_id = p.id
-                    LEFT JOIN
-                movimentacoes_cheques mc ON mc.parcela_id = p.id
-            WHERE
-                ep.entregue_parceiro is not null
-                AND ep.entregue_representante is null
-                AND p.representante_id = ?
-            GROUP BY p.id
-            ORDER BY data_parcela, valor_parcela',
-            [ $representante_id]
-        );
+        // $cheques = DB::select('SELECT
+        //         p.data_parcela, nome_cheque, numero_cheque, valor_parcela, mc.motivo, mc.status, p.id
+        //     FROM
+        //         parcelas p
+        //             INNER JOIN
+        //         entrega_parcela ep ON ep.parcela_id = p.id
+        //             LEFT JOIN
+        //         movimentacoes_cheques mc ON mc.parcela_id = p.id
+        //     WHERE
+        //         ep.entregue_parceiro is not null
+        //         AND ep.entregue_representante is null
+        //         AND p.representante_id = ?
+        //     GROUP BY p.id
+        //     ORDER BY data_parcela, valor_parcela',
+        //     [ $representante_id]
+        // );
+
+        $cheques = Parcela::with('pagamentos_representantes')
+            ->where('representante_id', $representante_id)
+            ->whereHas('entrega', function ($query) {
+                $query->whereNull('entregue_representante');
+                $query->whereNotNull('entregue_parceiro');
+            })
+            ->orWhere(function (Builder $query) use ($representante_id) {
+                $query->whereNull('parceiro_id')
+                ->whereHas('movimentacoes', function ($query) {
+                    $query->whereIn('status', ['Resgatado', 'Devolvido']);
+                })
+                ->doesnthave('entrega')
+                ->where('representante_id', $representante_id);
+            })
+
+            ->orderBy('status')
+            ->orderBy('nome_cheque')
+            ->orderBy('data_parcela')
+            ->get();
 
         // $cheques = DB::select('SELECT
         //         p.data_parcela, nome_cheque, numero_cheque, valor_parcela, mc.motivo, mc.status, p.id
