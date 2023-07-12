@@ -50,7 +50,7 @@ Vendas - {{$representante->pessoa->nome}}
                 @foreach ($venda->parcela as $parcela)
                 <br>
                 <small class="text-muted">
-                    @data($parcela->data_parcela) - @moeda($parcela->valor_parcela) ({{ $parcela->status }})
+                    @data($parcela->data_parcela) - @moeda($parcela->valor_parcela) ({{ $parcela->forma_pagamento }})
                 </small> 
                 @endforeach
             </td>
