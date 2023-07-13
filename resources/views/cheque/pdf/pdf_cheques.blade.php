@@ -7,7 +7,11 @@
     <title>Cheques à vencer - {{$representante->pessoa->nome}}</title>
 </head>
 <style>
+    * {
+        margin: 5 5 5 5;
+    }
     table {
+        margin: 0 0 0 0;
         width:100%;
         border-collapse: collapse;
     }
@@ -23,12 +27,13 @@
     tr:nth-child(even) {
         background-color: #a9acb0;
     }
-    h1 {
+    h5 {
         text-align: center;
+        margin: 0 0 0 0;
     }
 </style>
 <body>
-    <h1>Cheques à vencer - {{$representante->pessoa->nome}}</h1>
+    {{-- <h5>Cheques à vencer - {{$representante->pessoa->nome}}</h5> --}}
     <table>
         <thead>
             <tr>
@@ -55,7 +60,14 @@
                 </tr>
             @endforelse
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan=4><b>TOTAL</b></td>
+                <td><b>@moeda($parcelas->sum('valor_parcela'))</b></td>
+            </tr>
+        </tfoot>
     </table>
+    
 </body>
 </html>
 

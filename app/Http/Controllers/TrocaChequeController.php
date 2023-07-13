@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\App;
 
 class TrocaChequeController extends Controller
 {
+    public $feriados;
+
     public function __construct()
     {
         $this->feriados = Feriados::all();
@@ -27,10 +29,10 @@ class TrocaChequeController extends Controller
 
     public function index()
     {
-        $trocas = Troca::orderBy('data_troca', 'Desc')
-            ->orderBy('id', 'desc')
-            ->paginate(10);
-
+        $trocas = Troca::whereYear('data_troca', '>=',now()->year)
+            ->orderBy('data_troca', 'Desc')
+            ->get();
+        // dd($trocas);
         return view('troca_cheque.index', compact('trocas') );
     }
 

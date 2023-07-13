@@ -47,10 +47,8 @@ Trocas de cheques
         @endforelse
     </tbody>
 </x-table>
-{{ $trocas->links() }}
 @endsection
 @section('script')
 <script>
-
 </script>
 @endsection

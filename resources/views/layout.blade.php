@@ -283,10 +283,11 @@
   
   <!--DataTable-->
   <script src="{{ asset('js1/dataTable/datatables.min.js') }}"></script>
-  {{-- <script src="{{ asset('js1/dataTable/pdfmake.min.js') }}"></script>
+  {{-- 
+  <script src="{{ asset('js1/dataTable/pdfmake.min.js') }}"></script>
   <script src="{{ asset('js1/dataTable/pdfmake_fonts.min.js') }}"></script>
   <script src="{{ asset('js1/dataTable/pdf_zip.min.js') }}"></script>
-   --}}
+  --}}
   <script src="{{ asset('js1/mask.min.js') }}"></script>
   
   {{-- <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script> --}}
