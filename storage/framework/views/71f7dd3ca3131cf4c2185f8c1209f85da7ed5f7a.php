@@ -76,12 +76,9 @@ Trocas de cheques
 <?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
 <?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
 <?php endif; ?>
-<?php echo e($trocas->links()); ?>
-
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
 <script>
-
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\CAIXA\Desktop\Sistema\financeiro-main\resources\views/troca_cheque/index.blade.php ENDPATH**/ ?>

@@ -7,7 +7,11 @@
     <title>Cheques à vencer - <?php echo e($representante->pessoa->nome); ?></title>
 </head>
 <style>
+    * {
+        margin: 5 5 5 5;
+    }
     table {
+        margin: 0 0 0 0;
         width:100%;
         border-collapse: collapse;
     }
@@ -23,12 +27,13 @@
     tr:nth-child(even) {
         background-color: #a9acb0;
     }
-    h1 {
+    h5 {
         text-align: center;
+        margin: 0 0 0 0;
     }
 </style>
 <body>
-    <h1>Cheques à vencer - <?php echo e($representante->pessoa->nome); ?></h1>
+    
     <table>
         <thead>
             <tr>
@@ -55,7 +60,14 @@
                 </tr>
             <?php endif; ?>
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan=4><b>TOTAL</b></td>
+                <td><b><?php echo 'R$ ' . number_format($parcelas->sum('valor_parcela'), 2, ',', '.'); ?></b></td>
+            </tr>
+        </tfoot>
     </table>
+    
 </body>
 </html>
 
