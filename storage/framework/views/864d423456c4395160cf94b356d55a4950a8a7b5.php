@@ -31,6 +31,7 @@ Clientes
         <tr>
             <th>Nome</th>
             <th>Representante</th>
+            <th>Cidade</th>
             <th>Ações</th>
         </tr>
      <?php echo $__env->renderComponent(); ?>
@@ -43,6 +44,7 @@ Clientes
         <?php $__empty_1 = true; $__currentLoopData = $clientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cliente): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
         <tr>
             <td><?php echo e($cliente->pessoa->nome); ?></td>
+            <td><?php echo e($cliente->pessoa->municipio); ?></td>
             <td><?php echo e($cliente->representante->pessoa->nome ?? 'Sem representante'); ?></td>
             <td class='d-flex justify-content-center'>
                 <a class="btn btn-dark mr-2" title="Visualizar" href="<?php echo e(route('clientes.show', $cliente->id)); ?>">

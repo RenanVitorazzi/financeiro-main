@@ -45,7 +45,6 @@
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $compras; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $compra): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <?php if(!$consignados->where('venda_id', $compra->id)->isEmpty()): ?>
-                    
                     <tr>
                         <td rowspan=2>
                             (<?php echo date('d/m/Y', strtotime($consignados->where('venda_id', $compra->id)->first()->data)); ?>) 

@@ -38,6 +38,7 @@
                 <th></th>
                 <th>Data</th>
                 <th>Nome do cliente</th>
+                <th>Cidade</th>
                 <th>Peso</th>
                 <th>Fator</th>
             </tr>
@@ -48,18 +49,19 @@
                     <td><?php echo e($loop->iteration); ?></td>
                     <td><?php echo date('d/m/Y', strtotime($consignado->data)); ?></td>
                     <td><?php echo e($consignado->cliente->pessoa->nome); ?></td>
+                    <td><?php echo e($consignado->cliente->pessoa->municipio); ?></td>
                     <td><?php echo number_format($consignado->peso, 2, ',', '.'); ?></td>
                     <td><?php echo number_format($consignado->fator, 1, ',', '.'); ?></td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
-                    <td colspan=4> Nenhum registro </td>
+                    <td colspan=6> Nenhum registro </td>
                 </tr>
             <?php endif; ?>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan=3><b>TOTAL</b></td>
+                <td colspan=4><b>TOTAL</b></td>
                 <td><b><?php echo number_format($consignados->sum('peso'), 2, ',', '.'); ?></b></td>
                 <td><b><?php echo number_format($consignados->sum('fator'), 1, ',', '.'); ?></b></td>
             </tr>
