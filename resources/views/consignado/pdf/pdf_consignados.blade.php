@@ -38,6 +38,7 @@
                 <th></th>
                 <th>Data</th>
                 <th>Nome do cliente</th>
+                <th>Cidade</th>
                 <th>Peso</th>
                 <th>Fator</th>
             </tr>
@@ -48,18 +49,19 @@
                     <td>{{$loop->iteration}}</td>
                     <td>@data($consignado->data)</td>
                     <td>{{$consignado->cliente->pessoa->nome}}</td>
+                    <td>{{$consignado->cliente->pessoa->municipio}}</td>
                     <td>@peso($consignado->peso)</td>
                     <td>@fator($consignado->fator)</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan=4> Nenhum registro </td>
+                    <td colspan=6> Nenhum registro </td>
                 </tr>
             @endforelse
         </tbody>
         <tfoot>
             <tr>
-                <td colspan=3><b>TOTAL</b></td>
+                <td colspan=4><b>TOTAL</b></td>
                 <td><b>@peso($consignados->sum('peso'))</b></td>
                 <td><b>@fator($consignados->sum('fator'))</b></td>
             </tr>

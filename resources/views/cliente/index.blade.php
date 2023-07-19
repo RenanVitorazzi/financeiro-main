@@ -12,6 +12,7 @@ Clientes
         <tr>
             <th>Nome</th>
             <th>Representante</th>
+            <th>Cidade</th>
             <th>Ações</th>
         </tr>
     </x-table-header>
@@ -19,6 +20,7 @@ Clientes
         @forelse ($clientes as $cliente)
         <tr>
             <td>{{ $cliente->pessoa->nome }}</td>
+            <td>{{ $cliente->pessoa->municipio }}</td>
             <td>{{ $cliente->representante->pessoa->nome ?? 'Sem representante'}}</td>
             <td class='d-flex justify-content-center'>
                 <a class="btn btn-dark mr-2" title="Visualizar" href="{{ route('clientes.show', $cliente->id) }}">
