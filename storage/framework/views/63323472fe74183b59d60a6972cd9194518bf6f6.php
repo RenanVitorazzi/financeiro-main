@@ -69,11 +69,11 @@ Editar cliente
                     </div>
                     <div <?php echo e(($cliente->pessoa->tipoCadastro == 'Pessoa Jurídica') ? '' : 'style=display:none'); ?> id='cnpjGroup'>
                         <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['name' => 'cnpj','value' => ''.e(old('cnpj')).'']]); ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['name' => 'cnpj','value' => ''.e(old('cnpj', $cliente->pessoa->cnpj)).'']]); ?>
 <?php $component->withName('form-group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['name' => 'cnpj','value' => ''.e(old('cnpj')).'']); ?>CPNJ <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['name' => 'cnpj','value' => ''.e(old('cnpj', $cliente->pessoa->cnpj)).'']); ?>CPNJ <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>

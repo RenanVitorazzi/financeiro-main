@@ -110,6 +110,27 @@
 </x-table>
 
 <x-table>
+    <x-table-header>
+        <tr>
+            <th>Mês</th>
+            <th>Valor Bruto</th>
+            <th>Valor Juros</th>
+            <th>Valor Líquido</th>
+        </tr> 
+    </x-table-header>
+    <tbody>
+        @foreach ($total_cheques_mes as $key)   
+            <tr>
+                <td>{{ $key->mes }}</td>
+                <td>@moeda($key->total_mes)</td>
+                <td>@moeda($key->total_juros_mes)</td>
+                <td>@moeda($key->total_liquido_mes)</td>
+            </tr>
+        @endforeach
+    </tbody>
+</x-table>
+
+<x-table>
     <tr>
         <td>Total Bruto</td>
         <td>Total Juros</td>

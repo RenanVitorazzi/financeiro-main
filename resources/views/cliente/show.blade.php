@@ -5,12 +5,21 @@
 @endsection
 
 @section('body')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('clientes.index') }}">Clientes</a></li>
+        <li class="breadcrumb-item active"><a href="{{ route('clientes.show', $cliente->id) }}">{{$cliente->pessoa->nome}}</a></li>
+        {{-- <li class="breadcrumb-item active" aria-current="page">Adicionar</li> --}}
+    </ol>
+</nav>
 <div class='mb-4'>
     <h3 class='d-inline' style="color:#212529">Histórico - {{$cliente->pessoa->nome}} </h3> 
 </div>
     @if(Session::has('message'))
         <p class="alert alert-success">{{ Session::get('message') }}</p>
     @endif
+  
     {{-- <div class='alert alert-success'>
         Valor total de cheques para o mês: <b>{{ number_format($chequesMes, 2) }}</b>
     </div>  --}}
@@ -31,6 +40,7 @@
             <th>Cotação</th>
             <th>Valor da Venda</th>
             <th>Pagamento</th>
+            <th>Prazo Médio</th>
             <th>Ações</th>
         </x-table-header>
         <tbody>
@@ -53,10 +63,21 @@
                     @foreach ($venda->parcela as $parcela)
                         <div>
                             {{$parcela->forma_pagamento}} -
-                            @data($parcela->data_parcela) - 
+                            @data($parcela->data_parcela) ({{\Carbon\Carbon::parse($parcela->data_parcela)->diffInDays($venda->data_venda)}})- 
                             @moeda($parcela->valor_parcela) 
+                            
                         </div>
+                        @php
+                            $dias = \Carbon\Carbon::parse($parcela->data_parcela)->diffInDays($venda->data_venda);
+                            $totalPrazo += $dias;
+                        @endphp
                     @endforeach
+                </td>
+                <td>
+                    <div>{{number_format($totalPrazo / $venda->parcela->count(), 2)}}</div>
+                    @php
+                        $totalPrazo = 0;    
+                    @endphp
                 </td>
                 <td>
                     <x-botao-editar href='{{ route("venda.edit", $venda->id) }}'></x-botao-editar>
@@ -65,7 +86,7 @@
             </tr>
 
             @empty
-            <tr><td colspan="7" class="table-danger">Nenhum registro criado</td></tr>
+            <tr><td colspan="8" class="table-danger">Nenhum registro criado</td></tr>
             @endforelse
         </tbody>
     </x-table>

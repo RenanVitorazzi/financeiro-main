@@ -39,7 +39,7 @@ Editar cliente
                         <x-form-group name='cpf' value="{{old('cpf', $cliente->pessoa->cpf)}}">CPF</x-form-group>
                     </div>
                     <div {{ ($cliente->pessoa->tipoCadastro == 'Pessoa Jurídica') ? '' : 'style=display:none' }} id='cnpjGroup'>
-                        <x-form-group name='cnpj' value="{{old('cnpj')}}">CPNJ</x-form-group>
+                        <x-form-group name='cnpj' value="{{old('cnpj', $cliente->pessoa->cnpj)}}">CPNJ</x-form-group>
                     </div>
                 </div>
             </div>

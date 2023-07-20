@@ -56,7 +56,9 @@ class ClienteController extends Controller
             ->where('cliente_id', $cliente->id)
             ->get();
 
-        return view('cliente.show', compact('cliente', 'vendas'));
+        $totalPrazo = 0;
+
+        return view('cliente.show', compact('cliente', 'vendas', 'totalPrazo'));
     }
 
     public function edit($id)
