@@ -63,11 +63,11 @@ class HomeController extends Controller
 
         $ops = Parcela::ops()
             ->with('representante.pessoa', 'venda.cliente.pessoa', 'pagamentos_representantes')
-            ->where('data_parcela', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->whereBetween('data_parcela', [Carbon::now()->startOfWeek()->format('Y-m-d'), Carbon::now()->endOfWeek()->format('Y-m-d')])
             ->where('representante_id', '<>', 3)
             ->orderBy('representante_id')
             ->get();
-
+        // dd(Carbon::now()->endOfWeek()->format('Y-m-d'));
         return view('home', compact('depositos', 'adiamentos', 'fixasNaoPagas', 'ops'));
     }
 }
