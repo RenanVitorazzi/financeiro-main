@@ -7,12 +7,15 @@ Clientes
     <h3> Clientes </h3>
     <x-botao-novo href="{{ route('clientes.create') }}"></x-botao-novo>
 </div>
+
 <x-table id="myTable">
     <x-table-header>
         <tr>
             <th>Nome</th>
-            <th>Representante</th>
+            <th>CPF / CNPJ</th>
             <th>Cidade</th>
+            <th>Estado</th>
+            <th>Representante</th>
             <th>Ações</th>
         </tr>
     </x-table-header>
@@ -20,7 +23,9 @@ Clientes
         @forelse ($clientes as $cliente)
         <tr>
             <td>{{ $cliente->pessoa->nome }}</td>
+            <td>{{ $cliente->pessoa->cpf ?? $cliente->pessoa->cnpj }}</td>
             <td>{{ $cliente->pessoa->municipio }}</td>
+            <td>{{ $cliente->pessoa->estado }}</td>
             <td>{{ $cliente->representante->pessoa->nome ?? 'Sem representante'}}</td>
             <td class='d-flex justify-content-center'>
                 <a class="btn btn-dark mr-2" title="Visualizar" href="{{ route('clientes.show', $cliente->id) }}">

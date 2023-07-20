@@ -3,12 +3,21 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('body'); ?>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?php echo e(route('home')); ?>">Home</a></li>
+        <li class="breadcrumb-item"><a href="<?php echo e(route('clientes.index')); ?>">Clientes</a></li>
+        <li class="breadcrumb-item active"><a href="<?php echo e(route('clientes.show', $cliente->id)); ?>"><?php echo e($cliente->pessoa->nome); ?></a></li>
+        
+    </ol>
+</nav>
 <div class='mb-4'>
     <h3 class='d-inline' style="color:#212529">Histórico - <?php echo e($cliente->pessoa->nome); ?> </h3> 
 </div>
     <?php if(Session::has('message')): ?>
         <p class="alert alert-success"><?php echo e(Session::get('message')); ?></p>
     <?php endif; ?>
+  
     
     
   
@@ -31,6 +40,7 @@
             <th>Cotação</th>
             <th>Valor da Venda</th>
             <th>Pagamento</th>
+            <th>Prazo Médio</th>
             <th>Ações</th>
          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -58,10 +68,21 @@
                     <?php $__currentLoopData = $venda->parcela; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $parcela): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div>
                             <?php echo e($parcela->forma_pagamento); ?> -
-                            <?php echo date('d/m/Y', strtotime($parcela->data_parcela)); ?> - 
+                            <?php echo date('d/m/Y', strtotime($parcela->data_parcela)); ?> (<?php echo e(\Carbon\Carbon::parse($parcela->data_parcela)->diffInDays($venda->data_venda)); ?>)- 
                             <?php echo 'R$ ' . number_format($parcela->valor_parcela, 2, ',', '.'); ?> 
+                            
                         </div>
+                        <?php
+                            $dias = \Carbon\Carbon::parse($parcela->data_parcela)->diffInDays($venda->data_venda);
+                            $totalPrazo += $dias;
+                        ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </td>
+                <td>
+                    <div><?php echo e(number_format($totalPrazo / $venda->parcela->count(), 2)); ?></div>
+                    <?php
+                        $totalPrazo = 0;    
+                    ?>
                 </td>
                 <td>
                     <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
@@ -90,7 +111,7 @@
             </tr>
 
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-            <tr><td colspan="7" class="table-danger">Nenhum registro criado</td></tr>
+            <tr><td colspan="8" class="table-danger">Nenhum registro criado</td></tr>
             <?php endif; ?>
         </tbody>
      <?php echo $__env->renderComponent(); ?>

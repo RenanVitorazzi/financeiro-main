@@ -103,6 +103,47 @@
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
+    <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
+<?php $component->withName('table-header'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
+        <tr>
+            <th>Mês</th>
+            <th>Valor Bruto</th>
+            <th>Valor Juros</th>
+            <th>Valor Líquido</th>
+        </tr> 
+     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36)): ?>
+<?php $component = $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36; ?>
+<?php unset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36); ?>
+<?php endif; ?>
+    <tbody>
+        <?php $__currentLoopData = $total_cheques_mes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>   
+            <tr>
+                <td><?php echo e($key->mes); ?></td>
+                <td><?php echo 'R$ ' . number_format($key->total_mes, 2, ',', '.'); ?></td>
+                <td><?php echo 'R$ ' . number_format($key->total_juros_mes, 2, ',', '.'); ?></td>
+                <td><?php echo 'R$ ' . number_format($key->total_liquido_mes, 2, ',', '.'); ?></td>
+            </tr>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </tbody>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6)): ?>
+<?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
+<?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
+<?php endif; ?>
+
+<?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
+<?php $component->withName('table'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
     <tr>
         <td>Total Bruto</td>
         <td>Total Juros</td>

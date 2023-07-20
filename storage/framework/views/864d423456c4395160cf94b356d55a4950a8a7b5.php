@@ -16,6 +16,7 @@ Clientes
 <?php unset($__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd); ?>
 <?php endif; ?>
 </div>
+
 <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
 <?php $component->withName('table'); ?>
@@ -30,8 +31,10 @@ Clientes
 <?php $component->withAttributes([]); ?>
         <tr>
             <th>Nome</th>
-            <th>Representante</th>
+            <th>CPF / CNPJ</th>
             <th>Cidade</th>
+            <th>Estado</th>
+            <th>Representante</th>
             <th>Ações</th>
         </tr>
      <?php echo $__env->renderComponent(); ?>
@@ -44,7 +47,9 @@ Clientes
         <?php $__empty_1 = true; $__currentLoopData = $clientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cliente): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
         <tr>
             <td><?php echo e($cliente->pessoa->nome); ?></td>
+            <td><?php echo e($cliente->pessoa->cpf ?? $cliente->pessoa->cnpj); ?></td>
             <td><?php echo e($cliente->pessoa->municipio); ?></td>
+            <td><?php echo e($cliente->pessoa->estado); ?></td>
             <td><?php echo e($cliente->representante->pessoa->nome ?? 'Sem representante'); ?></td>
             <td class='d-flex justify-content-center'>
                 <a class="btn btn-dark mr-2" title="Visualizar" href="<?php echo e(route('clientes.show', $cliente->id)); ?>">

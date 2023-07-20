@@ -25,8 +25,8 @@ class DespesaController extends Controller
     public function index()
     {
         $idFixasPagas = ModelsDespesa::query()
-            ->whereMonth('data_referencia', DB::raw('MONTH(CURDATE()) - 1'))
-            ->whereYear('data_referencia', DB::raw('YEAR(CURDATE())'))
+            ->whereMonth('data_vencimento', DB::raw('MONTH(CURDATE())'))
+            ->whereYear('data_vencimento', DB::raw('YEAR(CURDATE())'))
             ->whereNotNull('fixas_id')
             ->orderBy('local_id')
             ->pluck('fixas_id');
@@ -42,8 +42,8 @@ class DespesaController extends Controller
             ->get();
             
         $despesas = ModelsDespesa::with('local')
-            ->where(DB::raw('MONTH(data_referencia)'), DB::raw('MONTH(CURDATE()) - 1'))
-            ->whereYear('data_referencia', DB::raw('YEAR(CURDATE())'))
+            ->where(DB::raw('MONTH(data_vencimento)'), DB::raw('MONTH(CURDATE())'))
+            ->whereYear('data_vencimento', DB::raw('YEAR(CURDATE())'))
             ->orderBy('local_id')
             ->get();
 

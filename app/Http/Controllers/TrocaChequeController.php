@@ -239,8 +239,26 @@ class TrocaChequeController extends Controller
             [$id]
         );
 
+        $total_cheques_mes = DB::select('SELECT
+                MONTH(IF(a.nova_data, MAX(a.nova_data), p.data_parcela)) as mes,
+                SUM(valor_parcela) as total_mes,
+                SUM(t.valor_juros) as total_juros_mes,
+                SUM(t.valor_liquido) as total_liquido_mes
+            FROM
+                parcelas p
+                    INNER JOIN
+                trocas_parcelas t ON t.parcela_id = p.id
+                    LEFT JOIN
+                adiamentos a ON a.parcela_id = p.id
+            WHERE
+                troca_id = ?
+            GROUP BY MONTH(p.data_parcela)
+            ORDER BY 1, 2',
+            [$id]
+        );
+        // dd($total_cheques_mes);
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('troca_cheque.pdf.troca_cheque', compact('troca', 'cheques', 'prazoMedio') );
+        $pdf->loadView('troca_cheque.pdf.troca_cheque', compact('troca', 'cheques', 'total_cheques_mes', 'prazoMedio') );
 
         return $pdf->stream();
     }
