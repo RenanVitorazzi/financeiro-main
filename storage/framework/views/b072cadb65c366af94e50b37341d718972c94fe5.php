@@ -33,7 +33,7 @@
     }
 </style>
 <body>
-    <h3>Relação de cheques no escritório - <?php echo e($representante->pessoa->nome); ?> <?php echo date('d/m/Y', strtotime($hoje)); ?></h3>
+    <h3>CHEQUES DEVOLVIDOS NO ESCRITÓRIO - <?php echo e($representante->pessoa->nome); ?> <?php echo date('d/m/Y', strtotime($hoje)); ?></h3>
     <table>
         <thead>
             <tr>

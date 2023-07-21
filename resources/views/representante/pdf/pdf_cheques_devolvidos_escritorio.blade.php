@@ -33,7 +33,7 @@
     }
 </style>
 <body>
-    <h3>Relação de cheques no escritório - {{$representante->pessoa->nome}} @data($hoje)</h3>
+    <h3>CHEQUES DEVOLVIDOS NO ESCRITÓRIO - {{$representante->pessoa->nome}} @data($hoje)</h3>
     <table>
         <thead>
             <tr>

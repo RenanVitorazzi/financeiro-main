@@ -11,8 +11,21 @@
         
     </ol>
 </nav>
-<div class='mb-4'>
+<div class='mb-2 d-flex justify-content-between'>
     <h3 class='d-inline' style="color:#212529">Histórico - <?php echo e($cliente->pessoa->nome); ?> </h3> 
+    <?php if (isset($component)) { $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\BotaoImprimir::class, []); ?>
+<?php $component->withName('botao-imprimir'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['href' => ''.e(route('pdf_historico_cliente', $cliente->id)).'','target' => '_blank']); ?>
+    
+     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5)): ?>
+<?php $component = $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5; ?>
+<?php unset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5); ?>
+<?php endif; ?>
 </div>
     <?php if(Session::has('message')): ?>
         <p class="alert alert-success"><?php echo e(Session::get('message')); ?></p>

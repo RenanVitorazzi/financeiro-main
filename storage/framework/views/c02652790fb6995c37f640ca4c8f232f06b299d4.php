@@ -11,6 +11,7 @@
         Você tem <?php echo e($fixasNaoPagas->count()); ?> despesa para pagar nos próximos 7 dias
     </div>
 <?php endif; ?>
+
 <div class="table-responsive">
 <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
@@ -189,7 +190,7 @@
 <?php endif; ?>
     <tbody>
     <?php $__empty_1 = true; $__currentLoopData = $ops; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ordem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-        <tr>
+        <tr <?php echo e($ordem->data_parcela < \Carbon\Carbon::now()->format('Y-m-d') ? "class=table-danger" : ''); ?>>
             <td><?php echo e($loop->index + 1); ?></td>
             <td><?php echo e($ordem->venda->cliente->pessoa->nome ?? $ordem->nome_cheque); ?></td>
             <td><?php echo date('d/m/Y', strtotime($ordem->data_parcela)); ?></td>
@@ -216,7 +217,7 @@
 <?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
 <?php endif; ?>
 
-<a class="btn btn-dark" target="_blank" href="<?php echo e(route('pdf_diario')); ?>">Impresso diário</a>
+<a class="btn btn-dark" target="_blank" href="<?php echo e(route('pdf_diario2')); ?>">Impresso diário</a>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
 <script>

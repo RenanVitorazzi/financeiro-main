@@ -12,6 +12,7 @@
         Você tem {{ $fixasNaoPagas->count() }} despesa para pagar nos próximos 7 dias
     </div>
 @endif
+
 <div class="table-responsive">
 <x-table>
     <x-tableheader>
@@ -105,7 +106,7 @@
     </x-tableheader>
     <tbody>
     @forelse ($ops as $ordem)
-        <tr>
+        <tr {{ $ordem->data_parcela < \Carbon\Carbon::now()->format('Y-m-d') ? "class=table-danger" : ''}}>
             <td>{{ $loop->index + 1}}</td>
             <td>{{ $ordem->venda->cliente->pessoa->nome ?? $ordem->nome_cheque}}</td>
             <td>@data($ordem->data_parcela)</td>
@@ -127,7 +128,7 @@
     </tbody>
 </x-table>
 
-<a class="btn btn-dark" target="_blank" href="{{ route('pdf_diario') }}">Impresso diário</a>
+<a class="btn btn-dark" target="_blank" href="{{ route('pdf_diario2') }}">Impresso diário</a>
 @endsection
 @section('script')
 <script>

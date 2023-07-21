@@ -164,7 +164,6 @@ class ClienteController extends Controller
         $compras = Venda::with('representante')
             ->where('cliente_id', $cliente_id)
             ->get();
-        // dd($compras);
 
         $parcelas = Parcela::query()
             ->whereIn('venda_id', $compras->pluck('id'))
@@ -175,10 +174,13 @@ class ClienteController extends Controller
             ->whereIn('venda_id', $compras->pluck('id'))
             ->orderBy('venda_id')
             ->get();
-        // dd($consignado);
+
+        $totalPrazo = 0;
+
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('cliente.pdf.pdf_historico_cliente', compact('cliente', 'compras', 'parcelas', 'consignados') )
-            ->setPaper('a4', 'landscape');
+        $pdf->loadView('cliente.pdf.pdf_historico_cliente', 
+            compact('cliente', 'compras', 'parcelas', 'consignados', 'totalPrazo') 
+        );
 
         return $pdf->stream();
     }

@@ -31,7 +31,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
 
-
     Route::resource('clientes', ClienteController::class);
     Route::resource('conta_corrente_representante', ContaCorrenteRepresentanteController::class);
     Route::resource('venda', VendaController::class);
