@@ -277,13 +277,22 @@
             </thead>
             <tbody>
                 @forelse ($recebimentos as $recebimento)
-                    @if ($recebimento->parcela->forma_pagamento == 'Cheque')
+                    @if ($recebimento->parcela()->exists() && $recebimento->parcela->forma_pagamento == 'Cheque')
                         <tr>
                             <td class='titular'>{{$recebimento->parcela->nome_cheque}}</td>
                             <td>{{ $recebimento->parcela->forma_pagamento }} - @moeda($recebimento->parcela->valor_parcela)</td>
                             <td>{{$recebimento->conta->nome}}</td>
                             <td>@moeda($recebimento->valor)</td>
                         </tr>
+                    @elseif(!$recebimento->parcela()->exists())
+                    <tr>
+                        <td class='titular'>
+                            {{$recebimento->representante->pessoa->nome}} 
+                        </td>
+                        <td>{{ $recebimento->observacao }}</td>
+                        <td>{{$recebimento->conta->nome}}</td>
+                        <td>@moeda($recebimento->valor)</td>
+                    </tr>
                     @else
                         <tr>
                             <td class='titular'>

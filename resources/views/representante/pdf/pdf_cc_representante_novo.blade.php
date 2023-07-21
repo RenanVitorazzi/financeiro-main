@@ -35,21 +35,21 @@
     }
 </style>
 <body>
-    <h3>Extrato {{$representante->pessoa->nome}} - @data($hoje)</h3>
+    <h3>EXTRATO {{$representante->pessoa->nome}} - @data($hoje)</h3>
     <table>
         <thead>
             <tr>
-                <th>Data</th>
-                <th>Descrição</th>
-                <th>Débito</th>
-                <th>Crédito</th>
-                <th>Saldo</th>
+                <th>DATA</th>
+                <th>DESCRIÇÃO</th>
+                <th>DÉBITO</th>
+                <th>CRÉDITO</th>
+                <th>SALDO</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>@data($infoRepresentante[$representante->id]['Data'])</td>
-                <td colspan=3>Saldo anterior</td>
+                <td colspan=3>SALDO ANTERIOR</td>
                 <td>@moeda($saldo_total)</td>
             </tr>
             @forelse ($saldos as $saldo)
@@ -94,7 +94,7 @@
 
             @empty
                 <tr>
-                    <td colspan=5>Nenhum registro</td>
+                    <td colspan=5>NENHUM REGISTRO</td>
                 </tr>
             @endforelse
         </tbody>
@@ -114,31 +114,39 @@
     </table>
     <br>
     <table>
-        <tr></tr>
+        <tr>
+            <td></td>
+            <td>QUANTIDADE</td>
+            <td>TOTAL DEVOLVIDO</td>
+            <td>TOTAL EM ABERTO</td>
+        </tr>
         <tr>
             <td>
                 <a  target='_blank' href='{{ route('pdf_cheques_devolvidos_escritorio', ['representante_id' => $representante->id]) }}'> 
-                    TOTAL DE CHEQUES NA EMPRESA ({{ $chequesNaoEntregues->count() }})
+                    CHEQUES NA EMPRESA 
                 </a>
             </td>
-            <td>Total Devolvido: @moeda($chequesNaoEntregues->sum('valor_parcela'))</td>
+            <td>{{ $chequesNaoEntregues->count() }}</td>
+            <td>@moeda($chequesNaoEntregues->sum('valor_parcela'))</td>
             {{-- <td>Total Pago: @moeda($chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'))</td> --}}
-            <td>Total aberto: @moeda($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'))</td>
+            <td>@moeda($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'))</td>
         </tr>
         <tr>
             <td>
                 <a  target='_blank' href='{{ route('pdf_cheques_devolvidos_parceiros', ['representante_id' => $representante->id]) }}'> 
-                    TOTAL DE CHEQUES COM PARCEIROS ({{ $chequesComParceiros->count() }})
+                    CHEQUES COM PARCEIROS 
                 </a>            
             </td>
+            <td>{{ $chequesComParceiros->count() }}</td>
             {{-- <td>@moeda($chequesComParceiros->sum('valor_parcela'))</td> --}}
-            <td>Total Devolvido: @moeda($chequesComParceiros->sum('valor_parcela'))</td>
+            <td>@moeda($chequesComParceiros->sum('valor_parcela'))</td>
             {{-- <td>Total Pago: @moeda($chequesComParceiros->sum('pagamentos_parceiros_sum_valor'))</td> --}}
-            <td>Total aberto: @moeda(($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')))</td>
+            <td>@moeda(($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')))</td>
 
         </tr>
         <tr>
-            <td>Total Geral</td>
+            <td>TOTAL GERAL</td>
+            <td>{{ $chequesNaoEntregues->count() + $chequesComParceiros->count()}}</td>
             <td colspan=2> @moeda(
                 ($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor') ) +
                 ($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor'))

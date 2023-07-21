@@ -35,21 +35,21 @@
     }
 </style>
 <body>
-    <h3>Extrato <?php echo e($representante->pessoa->nome); ?> - <?php echo date('d/m/Y', strtotime($hoje)); ?></h3>
+    <h3>EXTRATO <?php echo e($representante->pessoa->nome); ?> - <?php echo date('d/m/Y', strtotime($hoje)); ?></h3>
     <table>
         <thead>
             <tr>
-                <th>Data</th>
-                <th>Descrição</th>
-                <th>Débito</th>
-                <th>Crédito</th>
-                <th>Saldo</th>
+                <th>DATA</th>
+                <th>DESCRIÇÃO</th>
+                <th>DÉBITO</th>
+                <th>CRÉDITO</th>
+                <th>SALDO</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td><?php echo date('d/m/Y', strtotime($infoRepresentante[$representante->id]['Data'])); ?></td>
-                <td colspan=3>Saldo anterior</td>
+                <td colspan=3>SALDO ANTERIOR</td>
                 <td><?php echo 'R$ ' . number_format($saldo_total, 2, ',', '.'); ?></td>
             </tr>
             <?php $__empty_1 = true; $__currentLoopData = $saldos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $saldo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
@@ -94,7 +94,7 @@
 
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
-                    <td colspan=5>Nenhum registro</td>
+                    <td colspan=5>NENHUM REGISTRO</td>
                 </tr>
             <?php endif; ?>
         </tbody>
@@ -114,31 +114,39 @@
     </table>
     <br>
     <table>
-        <tr></tr>
+        <tr>
+            <td></td>
+            <td>QUANTIDADE</td>
+            <td>TOTAL DEVOLVIDO</td>
+            <td>TOTAL EM ABERTO</td>
+        </tr>
         <tr>
             <td>
                 <a  target='_blank' href='<?php echo e(route('pdf_cheques_devolvidos_escritorio', ['representante_id' => $representante->id])); ?>'> 
-                    TOTAL DE CHEQUES NA EMPRESA (<?php echo e($chequesNaoEntregues->count()); ?>)
+                    CHEQUES NA EMPRESA 
                 </a>
             </td>
-            <td>Total Devolvido: <?php echo 'R$ ' . number_format($chequesNaoEntregues->sum('valor_parcela'), 2, ',', '.'); ?></td>
+            <td><?php echo e($chequesNaoEntregues->count()); ?></td>
+            <td><?php echo 'R$ ' . number_format($chequesNaoEntregues->sum('valor_parcela'), 2, ',', '.'); ?></td>
             
-            <td>Total aberto: <?php echo 'R$ ' . number_format($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'), 2, ',', '.'); ?></td>
+            <td><?php echo 'R$ ' . number_format($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'), 2, ',', '.'); ?></td>
         </tr>
         <tr>
             <td>
                 <a  target='_blank' href='<?php echo e(route('pdf_cheques_devolvidos_parceiros', ['representante_id' => $representante->id])); ?>'> 
-                    TOTAL DE CHEQUES COM PARCEIROS (<?php echo e($chequesComParceiros->count()); ?>)
+                    CHEQUES COM PARCEIROS 
                 </a>            
             </td>
+            <td><?php echo e($chequesComParceiros->count()); ?></td>
             
-            <td>Total Devolvido: <?php echo 'R$ ' . number_format($chequesComParceiros->sum('valor_parcela'), 2, ',', '.'); ?></td>
+            <td><?php echo 'R$ ' . number_format($chequesComParceiros->sum('valor_parcela'), 2, ',', '.'); ?></td>
             
-            <td>Total aberto: <?php echo 'R$ ' . number_format(($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')), 2, ',', '.'); ?></td>
+            <td><?php echo 'R$ ' . number_format(($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')), 2, ',', '.'); ?></td>
 
         </tr>
         <tr>
-            <td>Total Geral</td>
+            <td>TOTAL GERAL</td>
+            <td><?php echo e($chequesNaoEntregues->count() + $chequesComParceiros->count()); ?></td>
             <td colspan=2> <?php echo 'R$ ' . number_format(($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor') ) +
                 ($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')), 2, ',', '.'); ?></td>
         </tr>
