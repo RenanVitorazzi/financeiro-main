@@ -63,8 +63,12 @@ class HomeController extends Controller
 
         $ops = Parcela::ops()
             ->with('representante.pessoa', 'venda.cliente.pessoa', 'pagamentos_representantes')
-            ->whereBetween('data_parcela', [Carbon::now()->startOfWeek()->format('Y-m-d'), Carbon::now()->endOfWeek()->format('Y-m-d')])
-            ->where('representante_id', '<>', 3)
+            ->where(function ($query) {
+                $query->whereBetween('data_parcela', [Carbon::now()->startOfWeek()->format('Y-m-d'), Carbon::now()->endOfWeek()->format('Y-m-d')]);
+                $query->orWhere('data_parcela', '<',  Carbon::now()->format('Y-m-d'));
+             })
+            ->whereIn('representante_id', [5,20,25])
+            ->orderBy('data_parcela')
             ->orderBy('representante_id')
             ->get();
         // dd(Carbon::now()->endOfWeek()->format('Y-m-d'));
