@@ -186,6 +186,7 @@ Adicionar recebimento
 <?php $component->withAttributes(['name' => 'forma_pagamento','value' => ''.e(old('forma_pagamento')).'']); ?>
                         <option></option>
                         <option value='Pix' <?php echo e(old('forma_pagamento') == 'PIX' ? 'selected' : ''); ?> > PIX </option>
+                        <option value='Cheque' <?php echo e(old('forma_pagamento') == 'Cheque' ? 'selected' : ''); ?> > Cheque </option>
                         <option value='TED' <?php echo e(old('forma_pagamento') == 'TED' ? 'selected' : ''); ?> > TED </option>
                         <option value='Depósito' <?php echo e(old('forma_pagamento') == 'Depósito' ? 'selected' : ''); ?> > Depósito </option>
                         <option value='DOC' <?php echo e(old('forma_pagamento') == 'DOC' ? 'selected' : ''); ?> > DOC </option>

@@ -90,6 +90,7 @@ Adicionar recebimento
                     <x-select name="forma_pagamento" value="{{ old('forma_pagamento') }}">
                         <option></option>
                         <option value='Pix' {{ old('forma_pagamento') == 'PIX' ? 'selected' : '' }} > PIX </option>
+                        <option value='Cheque' {{ old('forma_pagamento') == 'Cheque' ? 'selected' : '' }} > Cheque </option>
                         <option value='TED' {{ old('forma_pagamento') == 'TED' ? 'selected' : '' }} > TED </option>
                         <option value='Depósito' {{ old('forma_pagamento') == 'Depósito' ? 'selected' : '' }} > Depósito </option>
                         <option value='DOC' {{ old('forma_pagamento') == 'DOC' ? 'selected' : '' }} > DOC </option>
