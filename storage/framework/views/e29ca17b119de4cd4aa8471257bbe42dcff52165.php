@@ -10,6 +10,7 @@
     table {
         width:100%;
         border-collapse: collapse;
+        font-size: 12px
     }
 
     td, th {
@@ -29,15 +30,23 @@
         color: red;
         font-weight: 300;
     }
+
+    .conferido {
+        background-color: rgb(156, 214, 156);
+    }
+
+    p {
+        margin: 0 0 0 0;
+    }
 </style>
 <body>
-    <h1>
+    <h3>
         <div>
             <?php echo e($fornecedor->pessoa->nome); ?>
 
             (<?php echo number_format($registrosContaCorrente[count($registrosContaCorrente)-1]->saldo, 2, ',', '.'); ?>)
         </div>
-    </h1>
+    </h3>
     <table>
         <thead>
             <tr>
@@ -51,22 +60,33 @@
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $registrosContaCorrente; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $conta): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <?php if($conta->data > $data_inicio): ?>
-
-
                     <?php if($conta->balanco == 'Débito'): ?>
-                        <tr>
+                        <tr class="<?php echo e($conta->conferido ? 'conferido' : ''); ?>">
                             <td><?php echo date('d/m/Y', strtotime($conta->data)); ?></td>
+                            <td>
+                                <?php echo e($conta->observacao); ?> 
+                                <?php if($conta->conferido): ?>
+                                    <p>Conta conferido dia: <?php echo e($conta->conferido); ?></p>
+                                <?php endif; ?> 
+                            </td>
                             <td><?php echo number_format($conta->peso, 2, ',', '.'); ?></td>
                             <td></td>
-                            <td><?php echo e($conta->observacao); ?></td>
+                            
                             <td><?php echo number_format($conta->saldo, 2, ',', '.'); ?></td>
                         </tr>
                     <?php else: ?>
-                        <tr>
+                        <tr class="<?php echo e($conta->conferido ? 'conferido' : ''); ?>">
                             <td><?php echo date('d/m/Y', strtotime($conta->data)); ?></td>
+                            <td>
+                                <?php echo e($conta->observacao); ?>
+
+                                <?php if($conta->conferido): ?>
+                                    <p>Conta conferido dia: <?php echo e($conta->conferido); ?></p>
+                                <?php endif; ?> 
+                            </td>
                             <td></td>
                             <td><?php echo number_format($conta->peso, 2, ',', '.'); ?></td>
-                            <td><?php echo e($conta->observacao); ?></td>
+                            
                             <td><?php echo number_format($conta->saldo, 2, ',', '.'); ?></td>
                         </tr>
                     <?php endif; ?>

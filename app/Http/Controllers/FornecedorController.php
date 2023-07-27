@@ -168,7 +168,7 @@ class FornecedorController extends Controller
     {
         $fornecedor = Fornecedor::with('pessoa')->findOrFail($id);
 
-        $registrosContaCorrente = DB::select("SELECT id, data, balanco, peso, observacao, (SELECT SUM(peso_agregado)
+        $registrosContaCorrente = DB::select("SELECT id, data, balanco, peso, observacao, DATE_FORMAT(conferido, '%d/%m/%Y') as conferido, (SELECT SUM(peso_agregado)
             FROM conta_corrente
             WHERE fornecedor_id = ?
             AND deleted_at IS NULL
