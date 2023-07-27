@@ -10,6 +10,7 @@
     table {
         width:100%;
         border-collapse: collapse;
+        font-size: 12px
     }
 
     td, th {
@@ -29,14 +30,22 @@
         color: red;
         font-weight: 300;
     }
+
+    .conferido {
+        background-color: rgb(156, 214, 156);
+    }
+
+    p {
+        margin: 0 0 0 0;
+    }
 </style>
 <body>
-    <h1>
+    <h3>
         <div>
             {{ $fornecedor->pessoa->nome }}
             (@peso($registrosContaCorrente[count($registrosContaCorrente)-1]->saldo))
         </div>
-    </h1>
+    </h3>
     <table>
         <thead>
             <tr>
@@ -50,22 +59,32 @@
         <tbody>
             @forelse ($registrosContaCorrente as $conta)
                 @if ($conta->data > $data_inicio)
-
-
                     @if ($conta->balanco == 'Débito')
-                        <tr>
+                        <tr class="{{ $conta->conferido ? 'conferido' : ''}}">
                             <td>@data($conta->data)</td>
+                            <td>
+                                {{ $conta->observacao }} 
+                                @if ($conta->conferido)
+                                    <p>Conta conferido dia: {{ $conta->conferido }}</p>
+                                @endif 
+                            </td>
                             <td>@peso($conta->peso)</td>
                             <td></td>
-                            <td>{{ $conta->observacao }}</td>
+                            
                             <td>@peso($conta->saldo)</td>
                         </tr>
                     @else
-                        <tr>
+                        <tr class="{{ $conta->conferido ? 'conferido' : ''}}">
                             <td>@data($conta->data)</td>
+                            <td>
+                                {{ $conta->observacao }}
+                                @if ($conta->conferido)
+                                    <p>Conta conferido dia: {{ $conta->conferido }}</p>
+                                @endif 
+                            </td>
                             <td></td>
                             <td>@peso($conta->peso)</td>
-                            <td>{{ $conta->observacao }}</td>
+                            
                             <td>@peso($conta->saldo)</td>
                         </tr>
                     @endif
