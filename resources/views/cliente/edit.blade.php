@@ -107,7 +107,19 @@ Editar cliente
                 </div>
 
             </div>
-            <x-form-group name='complemento' value="{{ old('complemento', $cliente->pessoa->complemento) }}">Complemento</x-form-group>
+            
+            {{-- <x-form-group name='complemento' value="{{ old('complemento', $cliente->pessoa->complemento) }}">Complemento</x-form-group> --}}
+            <div class='row'>
+                <div class="col-4">
+                    <x-form-group name='complemento' value="{{ old('complemento', $cliente->pessoa->complemento) }}">Complemento</x-form-group>
+                </div>
+                <div class="col-4">
+                    <x-form-group name='lat' value="{{ old('lat', $cliente->pessoa->lat) }}">Latitude</x-form-group>
+                </div>
+                <div class="col-4">
+                    <x-form-group name='lng' value="{{ old('lng', $cliente->pessoa->lng) }}">Longitude</x-form-group>
+                </div>
+            </div>
         </div>
     </div>
 

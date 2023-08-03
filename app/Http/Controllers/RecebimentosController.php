@@ -66,7 +66,7 @@ class RecebimentosController extends Controller
 
         if ($request->tipo_pagamento == 1) {
             $pagamentoParceiro = PagamentosParceiros::create($request->validated());
-            if ($parcela) {
+            if ($request->parcela_id) {
                 Parcela::where('id', $parcela->id)->update(['status' => 'Pago']);
             }
         } else if ($request->tipo_pagamento == 2) {
@@ -93,12 +93,12 @@ class RecebimentosController extends Controller
                 }
             }
 
-        } else if ($request->tipo_pagamento == 3 && $request->tipo_pagamento == 4) {
+        } else if ($request->tipo_pagamento == 3 || $request->tipo_pagamento == 4) {
 
             $pagamentoRepresentante = PagamentosRepresentantes::create($request->validated());
 
             $pagamentoParceiro = PagamentosParceiros::create($request->validated());
-
+            
             if ($parcela->id) {
                 $valorTotalPagoRepresentante = PagamentosRepresentantes::where('parcela_id', $parcela->id)
                     ->sum('valor');
@@ -158,11 +158,10 @@ class RecebimentosController extends Controller
         $parceiros = Parceiro::all();
         $representantes = Representante::all();
         $pagamentosRepresentantes = PagamentosRepresentantes::findOrFail($request);
-        $formasPagamento = ['Pix', 'TED', 'Depósito', 'DOC', 'Dinheiro'];
+        $formasPagamento = ['Pix', 'TED', 'Depósito', 'DOC', 'Dinheiro', 'Cheque'];
         $outrosPagamentos =  PagamentosRepresentantes::where('parcela_id', $pagamentosRepresentantes->parcela_id)
             ->where('id', '<>', $pagamentosRepresentantes->id)
             ->get();
-        // dd(!$outrosPagamentos->isEmpty());
 
         return view('recebimento.edit', compact('pagamentosRepresentantes', 'contas', 'parceiros', 'representantes', 'formasPagamento', 'outrosPagamentos'));
     }

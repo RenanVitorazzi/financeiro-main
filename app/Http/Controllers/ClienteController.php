@@ -144,7 +144,9 @@ class ClienteController extends Controller
                 p.numero,
                 p.telefone,
                 p.celular,
-                UPPER(p.complemento) as complemento
+                UPPER(p.complemento) as complemento,
+                p.lat,
+                p.lng
             FROM clientes c
             INNER JOIN pessoas p ON p.id = c.pessoa_id
                 WHERE c.representante_id = ?

@@ -7,6 +7,9 @@
     <title>CLIENTES {{$representante->pessoa->nome}}</title>
 </head>
 <style>
+    * {
+        text-transform: uppercase;
+    }
     table {
         width:100%;
         border-collapse: collapse;
@@ -19,44 +22,45 @@
     tr:nth-child(even) {
         background-color: #d9dde2;
     }
-    h1 {
-        text-align: center;
-    }
-    .nome {
+    td  {
+        height: 25px;
         font-size:10px;
+    }
+    h3 {
+        margin: 2 2 2 2;
+        text-align: center;
     }
 </style>
 <body>
+    <h3> CLIENTES - {{$representante->pessoa->nome}}</h3>
     <table>
         <thead>
             <tr>
-                <th colspan = 7>Clientes - {{$representante->pessoa->nome}}</th>
-            </tr>
-            <tr>
-                <th></th>
+                <th>#</th>
                 <th>Nome</th>
-                <th>Estado</th>
+                <th>UF</th>
                 <th>Município</th>
-                <th>CEP</th>
                 <th>Endereço</th>
                 <th>Telefones</th>
+                <th>Geo</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($clientes as $cliente)
                 <tr>
-                    <td>{{ $loop->index+1 }}</td>
-                    <td class='nome'>{{ $cliente->nome }}</td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $cliente->nome }}</td>
                     <td>{{ $cliente->estado }}</td>
                     <td>{{ substr($cliente->municipio,0,15) }}</td>
-                    <td>{{ $cliente->cep }}</td>
-
-                    @if ($cliente->cep)
-                        <td>{{ $cliente->bairro }}, {{ $cliente->logradouro }}, {{ $cliente->numero }}</td>
-                    @else
-                        <td></td>
-                    @endif
-
+                    
+                    <td>
+                        {{ $cliente->cep ? $cliente->cep.',' : ''}}
+                        {{ $cliente->bairro ? $cliente->bairro.',' : ''}} 
+                        {{ $cliente->logradouro ? $cliente->logradouro.',' : ''}}
+                        {{ $cliente->numero ? $cliente->numero.',' : ''}}
+                        {{ $cliente->complemento ? $cliente->complemento.',' : ''}}
+                    </td>
+                    
                     <td>
                         @if ($cliente->celular)
                             {{ $cliente->celular }}
@@ -73,6 +77,11 @@
                         @if ($cliente->celular2)
                             <br>
                             {{ $cliente->celular2 }}
+                        @endif
+                    </td>
+                    <td>
+                        @if ($cliente->lat && $cliente->lng)
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ $cliente->lat }},{{ $cliente->lng }}">Abrir</a>
                         @endif
                     </td>
                 </tr>

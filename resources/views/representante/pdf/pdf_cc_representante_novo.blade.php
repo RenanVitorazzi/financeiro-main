@@ -118,6 +118,7 @@
             <td></td>
             <td>QUANTIDADE</td>
             <td>TOTAL DEVOLVIDO</td>
+            <td>TOTAL PAGO</td>
             <td>TOTAL EM ABERTO</td>
         </tr>
         <tr>
@@ -128,7 +129,7 @@
             </td>
             <td>{{ $chequesNaoEntregues->count() }}</td>
             <td>@moeda($chequesNaoEntregues->sum('valor_parcela'))</td>
-            {{-- <td>Total Pago: @moeda($chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'))</td> --}}
+            <td>@moeda($chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'))</td>
             <td>@moeda($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'))</td>
         </tr>
         <tr>
@@ -140,14 +141,14 @@
             <td>{{ $chequesComParceiros->count() }}</td>
             {{-- <td>@moeda($chequesComParceiros->sum('valor_parcela'))</td> --}}
             <td>@moeda($chequesComParceiros->sum('valor_parcela'))</td>
-            {{-- <td>Total Pago: @moeda($chequesComParceiros->sum('pagamentos_parceiros_sum_valor'))</td> --}}
+            <td>@moeda($chequesComParceiros->sum('pagamentos_representantes_sum_valor'))</td>
             <td>@moeda(($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')))</td>
 
         </tr>
         <tr>
             <td>TOTAL GERAL</td>
             <td>{{ $chequesNaoEntregues->count() + $chequesComParceiros->count()}}</td>
-            <td colspan=2> @moeda(
+            <td colspan=3> @moeda(
                 ($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor') ) +
                 ($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor'))
             )</td>

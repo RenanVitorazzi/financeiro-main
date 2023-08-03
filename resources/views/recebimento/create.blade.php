@@ -82,7 +82,7 @@ Adicionar recebimento
                         @foreach($contas as $conta)
                             <option value={{ $conta->id }} {{ old('conta_id', $contaImportacao) == $conta->id ? 'selected' : '' }}>{{ $conta->nome }}</option>
                         @endforeach
-                            <option value="999">Conta de Parceiro</option>
+                            <option value="">Conta de Parceiro</option>
                     </x-select>
                 </div>
                 <div class="col-4 form-group">

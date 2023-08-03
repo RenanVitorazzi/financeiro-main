@@ -40,7 +40,9 @@ class RequestFormPessoa extends FormRequest
             'telefone2' => 'telefone_com_ddd|nullable',
             'celular2' => 'celular_com_ddd|nullable',
             'email' => 'email:rfc,dns|nullable|',
-            'representante_id' => 'nullable|integer'
+            'representante_id' => 'nullable|integer',
+            'lat' => 'nullable',
+            'lng' => 'nullable',
         ];
     }
 
