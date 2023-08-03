@@ -43,7 +43,6 @@
                 </div>
                 
                 <x-form-group name='logradouro' value="{{ old('logradouro') }}">Logradouro</x-form-group>
-            
             </div>
         
             <div class="col-4">
@@ -55,6 +54,20 @@
             </div>
         
         </div>
-        <x-form-group name='complemento' value="{{ old('complemento') }}">Complemento</x-form-group>
+        
+        
+        <div class='row'>
+            <div class="col-4">
+                <x-form-group name='complemento' value="{{ old('complemento') }}">Complemento</x-form-group>
+            </div>
+            <div class="col-4">
+                <x-form-group name='lat' value="{{ old('lat') }}">Latitude</x-form-group>
+            </div>
+            <div class="col-4">
+                <x-form-group name='lng' value="{{ old('lng') }}">Longitude</x-form-group>
+            </div>
+        </div>
+
+        
     </div>  
 </div>  

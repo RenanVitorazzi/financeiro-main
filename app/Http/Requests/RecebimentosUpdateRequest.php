@@ -24,7 +24,7 @@ class RecebimentosUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $forma_pagamento = ['Pix', 'Depósito', 'Dinheiro', 'TED', 'DOC'];
+        $forma_pagamento = ['Pix', 'Depósito', 'Dinheiro', 'TED', 'DOC', 'Cheque'];
 
         return [
             'data' => ['date', 'required'],

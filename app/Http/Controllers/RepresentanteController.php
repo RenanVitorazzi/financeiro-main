@@ -227,6 +227,10 @@ class RepresentanteController extends Controller {
             26 => [
                 'Saldo' => 0,
                 'Data' => '2023-07-05'
+            ],
+            'Default' => [
+                'Saldo' => 0,
+                'Data' => '2023-01-02'
             ]
         ];
         
@@ -276,8 +280,8 @@ class RepresentanteController extends Controller {
                     ->where('representante_id', $representante_id);
             })
             ->get();
-// dd($chequesNaoEntregues);
-        $chequesComParceiros = Parcela::withSum('pagamentos_parceiros', 'valor')
+            
+        $chequesComParceiros = Parcela::withSum('pagamentos_representantes', 'valor')
             ->where('representante_id', $representante_id)
             ->whereHas('movimentacoes', function ($query) {
                 $query->whereIn('status', ['Devolvido', 'Resgatado']);

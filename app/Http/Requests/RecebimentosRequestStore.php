@@ -29,7 +29,7 @@ class RecebimentosRequestStore extends FormRequest
         return [
             'data' => ['date', 'required'],
             'valor' => ['required', 'numeric', 'min:0'],
-            'conta_id' => ['required', 'numeric'],
+            'conta_id' => ['nullable', 'numeric'],
             'parcela_id' => ['nullable', 'numeric'],
             'representante_id' => ['nullable', 'numeric','required_unless:tipo_pagamento,1'],
             'parceiro_id' => ['nullable', 'numeric', 'required_unless:tipo_pagamento,2'],

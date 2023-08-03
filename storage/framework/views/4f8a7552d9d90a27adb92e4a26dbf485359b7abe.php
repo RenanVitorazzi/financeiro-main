@@ -168,7 +168,7 @@ Adicionar recebimento
                         <?php $__currentLoopData = $contas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $conta): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value=<?php echo e($conta->id); ?> <?php echo e(old('conta_id', $contaImportacao) == $conta->id ? 'selected' : ''); ?>><?php echo e($conta->nome); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <option value="999">Conta de Parceiro</option>
+                            <option value="">Conta de Parceiro</option>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>

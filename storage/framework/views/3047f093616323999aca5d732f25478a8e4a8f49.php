@@ -7,6 +7,9 @@
     <title>CLIENTES <?php echo e($representante->pessoa->nome); ?></title>
 </head>
 <style>
+    * {
+        text-transform: uppercase;
+    }
     table {
         width:100%;
         border-collapse: collapse;
@@ -19,44 +22,49 @@
     tr:nth-child(even) {
         background-color: #d9dde2;
     }
-    h1 {
-        text-align: center;
-    }
-    .nome {
+    td  {
+        height: 25px;
         font-size:10px;
+    }
+    h3 {
+        margin: 2 2 2 2;
+        text-align: center;
     }
 </style>
 <body>
+    <h3> CLIENTES - <?php echo e($representante->pessoa->nome); ?></h3>
     <table>
         <thead>
             <tr>
-                <th colspan = 7>Clientes - <?php echo e($representante->pessoa->nome); ?></th>
-            </tr>
-            <tr>
-                <th></th>
+                <th>#</th>
                 <th>Nome</th>
-                <th>Estado</th>
+                <th>UF</th>
                 <th>Município</th>
-                <th>CEP</th>
                 <th>Endereço</th>
                 <th>Telefones</th>
+                <th>Geo</th>
             </tr>
         </thead>
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $clientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cliente): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td><?php echo e($loop->index+1); ?></td>
-                    <td class='nome'><?php echo e($cliente->nome); ?></td>
+                    <td><?php echo e($loop->iteration); ?></td>
+                    <td><?php echo e($cliente->nome); ?></td>
                     <td><?php echo e($cliente->estado); ?></td>
                     <td><?php echo e(substr($cliente->municipio,0,15)); ?></td>
-                    <td><?php echo e($cliente->cep); ?></td>
+                    
+                    <td>
+                        <?php echo e($cliente->cep ? $cliente->cep.',' : ''); ?>
 
-                    <?php if($cliente->cep): ?>
-                        <td><?php echo e($cliente->bairro); ?>, <?php echo e($cliente->logradouro); ?>, <?php echo e($cliente->numero); ?></td>
-                    <?php else: ?>
-                        <td></td>
-                    <?php endif; ?>
+                        <?php echo e($cliente->bairro ? $cliente->bairro.',' : ''); ?> 
+                        <?php echo e($cliente->logradouro ? $cliente->logradouro.',' : ''); ?>
 
+                        <?php echo e($cliente->numero ? $cliente->numero.',' : ''); ?>
+
+                        <?php echo e($cliente->complemento ? $cliente->complemento.',' : ''); ?>
+
+                    </td>
+                    
                     <td>
                         <?php if($cliente->celular): ?>
                             <?php echo e($cliente->celular); ?>
@@ -77,6 +85,11 @@
                             <br>
                             <?php echo e($cliente->celular2); ?>
 
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if($cliente->lat && $cliente->lng): ?>
+                            <a href="https://www.google.com/maps/search/?api=1&query=<?php echo e($cliente->lat); ?>,<?php echo e($cliente->lng); ?>">Abrir</a>
                         <?php endif; ?>
                     </td>
                 </tr>

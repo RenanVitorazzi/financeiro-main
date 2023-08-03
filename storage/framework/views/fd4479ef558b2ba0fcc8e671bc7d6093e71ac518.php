@@ -118,6 +118,7 @@
             <td></td>
             <td>QUANTIDADE</td>
             <td>TOTAL DEVOLVIDO</td>
+            <td>TOTAL PAGO</td>
             <td>TOTAL EM ABERTO</td>
         </tr>
         <tr>
@@ -128,7 +129,7 @@
             </td>
             <td><?php echo e($chequesNaoEntregues->count()); ?></td>
             <td><?php echo 'R$ ' . number_format($chequesNaoEntregues->sum('valor_parcela'), 2, ',', '.'); ?></td>
-            
+            <td><?php echo 'R$ ' . number_format($chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'), 2, ',', '.'); ?></td>
             <td><?php echo 'R$ ' . number_format($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor'), 2, ',', '.'); ?></td>
         </tr>
         <tr>
@@ -140,14 +141,14 @@
             <td><?php echo e($chequesComParceiros->count()); ?></td>
             
             <td><?php echo 'R$ ' . number_format($chequesComParceiros->sum('valor_parcela'), 2, ',', '.'); ?></td>
-            
+            <td><?php echo 'R$ ' . number_format($chequesComParceiros->sum('pagamentos_representantes_sum_valor'), 2, ',', '.'); ?></td>
             <td><?php echo 'R$ ' . number_format(($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')), 2, ',', '.'); ?></td>
 
         </tr>
         <tr>
             <td>TOTAL GERAL</td>
             <td><?php echo e($chequesNaoEntregues->count() + $chequesComParceiros->count()); ?></td>
-            <td colspan=2> <?php echo 'R$ ' . number_format(($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor') ) +
+            <td colspan=3> <?php echo 'R$ ' . number_format(($chequesNaoEntregues->sum('valor_parcela') - $chequesNaoEntregues->sum('pagamentos_representantes_sum_valor') ) +
                 ($chequesComParceiros->sum('valor_parcela') - $chequesComParceiros->sum('pagamentos_representantes_sum_valor')), 2, ',', '.'); ?></td>
         </tr>
     </table>
