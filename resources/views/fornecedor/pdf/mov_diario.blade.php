@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Movimentação diária @data($hoje)</title>
+    <title>Movimentação diária @data($data)</title>
 </head>
 <style>
     table { 
@@ -16,9 +16,6 @@
         border: 1px solid black;
         text-align: center;
     }
-    /* tr:nth-child(even) {    
-        background-color: #d9dde2;
-    } */
     th {
         background-color: #d9dde2;
     }
@@ -31,8 +28,8 @@
     }
 </style>
 <body>
-    <h3>Movimentação diária - @data($hoje)</h3>
-    @if(count($cc_representante) > 0)
+    <h3>Movimentação diária - @data($data)</h3>
+    @if (!$cc_representante->isEmpty())
         <table>
             <thead>
                 <tr>
@@ -65,7 +62,7 @@
         
         <br>
     @endif
-    @if (count($cc_fornecedor) > 0)
+    @if (!$cc_fornecedor->isEmpty())
         <table>
             <thead>
                 <tr>
@@ -100,16 +97,17 @@
         </table>
         <br>    
     @endif
-    @if (count($adiamentos) > 0)
+    @if ($cheques->has('Adiado'))
         <table>
             <thead>
                 <tr>
-                    <th colspan = 7>Adiamentos</th>
+                    <th colspan = 8>Prorrogações</th>
                 </tr>
                 <tr>
                     <th>Cliente</th>
                     <th>Data</th>
                     <th>Para</th>
+                    <th>Dias</th>
                     <th>Valor</th>
                     <th>Juros</th>
                     <th>Rep</th>
@@ -117,35 +115,29 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($adiamentos as $adiamento)
+                @forelse ($cheques['Adiado'] as $chequesAdiados)
                     <tr>
-                        <td class='titular'>{{$adiamento->nome_cheque}}</td>
-                        <td>@data($adiamento->data_parcela)</td>
-                        <td>@data($adiamento->nova_data)</td>
-                        <td>@moeda($adiamento->valor_parcela)</td>
-                        <td>@moeda($adiamento->juros_totais)</td>
-                        <td>{{$adiamento->nome_representante}}</td>
-                        <td>{{$adiamento->nome_parceiro}}</td>
+                        <td class='titular'>{{$chequesAdiados->nome_cheque}}</td>
+                        <td>@data($chequesAdiados->data_parcela)</td>
+                        <td>@data($chequesAdiados->adiamentos->nova_data)</td>
+                        <td>{{ $chequesAdiados->adiamentos->dias_totais }}</td>
+                        <td>@moeda($chequesAdiados->valor_parcela)</td>
+                        <td>@moeda($chequesAdiados->adiamentos->juros_totais)</td>
+                        <td>{{$chequesAdiados->representante->pessoa->nome}}</td>
+                        <td>{{$chequesAdiados->parceiro->pessoa->nome ?? 'Carteira'}}</td>
                     </tr>
-                    @php 
-                        $juros_totais += $adiamento->juros_totais;
-                    @endphp
+                   
                 @empty
                     <tr>
                         <td colspan=7>Nenhum registro</td>
                     </tr>
                 @endforelse
             </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan=4>Juros Totais</th>
-                    <th colspan=3>@moeda($juros_totais)</th>
-                </tr>
-            </tfoot>
+            
         </table>
         <br>
     @endif
-    @if (count($devolvidos) > 0)
+    @if ($cheques->has('Devolvido'))
         <table>
             <thead>
                 <tr>
@@ -155,40 +147,70 @@
                     <th>Cliente</th>
                     <th>Data</th>
                     <th>Status</th>
-                    <th>Rep</th>
+                    <th>Representante</th>
                     <th>Valor</th>
                     <th>Parceiro</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($devolvidos as $devolvido)
+                @forelse ($cheques['Devolvido'] as $devolvido)
                     <tr>
                         <td class='titular'>{{$devolvido->nome_cheque}}</td>
                         <td>@data($devolvido->data_parcela)</td>
                         <td>{{$devolvido->status}} {{$devolvido->motivo}}</td>
-                        <td>{{$devolvido->nome_representante}}</td>
+                        <td>{{$devolvido->representante->pessoa->nome}}</td>
                         <td>@moeda($devolvido->valor_parcela)</td>
-                        <td>{{$devolvido->nome_parceiro}}</td>
+                        <td>{{$devolvido->parceiro->pessoa->nome}}</td>
                     </tr>
-                    @php 
-                        $total_devolvido += $devolvido->valor_parcela;
-                    @endphp
+                    
                 @empty
                     <tr>
                         <td colspan=6>Nenhum registro</td>
                     </tr>
                 @endforelse
             </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan=4>Total</th>
-                    <th colspan=2>@moeda($total_devolvido)</th>
-                </tr>
-            </tfoot>
+            
         </table>
         <br>
     @endif
-    @if (count($depositados) > 0)
+    @if ($cheques->has('Resgatado'))
+    <table>
+        <thead>
+            <tr>
+                <th colspan = 6>Cheques Devolvidos/Resgatados</th>
+            </tr>
+            <tr>
+                <th>Cliente</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Representante</th>
+                <th>Valor</th>
+                <th>Parceiro</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($cheques['Resgatado'] as $resgatado)
+                <tr>
+                    <td class='titular'>{{$resgatado->nome_cheque}}</td>
+                    <td>@data($resgatado->data_parcela)</td>
+                    <td>{{$resgatado->status}}</td>
+                    <td>{{$resgatado->representante->pessoa->nome}}</td>
+                    <td>@moeda($resgatado->valor_parcela)</td>
+                    <td>{{$resgatado->parceiro->pessoa->nome}}</td>
+                </tr>
+                
+            @empty
+                <tr>
+                    <td colspan=5>Nenhum registro</td>
+                </tr>
+            @endforelse
+        </tbody>
+        
+    </table>
+    <br>
+@endif
+    {{-- @if (count($cheques['Depositado']) > 0) --}}
+    @if ($cheques->has('Depositado'))
         <table>
             <thead>
                 <tr>
@@ -197,21 +219,19 @@
                 <tr>
                     <th>Cliente</th>
                     <th>Data</th>
-                    <th>Valor</th>
                     <th>Representante</th>
+                    <th>Valor</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($depositados as $depositado)
+                @forelse ($cheques['Depositado'] as $depositado)
                     <tr>
                         <td class='titular'>{{$depositado->nome_cheque}}</td>
                         <td>@data($depositado->data_parcela)</td>
+                        <td>{{$depositado->representante->pessoa->nome}}</td>
                         <td>@moeda($depositado->valor_parcela)</td>
-                        <td>{{$depositado->nome_representante}}</td>
                     </tr>
-                    @php 
-                        $total_depositado += $depositado->valor_parcela;
-                    @endphp
+                  
                 @empty
                     <tr>
                         <td colspan=4>Nenhum registro</td>
@@ -220,8 +240,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan=3>Total</th>
-                    <th colspan=1>@moeda($total_depositado)</th>
+                    <td colspan=3>TOTAL</td>
+                    <td>@moeda($cheques['Depositado']->sum('valor_parcela'))</td>
                 </tr>
             </tfoot>
         </table>
@@ -270,7 +290,7 @@
                 </tr>
                 <tr>
                     <th>Cliente</th>
-                    <th>Valor da dívida</th>
+                    <th>Observação</th>
                     <th>Conta</th>
                     <th>Valor recebido</th>
                 </tr>
@@ -280,8 +300,8 @@
                     @if ($recebimento->parcela()->exists() && $recebimento->parcela->forma_pagamento == 'Cheque')
                         <tr>
                             <td class='titular'>{{$recebimento->parcela->nome_cheque}}</td>
-                            <td>{{ $recebimento->parcela->forma_pagamento }} - @moeda($recebimento->parcela->valor_parcela)</td>
-                            <td>{{$recebimento->conta->nome}}</td>
+                            <td>Ref. {{ $recebimento->parcela->forma_pagamento }} - @moeda($recebimento->parcela->valor_parcela)</td>
+                            <td>{{ $recebimento->conta->nome ?? '' }}</td>
                             <td>@moeda($recebimento->valor)</td>
                         </tr>
                     @elseif(!$recebimento->parcela()->exists())
@@ -290,7 +310,7 @@
                             {{$recebimento->representante->pessoa->nome}} 
                         </td>
                         <td>{{ $recebimento->observacao }}</td>
-                        <td>{{$recebimento->conta->nome}}</td>
+                        <td>{{ $recebimento->conta->nome ?? '' }}</td>
                         <td>@moeda($recebimento->valor)</td>
                     </tr>
                     @else
@@ -299,7 +319,7 @@
                                 {{$recebimento->parcela->venda->cliente->pessoa->nome}} 
                             </td>
                             <td>{{ $recebimento->parcela->forma_pagamento }} - @moeda($recebimento->parcela->valor_parcela)</td>
-                            <td>{{$recebimento->conta->nome}}</td>
+                            <td>{{ $recebimento->conta->nome ?? '' }}</td>
                             <td>@moeda($recebimento->valor)</td>
                         </tr>
                     @endif

@@ -3,6 +3,7 @@
 Entrega de cheques
 @endsection
 @section('body')
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
@@ -56,6 +57,42 @@ Entrega de cheques
             @endforelse
         </tbody>
     </x-table>
+    @if ($tipo == 'entregue_representante')
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipo_entrega" value="entregue_representante" id="radio1" checked>
+                <label class="form-check-label" for="radio1">
+                    Entregue em mãos
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipo_entrega" value="enviado_correio" id="radio2" >
+                <label class="form-check-label" for="radio2">
+                    Enviado por correio
+                </label>
+            </div>
+        </div>  
+        <div class="form-group" id='group_rastreio' style='display:none'>
+            <label for="codigo_rastreio">Código de rastreio</label>
+            <x-input name='codigo_rastreio'></x-input>
+        </div>
+      
+    @endif  
+    {{--     
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="envio_correio">Envio por correios?</label>
+                <x-select name="envio_correio" required>
+                    <option value='Não' {{ (old('envio_correio') == 'Não') ? 'selected' : '' }} > Não</option>
+                    <option value='Sim' {{ (old('envio_correio') == 'Sim') ? 'selected' : '' }} > Sim</option>
+                </x-select>
+            </div>
+        </div>
+        
+    </div> 
+    --}}
+    
     <input class="btn btn-success" type="submit">
 
 </form>
@@ -63,7 +100,7 @@ Entrega de cheques
 @endsection
 @section('script')
 <script>
-   $("#tabelaCheques").DataTable({
+    $("#tabelaCheques").DataTable({
         "lengthMenu": [ [-1], ["Todos"] ]
     });
 
@@ -94,6 +131,9 @@ Entrega de cheques
         $("#formCheques")[0].submit()
     });
 
+    $("#radio2").click( (e) => {
+        $("#group_rastreio").toggle()
+    })
     @if(Session::has('message'))
         toastr["success"]("{{ Session::get('message') }}")
     @endif

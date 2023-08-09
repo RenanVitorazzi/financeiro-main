@@ -26,23 +26,6 @@ class EntregaParcelaController extends Controller
     {
         $representante = Representante::findOrFail($representante_id);
 
-        // $cheques = DB::select('SELECT
-        //         p.data_parcela, nome_cheque, numero_cheque, valor_parcela, mc.motivo, mc.status, p.id
-        //     FROM
-        //         parcelas p
-        //             INNER JOIN
-        //         entrega_parcela ep ON ep.parcela_id = p.id
-        //             LEFT JOIN
-        //         movimentacoes_cheques mc ON mc.parcela_id = p.id
-        //     WHERE
-        //         ep.entregue_parceiro is not null
-        //         AND ep.entregue_representante is null
-        //         AND p.representante_id = ?
-        //     GROUP BY p.id
-        //     ORDER BY data_parcela, valor_parcela',
-        //     [ $representante_id]
-        // );
-
         $cheques = Parcela::with('pagamentos_representantes')
             ->where('representante_id', $representante_id)
             ->whereHas('entrega', function ($query) {
@@ -57,29 +40,10 @@ class EntregaParcelaController extends Controller
                 ->doesnthave('entrega')
                 ->where('representante_id', $representante_id);
             })
-
             ->orderBy('status')
             ->orderBy('nome_cheque')
             ->orderBy('data_parcela')
             ->get();
-
-        // $cheques = DB::select('SELECT
-        //         p.data_parcela, nome_cheque, numero_cheque, valor_parcela, mc.motivo, mc.status, p.id
-        //     FROM
-        //         parcelas p
-        //             INNER JOIN
-        //         movimentacoes_cheques mc ON mc.parcela_id = p.id
-        //     WHERE
-        //         mc.status IN (?, ?)
-        //             AND p.forma_pagamento LIKE ?
-        //             AND p.representante_id = ?
-        //             AND p.id NOT IN
-        //                 (SELECT parcela_id FROM entrega_parcela WHERE entregue_representante IS NOT NULL)
-
-        //     GROUP BY p.id
-        //     ORDER BY data_parcela, valor_parcela',
-        //     ['Devolvido' , 'Resgatado', 'Cheque', $representante_id]
-        // );
 
         $hoje = date('Y-m-d');
         $tipo = 'entregue_representante';
@@ -113,11 +77,22 @@ class EntregaParcelaController extends Controller
 
     public function store(Request $request)
     {
-        foreach ($request->cheque_id as $index => $parcela_id) {
-            $entrega = EntregaParcela::updateOrCreate(
-                ['parcela_id' => $parcela_id],
-                [$request->tipo => DB::raw('NOW()')]
-            );
+        if ($request->tipo_entrega == 'enviado_correio' && $request->tipo == 'entregue_representante') {
+            foreach ($request->cheque_id as $index => $parcela_id) {
+                EntregaParcela::updateOrCreate(
+                    ['parcela_id' => $parcela_id],
+                    ['enviado' => DB::raw('NOW()')],
+                    ['codigo_rastreio' => $request->codigo_rastreio],
+                    ['empresa' => 'CORREIOS']
+                );
+            }
+        } else {
+            foreach ($request->cheque_id as $index => $parcela_id) {
+                EntregaParcela::updateOrCreate(
+                    ['parcela_id' => $parcela_id],
+                    [$request->tipo => DB::raw('NOW()')]
+                );
+            }
         }
 
         $request
@@ -133,7 +108,7 @@ class EntregaParcelaController extends Controller
     public function pdf_cheques_entregues($representante_id, $data_entrega)
     {
         $representante = Representante::findOrFail($representante_id);
-        // dd($data_entrega);
+        
         if ($data_entrega == 'todos') {
             $cheques = DB::select('SELECT
                 p.id,

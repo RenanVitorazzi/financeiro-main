@@ -3,6 +3,12 @@ Conta Corrente - <?php echo e($fornecedor->pessoa->nome); ?>
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('body'); ?>
+<style>
+    .borda-vermelha {
+        border: 0.7mm solid #dc3545;
+        border-collapse: collapse;
+    }
+</style>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?php echo e(route('home')); ?>">Home</a></li>
@@ -18,7 +24,7 @@ Conta Corrente - <?php echo e($fornecedor->pessoa->nome); ?>
 <?php $component->withName('botao-imprimir'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['class' => 'mr-2','href' => ''.e(route('pdf_fornecedor', ['id' => $fornecedor->id, 'data_inicio' => $hoje])).'']); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['class' => 'mr-2','href' => ''.e(route('pdf_fornecedor', ['id' => $fornecedor->id, 'data_inicio' => $data_inicio])).'']); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5)): ?>
 <?php $component = $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5; ?>
@@ -40,7 +46,7 @@ Conta Corrente - <?php echo e($fornecedor->pessoa->nome); ?>
 </div>
 <?php if(count($registrosContaCorrente) > 0): ?>
     <h3 class="<?php echo e($registrosContaCorrente[0]->saldo > 0 ? 'text-success' : 'text-danger'); ?> font-weight-bold">
-        <?php echo e($registrosContaCorrente[count($registrosContaCorrente)-1]->saldo); ?>g
+        <?php echo number_format($registrosContaCorrente->last()->saldo, 2, ',', '.'); ?>g
     </h3>
 <?php endif; ?>
 <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
@@ -71,20 +77,30 @@ Conta Corrente - <?php echo e($fornecedor->pessoa->nome); ?>
 <?php endif; ?>
     <tbody>
         <?php $__empty_1 = true; $__currentLoopData = $registrosContaCorrente; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contaCorrente): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <?php if($ultimaConferencia && $contaCorrente->id == $ultimaConferencia->id): ?>
+            <?php if($ultimaConferencia && $contaCorrente->id == $ultimaConferencia->id && $filtrarConferencia !== true): ?>
                 <?php
-                    $conferencia = true
+                    $filtrarConferencia = true
                 ?>
             <?php endif; ?>
-            <?php if($conferencia): ?>
-                <tr <?php echo e($contaCorrente->peso_agregado == NULL ? "class=table-danger" : ''); ?>>
+            <?php if($filtrarConferencia): ?>
+                <tr
+                    <?php if($ultimaConferencia && $contaCorrente->id == $ultimaConferencia->id && $filtrarConferencia): ?>
+                        class="table-success"
+                    <?php elseif(!$contaCorrente->peso_agregado): ?>
+                        class="borda-vermelha table-danger"
+                    <?php endif; ?>
+                    
+                >
                     <td><?php echo date('d/m/Y', strtotime($contaCorrente->data)); ?></td>
                     <td><?php echo number_format($contaCorrente->peso, 2, ',', '.'); ?></td>
                     <td class="<?php echo e($contaCorrente->balanco == 'Crédito' ? 'text-success' : 'text-danger'); ?>">
                         <b><?php echo e($contaCorrente->balanco); ?></b>
                         <i class="fas <?php echo e($contaCorrente->balanco == 'Crédito' ? 'fa-angle-up' : 'fa-angle-down'); ?>"></i>
                     </td>
-                    <td><?php echo e($contaCorrente->observacao); ?></td>
+                    <td><?php echo e($contaCorrente->observacao); ?>
+
+                        <b><?php echo e($contaCorrente->conferido ? 'CONFERIDO: '. $contaCorrente->conferido->format('m/d/Y') : ''); ?></b>
+                    </td>
                     <td class="<?php echo e($contaCorrente->balanco > 0 ? 'text-success' : 'text-danger'); ?>"><?php echo number_format($contaCorrente->saldo, 2, ',', '.'); ?></td>
                     <td>
                         <a class="btn btn-dark mr-2" href="<?php echo e(route('conta_corrente_anexo.index', ['id' => $contaCorrente->id])); ?>" title="Anexos">

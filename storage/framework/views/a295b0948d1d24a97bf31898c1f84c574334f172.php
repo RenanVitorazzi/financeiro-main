@@ -5,7 +5,7 @@ Conta Corrente <?php echo e($representante->pessoa->nome); ?>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?php echo e(route('home')); ?>">Home</a></li>
-        <?php if(!auth()->user()->is_representante): ?>
+        <?php if(auth()->user()->is_admin): ?>
         <li class="breadcrumb-item"><a href="<?php echo e(route('representantes.index')); ?>">Representantes</a></li>
         <?php endif; ?>
         <li class="breadcrumb-item active">Conta Corrente <?php echo e($representante->pessoa->nome); ?> </li>
@@ -28,7 +28,8 @@ Conta Corrente <?php echo e($representante->pessoa->nome); ?>
 <?php unset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5); ?>
 <?php endif; ?>
         <?php endif; ?>
-        <?php if (isset($component)) { $__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd = $component; } ?>
+        <?php if(auth()->user()->is_admin): ?>
+            <?php if (isset($component)) { $__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoNovo::class, []); ?>
 <?php $component->withName('botao-novo'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -39,6 +40,7 @@ Conta Corrente <?php echo e($representante->pessoa->nome); ?>
 <?php $component = $__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd; ?>
 <?php unset($__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd); ?>
 <?php endif; ?>
+        <?php endif; ?>
     </div>
 </div>
 <div>
@@ -94,6 +96,7 @@ Conta Corrente <?php echo e($representante->pessoa->nome); ?>
                     <div>Fator: <?php echo number_format($registro->saldo_fator, 1, ',', '.'); ?></div>
                 </td>
                 <td>
+                    <?php if(auth()->user()->is_admin): ?>
                     <a class="btn btn-dark" href="<?php echo e(route('ccr_anexo.index', ['id' => $registro->id])); ?>" title="Anexos">
                         <i class="fas fa-file-image"></i>
                     </a>
@@ -119,6 +122,7 @@ Conta Corrente <?php echo e($representante->pessoa->nome); ?>
 <?php $component = $__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247; ?>
 <?php unset($__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247); ?>
 <?php endif; ?>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

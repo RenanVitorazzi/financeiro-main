@@ -63,6 +63,14 @@
         </div>
       </div>
       
+      <div class="sidebar-header">
+        
+        <div class="user-info">
+          <span class="user-name"><b><?php echo e(auth()->user()->name); ?></b></span>
+          <span class="user-role"><?php echo e(auth()->user()->is_admin ? 'Administrador' : 'Representante'); ?></span>
+        </div>
+      </div> 
+     
       <!-- sidebar-header  -->
       
       <!-- sidebar-search  -->
@@ -96,16 +104,21 @@
               <span>Clientes</span>
             </a>
           </li>
+          <li <?php if(route('consignado.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
+            <a href="<?php echo e(route('consignado.index')); ?>">
+              <i class="fas fa-users"></i>
+              <span>Consignados</span>
+            </a>
+          </li>
           
-          
-          
+          <?php if(auth()->user()->is_admin): ?>
           <li <?php if(route('estoque.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
             <a href="<?php echo e(route('estoque.index')); ?>">
             <i class="fas fa-exchange-alt"></i>
               <span>Estoque</span>
             </a>
           </li>
-          <?php if(auth()->user()->is_admin): ?>
+          
           <li class="header-menu">
             <span>Financeiro</span>
           </li>
@@ -167,12 +180,7 @@
                 <span>Conta Corrente</span>
                 </a>
             </li>
-            <li <?php if(route('cheques.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
-                <a href="<?php echo e(route('cheques.index')); ?>">
-                <i class="fas fa-money-check-alt"></i>
-                <span>Carteira de cheques</span>
-                </a>
-            </li>
+            
           <?php endif; ?>
         </ul>
       </div>

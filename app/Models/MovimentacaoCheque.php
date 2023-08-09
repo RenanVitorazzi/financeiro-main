@@ -15,4 +15,7 @@ class MovimentacaoCheque extends Model
     public function adiamentos() {
         return $this->belongsTo(Adiamento::class);
     } 
+    public function parcela() {
+        return $this->belongsTo(Parcela::class);
+    } 
 }

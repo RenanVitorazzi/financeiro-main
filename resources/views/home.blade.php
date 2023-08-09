@@ -7,55 +7,58 @@
     </div>
 @endif
 <title>Home</title>
-@if($fixasNaoPagas->count() > 0)
+{{-- @if($fixasNaoPagas->count() > 0)
     <div class="alert alert-warning">
         Você tem {{ $fixasNaoPagas->count() }} despesa para pagar nos próximos 7 dias
     </div>
+@endif --}}
+
+@if (count($depositos) > 0)
+    <div class="table-responsive">
+        <x-table>
+            <x-tableheader>
+                <th colspan=5>
+                    Cheques para depósito
+                    <form style="display: inline-block; float:right;" action="{{ route('depositar_diario') }}" method="POST">
+                        @csrf
+                        <button class="btn btn-light">Depositar</button>
+                    </form>
+                </th>
+            </x-tableheader>
+
+            <x-tableheader>
+                <th>#</th>
+                <th>Titular</th>
+                <th>Data do cheque</th>
+                <th>Valor</th>
+                <th>Representante</th>
+            </x-tableheader>
+            <tbody>
+
+            @forelse ($depositos as $cheque)
+                <tr>
+                    <td>{{ $loop->index + 1 }}</td>
+                    <td>{{ $cheque->nome_cheque }}</td>
+                    <td>@data($cheque->data_parcela)</td>
+                    <td>@moeda($cheque->valor_parcela)</td>
+                    <td>{{ $cheque->representante->pessoa->nome ?? '-' }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan=5>Nenhum cheque para depósito!</td>
+                </tr>
+            @endforelse
+            </tbody>
+            @if ($depositos)
+            <tfoot class="thead-dark">
+                <th >Total</th>
+                <th colspan=4>@moeda($depositos->sum('valor_parcela'))</th>
+            </tfoot>
+            @endif
+        </x-table>
+    </div>
 @endif
 
-<div class="table-responsive">
-<x-table>
-    <x-tableheader>
-        <th colspan=5>
-            Cheques para depósito
-            <form style="display: inline-block; float:right;" action="{{ route('depositar_diario') }}" method="POST">
-                @csrf
-                <button class="btn btn-light">Depositar</button>
-            </form>
-        </th>
-    </x-tableheader>
-
-    <x-tableheader>
-        <th>#</th>
-        <th>Titular</th>
-        <th>Data do cheque</th>
-        <th>Valor</th>
-        <th>Representante</th>
-    </x-tableheader>
-    <tbody>
-
-    @forelse ($depositos as $cheque)
-        <tr>
-            <td>{{ $loop->index + 1 }}</td>
-            <td>{{ $cheque->nome_cheque }}</td>
-            <td>@data($cheque->data_parcela)</td>
-            <td>@moeda($cheque->valor_parcela)</td>
-            <td>{{ $cheque->representante->pessoa->nome ?? '-' }}</td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan=5>Nenhum cheque para depósito!</td>
-        </tr>
-    @endforelse
-    </tbody>
-    @if ($depositos)
-    <tfoot class="thead-dark">
-        <th >Total</th>
-        <th colspan=4>@moeda($depositos->sum('valor_parcela'))</th>
-    </tfoot>
-    @endif
-</x-table>
-</div>
 <x-table id="adiamentos">
     <x-tableheader id="copiarAdiamentos" style="cursor:pointer">
         <th colspan=8>Prorrogações</th>
@@ -78,10 +81,10 @@
             <td>{{ $cheque->nome_cheque }}</td>
             <td>@moeda($cheque->valor_parcela)</td>
             <td>@data($cheque->data_parcela)</td>
-            <td>@data($cheque->nova_data)</td>
+            <td>@data($cheque->adiamentos->nova_data)</td>
             <td>{{ $cheque->numero_cheque }}</td>
-            <td>{{ $cheque->representante }}</td>
-            <td>{{ $cheque->parceiro ?? 'Carteira'}}</td>
+            <td>{{ $cheque->representante->pessoa->nome }}</td>
+            <td>{{ $cheque->parceiro->pessoa->nome ?? 'Carteira'}}</td>
         </tr>
     @empty
         <tr>
@@ -127,8 +130,9 @@
     @endforelse
     </tbody>
 </x-table>
-
-<a class="btn btn-dark" target="_blank" href="{{ route('pdf_diario2') }}">Impresso diário</a>
+@if (auth()->user()->is_admin)
+    <a class="btn btn-dark" target="_blank" href="{{ route('pdf_diario2') }}">Impresso diário</a>
+@endif
 @endsection
 @section('script')
 <script>

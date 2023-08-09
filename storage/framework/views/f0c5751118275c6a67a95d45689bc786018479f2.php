@@ -15,7 +15,7 @@ Editar conta
     <?php echo csrf_field(); ?>
     <?php echo method_field('PUT'); ?>
     <input name="fornecedor_id" type="hidden" value="<?php echo e($contaCorrente->fornecedor_id); ?>" >
-
+ 
     <div class="row">
         <div class="col-6">
             <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
@@ -101,8 +101,15 @@ Editar conta
 <?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
 <?php endif; ?>
         </div>
-        
     </div> 
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="conferido" name="conferido"
+            <?php echo e(!$contaCorrente->conferido ?: 'checked'); ?>
+
+        >
+        <label class="form-check-label" for="conferido">Conferido?</label>
+    </div>
+    <br>
     <div class="form-group">
         <label for="observacao">Observação</label>
         <?php if (isset($component)) { $__componentOriginalada24a059c331be0784ec187913c2ecfacd51890 = $component; } ?>

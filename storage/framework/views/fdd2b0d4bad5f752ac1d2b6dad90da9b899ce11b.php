@@ -45,10 +45,12 @@ Fornecedores
                     <div class='mt-2'>
                         <span><?php echo e($fornecedor->pessoa->nome); ?> </span>
                         <span>(<?php echo number_format($fornecedor->conta_corrente_sum_peso_agregado, 2, ',', '.'); ?>g)</span>
-                        <?php if($fornecedor->conta_corrente_count > 0): ?>
-                            <span class="font-weight-bold ml-2 badge badge-pill badge-danger">
-                                Lançamento pendente
-                            </span>
+                        <?php if(!$lancamentos_pendentes->where('fornecedor_id', $fornecedor->id)->isEmpty()): ?>
+                            <a class="font-weight-bold ml-2 badge badge-pill badge-danger"
+                                href="<?php echo e(route('conta_corrente.edit', $lancamentos_pendentes->where('fornecedor_id', $fornecedor->id)->first()->id )); ?>"
+                            >
+                                Lançamento pendente   
+                            </a>
                         <?php endif; ?>
                     </div>
                     <div class='d-flex'>
@@ -94,48 +96,9 @@ Fornecedores
 <?php $__env->startSection('script'); ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // const LABELS = <?php echo json_encode($labels, 15, 512) ?>;
-    // const DATA_GRAFICO = <?php echo json_encode($data, 15, 512) ?>;
-
     <?php if(Session::has('message')): ?>
         toastr["success"]("<?php echo e(Session::get('message')); ?>")
     <?php endif; ?>
-
-    // var poolColors = function (a) {
-    //     var pool = [];
-    //     for(i=0;i<a;i++){
-    //         pool.push(dynamicColors());
-    //     }
-    //     return pool;
-    // }
-
-    // var dynamicColors = function() {
-    //     var r = Math.floor(Math.random() * 255);
-    //     var g = Math.floor(Math.random() * 255);
-    //     var b = Math.floor(Math.random() * 255);
-    //     return "rgb(" + r + "," + g + "," + b + ")";
-    // }
-
-    // const data = {
-    //     labels: JSON.parse(LABELS),
-    //     datasets: [{
-    //         data: JSON.parse(DATA_GRAFICO),
-    //         backgroundColor:
-    //             poolColors(20)
-
-    //         ,
-    //     }]
-    // };
-
-    // const config = {
-    //     type: 'pie',
-    //     data: data
-    // };
-
-    // var myChart = new Chart(
-    //     document.getElementById('myChart'),
-    //     config
-    // );
 </script>
 <?php $__env->stopSection(); ?>
 
