@@ -33,48 +33,45 @@ class ChequeController extends Controller
 
     public function index()
     {
-        $cheques = DB::select('SELECT
-                                    par.id,
-                                    par.nome_cheque,
-                                    par.numero_cheque,
-                                    par.valor_parcela,
-                                    par.observacao,
-                                    par.status,
-                                    par.venda_id,
-                                    (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
-                                    IF(par.status = ?,
-                                        (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
-                                        par.data_parcela
-                                    ) as data_parcela
-                                FROM
-                                    parcelas par
-                                        LEFT JOIN
-                                    representantes r ON r.id = par.representante_id
-                                WHERE
-                                    par.status in (?,?)
-                                        AND par.deleted_at IS NULL
-                                        AND r.deleted_at IS NULL
-                                        AND parceiro_id IS NULL
-                                        AND forma_pagamento LIKE ?
-                                ORDER BY data_parcela ASC, valor_parcela ASC', ['Adiado','Adiado','Aguardando', 'Cheque']);
+        // $cheques = DB::select('SELECT
+        //                             par.id,
+        //                             par.nome_cheque,
+        //                             par.numero_cheque,
+        //                             par.valor_parcela,
+        //                             par.observacao,
+        //                             par.status,
+        //                             par.venda_id,
+        //                             (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
+        //                             IF(par.status = ?,
+        //                                 (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
+        //                                 par.data_parcela
+        //                             ) as data_parcela
+        //                         FROM
+        //                             parcelas par
+        //                                 LEFT JOIN
+        //                             representantes r ON r.id = par.representante_id
+        //                         WHERE
+        //                             par.status in (?,?)
+        //                                 AND par.deleted_at IS NULL
+        //                                 AND r.deleted_at IS NULL
+        //                                 AND parceiro_id IS NULL
+        //                                 AND forma_pagamento LIKE ?
+        //                         ORDER BY data_parcela ASC, valor_parcela ASC', 
+        //                         ['Adiado','Adiado','Aguardando', 'Cheque']
+        // );
 
-        $arrayCores = [
-            'Devolvido' => 'text-danger',
-            'Adiado' => 'text-warning',
-            'Sustado' => 'text-danger',
-            'Pago' => 'text-success',
-            'Aguardando' => 'text-muted',
-            'Resgatado' => 'text-warning',
-            'Depositado' => 'text-muted'    ,
-        ];
+        $cheques = Parcela::query()
+            ->carteira()
+            ->with('representante.pessoa:id,nome')
+            ->get();
 
-        return view('cheque.index', compact('cheques', 'arrayCores') );
+        return view('cheque.index', compact('cheques') );
     }
 
     public function edit($id)
     {
         $cheque = Parcela::findOrFail($id);
-        $situacoesCheque = ['Pago', 'Sustado', 'Adiado', 'Aguardando', 'Devolvido', 'Resgatado', 'Depositado'];
+        $situacoesCheque = ['Adiado', 'Aguardando', 'Devolvido', 'Resgatado', 'Depositado'];
 
         return view('cheque.edit', compact('cheque', 'situacoesCheque'));
     }
@@ -211,7 +208,7 @@ class ChequeController extends Controller
     {
         // dd($request);
         // if (!$request->todosCheques) {
-            $filtrarChequesDosUltimosAnos = !$request->todosCheques 
+        $filtrarChequesDosUltimosAnos = !$request->todosCheques 
             ? 'AND data_parcela >= CURDATE() - INTERVAL 6 MONTH'
             : '';
         // } 
@@ -258,11 +255,12 @@ class ChequeController extends Controller
                 AND  (' . $request->tipo_select . ' = ?
                 ' . $filtrarChequesDosUltimosAnos . '
                 OR
-                    nome_cheque like ?)
+                    nome_cheque like ? ' . $filtrarChequesDosUltimosAnos . ')
                 ORDER BY par.data_parcela
                 LIMIT 150',
             ['R$ ' ,'de_DE', 'Cheque', $request->texto_pesquisa, $nome_cliente]
         );
+        
         $blackList = DB::select('SELECT DISTINCT
                 pa.nome_cheque,
                 GROUP_CONCAT(pa.nome_cheque) as nome_cheque,

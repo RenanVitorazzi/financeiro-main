@@ -16,7 +16,7 @@ Editar conta
     @csrf
     @method('PUT')
     <input name="fornecedor_id" type="hidden" value="{{ $contaCorrente->fornecedor_id }}" >
-
+ 
     <div class="row">
         <div class="col-6">
             <x-form-group name="data" type="date" value="{{ $contaCorrente->data }}" >Data</x-form-group>
@@ -42,8 +42,14 @@ Editar conta
         <div class="col-3" id="group-valor" style="{{ $contaCorrente->balanco == 'Crédito' ?: 'display:none'}}">
             <x-form-group name="valor" type="number" step="0.01" min="0" value="{{ $contaCorrente->valor }}">Valor (R$)</x-form-group>
         </div>
-        
     </div> 
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="conferido" name="conferido"
+            {{!$contaCorrente->conferido ?: 'checked'}}
+        >
+        <label class="form-check-label" for="conferido">Conferido?</label>
+    </div>
+    <br>
     <div class="form-group">
         <label for="observacao">Observação</label>
         <x-textarea name="observacao" class="form-control">{{ $contaCorrente->observacao }}</x-textarea>

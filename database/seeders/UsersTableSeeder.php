@@ -24,10 +24,10 @@ class UsersTableSeeder extends Seeder
         // ]);
 
         User::create([
-            'name' => 'dudo',
-            'email' => 'dudolucio@hotmail.com',
-            'password' => bcrypt('dudo'),
-            'is_admin' => 1,
+            'name' => 'dennis',
+            'email' => 'dennis@hotmail.com',
+            'password' => bcrypt('dennis'),
+            'is_representante' => 1,
         ]);
 
         // User::create([

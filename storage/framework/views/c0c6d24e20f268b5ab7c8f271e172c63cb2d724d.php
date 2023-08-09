@@ -6,10 +6,16 @@ Consignados
     <h3> Consignados </h3>
     
     <div class="d-flex">
+        <?php if(auth()->user()->is_admin): ?>
         <a href="<?php echo e(route('pdf_consignados_geral')); ?>" class="btn btn-dark mr-2" target="_blank">
             Relação representante <i class="fas fa-print"></i>
         </a>
-        
+        <?php elseif(auth()->user()->is_representante): ?>
+            <a href="<?php echo e(route('pdf_consignados', auth()->user()->is_representante)); ?>" class="btn btn-dark mr-2" target="_blank">
+                Relação cliente <i class="fas fa-print"></i>
+            </a>
+        <?php endif; ?>
+       
         
         <?php if (isset($component)) { $__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoNovo::class, []); ?>
@@ -59,8 +65,8 @@ Consignados
             <td><?php echo number_format($consignado->peso, 2, ',', '.'); ?></td>
             <td><?php echo number_format($consignado->fator, 1, ',', '.'); ?></td>
             <td class='d-flex justify-content-center'>
-                
-                <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
+                <?php if(auth()->user()->is_admin): ?>
+                    <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
 <?php $component->withName('botao-editar'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -71,7 +77,7 @@ Consignados
 <?php $component = $__componentOriginal13702a75d66702067dad623af293364e28e151a7; ?>
 <?php unset($__componentOriginal13702a75d66702067dad623af293364e28e151a7); ?>
 <?php endif; ?>
-                <?php if (isset($component)) { $__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247 = $component; } ?>
+                    <?php if (isset($component)) { $__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoExcluir::class, []); ?>
 <?php $component->withName('botao-excluir'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -82,6 +88,7 @@ Consignados
 <?php $component = $__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247; ?>
 <?php unset($__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247); ?>
 <?php endif; ?>
+                <?php endif; ?>
             </td>
         </tr>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

@@ -49,6 +49,31 @@ Procurar cheque
     const TAXA = 3;
     const MODAL = $("#modal")
     const MODAL_BODY = $("#modal-body")
+
+    const ARRAY_FORMAS_DE_PAGAMENTO = ['Pix', 'Cheque', 'TED', 'Depósito', 'DOC', 'Dinheiro']
+    let optionFormasDePagamento = ''
+    ARRAY_FORMAS_DE_PAGAMENTO.forEach(element => {
+        optionFormasDePagamento += `<option value='${element}'> ${element} </option>`
+    })
+
+    let optionContas  = ''
+
+    $.ajax({
+        type: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token-2"]').attr('content')
+        },
+        url: "{{route('procurarContas')}}",
+        dataType: 'json',
+        success: (response) => {
+
+            response.forEach(element => {
+                optionContas += `<option value='${element.id}'> ${element.nome} </option>`
+            })
+            
+        }
+    });
+
     procurarCheque()
 
     function adiarCheque(element) {
@@ -89,7 +114,6 @@ Procurar cheque
                     <x-textarea name="observacao"></x-textarea>
                 </div>
             </form>
-
         `)
 
         $("#taxa_juros, #nova_data").change( () => {
@@ -97,11 +121,10 @@ Procurar cheque
             let diferencaDias = calcularDiferencaDias(data.dia, dataNova)
 
             let jurosNovos = calcularNovosJuros(element, diferencaDias)
-            console.log({element, diferencaDias});
+
             $("#diasAdiados").html(diferencaDias)
             $("#juros_totais").val(jurosNovos)
         })
-
 
     }
 
@@ -154,7 +177,6 @@ Procurar cheque
 
     function calcularNovosJuros (element, dias) {
         let taxa = $("#taxa_juros").val();
-        console.log(taxa);
         let valor_cheque = $(element).data("valor")
         let porcentagem = taxa / 100 || TAXA / 100 ;
 
@@ -232,6 +254,7 @@ Procurar cheque
                                 <i class="fas fa-money-bill"></i> 
                             </div>
                         `
+
                         let botaoHistorico = `
                             <div class="btn btn-dark btn-historico" title="Histórico" data-id="${element.id}"> 
                                 <i class="fas fa-book"></i> 
@@ -420,15 +443,19 @@ Procurar cheque
                     tableBodyPagamentos += `
                         <tr class = ${element.confirmado ? '' : 'table-danger'}>
                             <td>${transformaData(element.data)}</td>
-                            <td>${moeda.format(valorTratado)}</td>
                             <td>${element.conta.nome}</td>
                             <td>${element.forma_pagamento}</td>
                             <td>${element.confirmado ? 'Sim' : 'Não'}</td>
+                            <td>${moeda.format(valorTratado)}</td>
                         <tr>
                     `
                     totalPago += valorTratado;
                 })
-                $("#modal-header2").html('Pagamentos')
+                $("#modal-header2").html(`
+                    <h3>Pagamentos</h3> 
+                    <div class='btn btn-success' id='btn_adicionar_pagamento' data-id='${parcela_id}' data-totalPago='${totalPago}'>
+                        <span class='fas fa-plus'></span>
+                    </div>`)
                 $("#modal-body2").html(`
                     <x-table>
                         <x-table-header>
@@ -436,8 +463,8 @@ Procurar cheque
                                 <th>Data</th>
                                 <th>Conta</th>
                                 <th>Forma do Pagamento</th>
-                                <th>Valor</th>
                                 <th>Confirmado?</th>
+                                <th>Valor</th>
                             </tr>
                         </x-table-header>
                         <tbody>
@@ -445,15 +472,19 @@ Procurar cheque
                         </tbody>
                         <t-foot>
                             <tr>
-                                <td colspan=3>Total pago</td>
-                                <td colspan=2>${moeda.format(totalPago)}</td>
+                                <td colspan=4>Total pago</td>
+                                <td>${moeda.format(totalPago)}</td>
                             </tr>
                         </t-foot>
                     </x-table>
+                    
+                    <div id='campo_pagamento' style='display:none' class='mt-2'></div>
                 `)
 
                 $("#modal2").modal('show')
-                
+                $("#btn_adicionar_pagamento").click((e) => {
+                    adicionarPagamento(e.currentTarget)
+                })
                 Swal.close()
             },
             error: (jqXHR, textStatus, errorThrown) => {
@@ -469,8 +500,114 @@ Procurar cheque
         currency: 'BRL',
     });
 
+    function adicionarPagamento (botaoAdicionar) {
+
+        let parcela_id = $(botaoAdicionar).data('id')
+        let campo_pagamento = $("#campo_pagamento")
+        $(botaoAdicionar).fadeOut()
+        
+        campo_pagamento.html(`
+            <form id="formLancarRecebimento" action="{{ route('recebimentoCreateApi') }}">   
+                <meta name="csrf-token-3" content="{{ csrf_token() }}">
+                <input type='hidden' value='${parcela_id}' name='parcela_id' id='parcela_id'> 
+                <div class="row">
+                    <div class="col-6">
+                        <x-form-group type="date" name="data">Data</x-form-group>
+                    </div>
+                    <div class="col-6">
+                        <x-form-group name="valor">Valor</x-form-group>
+                    </div>
+
+                    <div class="col-6 form-group">
+                        <label for="conta_id">Conta</label>
+                        <x-select name="conta_id">
+                            <option></option>
+                            ${optionContas}
+                        </x-select>
+                    </div>
+                    <div class="col-6 form-group">
+                        <label for="forma_pagamento">Forma de Pagamento</label>
+                        <x-select name="forma_pagamento">
+                            <option></option>
+                            ${optionFormasDePagamento}
+                        </x-select>
+                    </div>
+                    <div class="col-6 form-group">
+                        <label for="confirmado">Pagamento Confirmado?</label>
+                        <x-select name="confirmado">
+                            <option></option>
+                            <option value=1> Sim </option>
+                            <option value=0> Não </option>
+                        </x-select>
+                    </div>
+
+                    <div class="col-12 form-group">
+                        <label for="observacao">Observação</label>
+                        <x-text-area name="observacao" type="text"></x-text-area>
+                    </div>
+                    
+                </div>
+                <div class='btn btn-success' id='btnEnviarFormRecebimento'>Enviar</div>
+            </form>
+        `)
+        campo_pagamento.fadeIn()    
+
+        enviarFormRecebimento()
+    }
+
+    function enviarFormRecebimento() {
+        
+        $('#btnEnviarFormRecebimento').click( () => {
+    
+            let dataFormRecebimento = $("#formLancarRecebimento").serialize()
+            
+            console.log(dataFormRecebimento);
+            console.log($('#formLancarRecebimento').attr('action'))
+
+            $.ajax({
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token-3"]').attr('content')
+                },
+                url: $('#formLancarRecebimento').attr('action'),
+                data: dataFormRecebimento,
+                beforeSend: () => {
+                    swal.showLoading()
+                },
+                success: (response) => {
+                    console.log(response)
+                    Swal.fire({
+                        title: 'Sucesso',
+                        icon: 'success',
+                        text: 'Pagamento cadastrado'
+                    })
+    
+                    MODAL.modal("hide")
+                    procurarPagamentos($("#parcela_id").val())
+                    $("#form_procura_cheque").submit()
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    var response = JSON.parse(jqXHR.responseText)
+                    var errorString = ''
+                    $.each( response.errors, function( key, value) {
+                        errorString += '<div>' + value + '</div>'
+                    });
+                    console.log(response)
+                    Swal.fire({
+                        title: 'Erro',
+                        icon: 'error',
+                        html: errorString
+                    })
+                }
+            });
+    
+        }) 
+    }
+    
     function procurarHistorico(parcela_id) {
+
         tableBodyPagamentos = ``;
+
         $.ajax({
             type: 'GET',
             url: '/historico_parcela',

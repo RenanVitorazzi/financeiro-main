@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RecebimentosApiRequestStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,6 @@ class RecebimentosController extends Controller
             ->orderBy('id', 'desc')
             ->take(25)
             ->get();
-        // dd($pgtoRepresentante);
 
         return view('recebimento.index', compact('pgtoRepresentante'));
     }
@@ -136,17 +136,6 @@ class RecebimentosController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -229,5 +218,31 @@ class RecebimentosController extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('recebimento.pdf.pdf_confirmar_depositos', compact('depositos'));
         return $pdf->stream();
+    }
+
+    public function recebimentoCreateApi (RecebimentosApiRequestStore $request) 
+    {
+        $parcela = Parcela::findOrFail($request->parcela_id);
+        
+        PagamentosRepresentantes::create(
+            array_merge(
+                $request->validated(),
+                ['representante_id' => $parcela->representante_id]
+            )
+        );
+        
+        $valorTotalPago = PagamentosRepresentantes::where('parcela_id', $parcela->id)->sum('valor');
+        
+        if ($valorTotalPago >= $parcela->valor_parcela) {
+
+            Parcela::where('id', $parcela->id)->update(['status' => 'Pago']);
+            
+            MovimentacaoCheque::create([
+                'parcela_id' => $parcela->id,
+                'status' => 'Pago representante',
+            ]);
+
+        }
+        
     }
 }

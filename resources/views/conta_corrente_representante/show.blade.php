@@ -6,7 +6,7 @@ Conta Corrente {{ $representante->pessoa->nome }}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-        @if (!auth()->user()->is_representante)
+        @if (auth()->user()->is_admin)
         <li class="breadcrumb-item"><a href="{{ route('representantes.index') }}">Representantes</a></li>
         @endif
         <li class="breadcrumb-item active">Conta Corrente {{ $representante->pessoa->nome }} </li>
@@ -19,7 +19,9 @@ Conta Corrente {{ $representante->pessoa->nome }}
         @if (count($contaCorrente) > 0) 
             <x-botao-imprimir class="mr-2" href="{{ route($impresso, ['id' => $representante->id]) }}"></x-botao-imprimir>
         @endif
-        <x-botao-novo href="{{ route('conta_corrente_representante.create', ['representante_id' => $representante->id]) }}"></x-botao-novo>
+        @if (auth()->user()->is_admin)
+            <x-botao-novo href="{{ route('conta_corrente_representante.create', ['representante_id' => $representante->id]) }}"></x-botao-novo>
+        @endif
     </div>
 </div>
 <div>
@@ -60,11 +62,13 @@ Conta Corrente {{ $representante->pessoa->nome }}
                     <div>Fator: @fator($registro->saldo_fator)</div>
                 </td>
                 <td>
+                    @if (auth()->user()->is_admin)
                     <a class="btn btn-dark" href="{{ route('ccr_anexo.index', ['id' => $registro->id]) }}" title="Anexos">
                         <i class="fas fa-file-image"></i>
                     </a>
                     <x-botao-editar href='{{ route("conta_corrente_representante.edit", $registro->id) }}'></x-botao-editar>
                     <x-botao-excluir action='{{ route("conta_corrente_representante.destroy", $registro->id) }}'></x-botao-excluir>
+                    @endif
                 </td>
             </tr>
         @empty

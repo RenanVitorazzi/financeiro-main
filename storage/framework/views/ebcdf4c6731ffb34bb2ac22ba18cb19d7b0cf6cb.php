@@ -2,6 +2,7 @@
 Entrega de cheques
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('body'); ?>
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?php echo e(route('home')); ?>">Home</a></li>
@@ -84,6 +85,39 @@ Entrega de cheques
 <?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
 <?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
 <?php endif; ?>
+    <?php if($tipo == 'entregue_representante'): ?>
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipo_entrega" value="entregue_representante" id="radio1" checked>
+                <label class="form-check-label" for="radio1">
+                    Entregue em mãos
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipo_entrega" value="enviado_correio" id="radio2" >
+                <label class="form-check-label" for="radio2">
+                    Enviado por correio
+                </label>
+            </div>
+        </div>  
+        <div class="form-group" id='group_rastreio' style='display:none'>
+            <label for="codigo_rastreio">Código de rastreio</label>
+            <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
+<?php $component->withName('input'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['name' => 'codigo_rastreio']); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7)): ?>
+<?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
+<?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
+<?php endif; ?>
+        </div>
+      
+    <?php endif; ?>  
+    
+    
     <input class="btn btn-success" type="submit">
 
 </form>
@@ -91,7 +125,7 @@ Entrega de cheques
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
 <script>
-   $("#tabelaCheques").DataTable({
+    $("#tabelaCheques").DataTable({
         "lengthMenu": [ [-1], ["Todos"] ]
     });
 
@@ -122,6 +156,9 @@ Entrega de cheques
         $("#formCheques")[0].submit()
     });
 
+    $("#radio2").click( (e) => {
+        $("#group_rastreio").toggle()
+    })
     <?php if(Session::has('message')): ?>
         toastr["success"]("<?php echo e(Session::get('message')); ?>")
     <?php endif; ?>

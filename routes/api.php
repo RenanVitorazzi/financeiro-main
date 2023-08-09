@@ -1,12 +1,8 @@
 <?php
 
-use App\Http\Controllers\AdiamentosController;
-use App\Http\Controllers\ChequeController;
 use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\ConsignadoController;
-use App\Http\Controllers\FornecedorController;
-use App\Http\Controllers\VendaController;
-use App\Http\Controllers\TrocaChequeController;
+use App\Http\Controllers\ContaController;
+use App\Http\Controllers\RecebimentosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 // Route::post('troca_cheques', [TrocaChequeController::class, 'trocar'])->name('trocar');
 Route::get('clientes/procurar', [ClienteController::class, 'procurarCliente'])->name('procurarCliente');
+Route::get('contas/procurar', [ContaController::class, 'procurarContas'])->name('procurarContas');
+
 // Route::get('/enviarContaCorrente', [ClienteController::class, 'todosClientes'])->name('todosClientes');

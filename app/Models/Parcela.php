@@ -50,17 +50,34 @@ class Parcela extends Model
 
     public function scopeCarteira($query)
     {
-        return $query->where('forma_pagamento', 'Cheque')
-            ->where('status', 'Aguardando')
-            ->where('parceiro_id', NULL);
+        return $query->with('adiamentos')
+            ->whereIn('status', ['Aguardando', 'Adiado'])
+            ->where('forma_pagamento', '=', 'Cheque')
+            ->withMax('adiamentos', 'nova_data')
+            ->whereNull('parceiro_id')
+            ->orderByRaw('IF(adiamentos_max_nova_data, adiamentos_max_nova_data, data_parcela)')
+            ->orderBy('valor_parcela')
+            ->orderBy('nome_cheque');
+    }
+
+    public function scopeAdiamentosDoDia($query, $dia)
+    {
+        return $query->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome', 'adiamentos')
+        ->whereHas('adiamentos', function (Builder $query) use ($dia) {
+            $query->whereDate('created_at', '=', $dia);
+        })
+        ->orderBy('representante_id')
+        ->orderBy('data_parcela')
+        ->orderBy('valor_parcela')
+        ->get();
     }
 
     public function scopeOps($query)
     {
         return $query->where([
-                    ['forma_pagamento', 'Transferência Bancária'],
-                    ['status', 'Aguardando Pagamento']
-                ])->whereNull('parceiro_id');
+            ['forma_pagamento', 'Transferência Bancária'],
+            ['status', 'Aguardando Pagamento']
+        ])->whereNull('parceiro_id');
     }
 
     public function scopeAcharRepresentante($query, $id)
@@ -90,11 +107,11 @@ class Parcela extends Model
 
     protected static function booted()
     {
-        // if (auth()->user()->is_representante && !auth()->user()->is_admin) {
-        //     static::addGlobalScope('user', function (Builder $builder) {
-        //         $builder->where('representante_id', auth()->user()->is_representante);
-        //     });
-        // }
+        if (auth()->user()->is_representante) {
+            static::addGlobalScope('user', function (Builder $builder) {
+                $builder->where('representante_id', auth()->user()->is_representante);
+            });
+        }
     }
 
 }

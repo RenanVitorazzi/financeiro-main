@@ -62,18 +62,18 @@
           <i class="fas fa-times"></i>
         </div>
       </div>
-      {{--
+      
       <div class="sidebar-header">
-        <div class="user-pic">
+        {{-- <div class="user-pic">
           <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
             alt="User picture">
-        </div> 
+        </div>  --}}
         <div class="user-info">
           <span class="user-name"><b>{{ auth()->user()->name }}</b></span>
           <span class="user-role">{{ auth()->user()->is_admin ? 'Administrador' : 'Representante' }}</span>
         </div>
       </div> 
-      --}}
+     
       <!-- sidebar-header  -->
       {{-- <div class="sidebar-search">
         <div>
@@ -120,7 +120,12 @@
               <span>Clientes</span>
             </a>
           </li>
-          
+          <li @if(route('consignado.index') == Request::url()) class="ativo" @endif>
+            <a href="{{ route('consignado.index') }}">
+              <i class="fas fa-users"></i>
+              <span>Consignados</span>
+            </a>
+          </li>
           {{--
           <li @if(route('ops.index') == Request::url()) class="ativo" @endif>
             <a href="{{ route('ops.index') }}">
@@ -129,14 +134,14 @@
             </a>
           </li>
           --}}
-          
+          @if(auth()->user()->is_admin)
           <li @if(route('estoque.index') == Request::url()) class="ativo" @endif>
             <a href="{{ route('estoque.index') }}">
             <i class="fas fa-exchange-alt"></i>
               <span>Estoque</span>
             </a>
           </li>
-          @if(auth()->user()->is_admin)
+          
           <li class="header-menu">
             <span>Financeiro</span>
           </li>
@@ -232,12 +237,12 @@
                 <span>Conta Corrente</span>
                 </a>
             </li>
-            <li @if(route('cheques.index') == Request::url()) class="ativo" @endif>
+            {{-- <li @if(route('cheques.index') == Request::url()) class="ativo" @endif>
                 <a href="{{ route('cheques.index') }}">
                 <i class="fas fa-money-check-alt"></i>
                 <span>Carteira de cheques</span>
                 </a>
-            </li>
+            </li> --}}
           @endif
         </ul>
       </div>

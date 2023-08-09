@@ -24,6 +24,14 @@ class Fornecedor extends Model
     public function contaCorrente() {
         return $this->hasMany(ContaCorrente::class)->latest();
     }
+
+    public function scopeSaldoFornecedores($query)
+    {
+        return $query->with(['pessoa:id,nome'])
+            ->withSum('contaCorrente', 'peso_agregado')
+            ->orderBy('conta_corrente_sum_peso_agregado')
+            ->get();
+    }
 }
 
 ?>

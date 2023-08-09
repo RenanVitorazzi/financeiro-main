@@ -26,5 +26,6 @@ class Adiamento extends Model
         static::addGlobalScope('ancient', function (Builder $builder) {
             $builder->whereNull('pago');
         });
+        
     }
 }

@@ -72,6 +72,12 @@ class ContaCorrenteController extends Controller
         }
 
         $request->request->add(['peso_agregado' => $peso_agregado]);
+        
+        if ($request->conferido) {
+            $request->request->add(['conferido' => now()]);
+        } else {
+            $contaCorrente->update(['conferido' => NULL]);
+        }
 
         $contaCorrente
             ->fill($request->all())

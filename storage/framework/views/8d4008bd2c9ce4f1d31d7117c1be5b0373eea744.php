@@ -5,6 +5,7 @@ Carteira de cheques
 
 <div class='mb-2 d-flex justify-content-between'>
     <h3> Carteira de Cheques </h3>
+    <?php if(auth()->user()->is_admin): ?>
     <div>
         <?php if (isset($component)) { $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoImprimir::class, []); ?>
@@ -29,6 +30,7 @@ Carteira de cheques
 <?php unset($__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd); ?>
 <?php endif; ?>
     </div>
+    <?php endif; ?>
 </div>
        
 <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
@@ -44,14 +46,10 @@ Carteira de cheques
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
         <tr>
-            
             <th>Data</th>
             <th>Titular</th>
-            <?php if(!auth()->user()->is_representante): ?>
-                <th>Representante</th>
-            <?php endif; ?>
+            <th>Representante</th>
             <th>Valor</th>
-            
             <th>Detalhes</th>
             <th>Ações</th>
         </tr>
@@ -64,14 +62,10 @@ Carteira de cheques
     <tbody>
         <?php $__empty_1 = true; $__currentLoopData = $cheques; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cheque): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr class="<?php echo e(($cheque->data_parcela < Carbon\Carbon::now()) ? 'table-danger' : ''); ?>">
-                
                 <td><?php echo date('d/m/Y', strtotime($cheque->data_parcela)); ?></td>
                 <td><?php echo e($cheque->nome_cheque); ?></td>
-                <?php if(!auth()->user()->is_representante): ?>
-                    <td><?php echo e($cheque->venda_id ? $cheque->nome_representante : $cheque->nome_representante); ?></td>
-                <?php endif; ?>
+                <td><?php echo e($cheque->representante->pessoa->nome ?? ''); ?></td>
                 <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>
-                
                 <td><?php echo e($cheque->numero_cheque); ?> <?php echo e($cheque->observacao); ?></td>
                 <td>
                     <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
