@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('depositar_diario', [ChequeController::class, 'depositar_diario'])->name('depositar_diario');
         Route::view('procura_cheque', 'cheque.procura_cheque')->name('procura_cheque');
         Route::get('procurarConsignado', [ConsignadoController::class, 'procurarConsignado'])->name('procurarConsignado');
+        Route::get('dashboard/{representante}', [RepresentanteController::class, 'representanteDashboard'])->name('representanteDashboard');
 
         //? Cadastros auxiliares
         Route::resource('fornecedores', FornecedorController::class);
@@ -94,6 +95,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pdf_diario', [FornecedorController::class, 'pdf_diario'])->name('pdf_diario');
         Route::get('pdf_diario2', [FornecedorController::class, 'pdf_diario2'])->name('pdf_diario2');
         Route::get('pdf_mov_diario/{data}', [FornecedorController::class, 'pdf_mov_diario'])->name('pdf_mov_diario');
+        Route::get('pdf_movimentacao/{dataInicio}/{dataFim}', [FornecedorController::class, 'pdf_movimentacao'])->name('pdf_movimentacao');
         Route::get('pdf_clientes/{representante_id}', [ClienteController::class, 'pdf_clientes'])->name('pdf_clientes');
         Route::get('adiamento_impresso/{representante_id}', [AdiamentosController::class, 'adiamento_impresso'])->name('adiamento_impresso');
         Route::get('cheques_devolvidos/{representante_id}', [DevolvidosController::class, 'cheques_devolvidos'])->name('cheques_devolvidos');

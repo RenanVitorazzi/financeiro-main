@@ -100,6 +100,42 @@ class Parcela extends Model
         return $this->hasMany(PagamentosParceiros::class);
     }
 
+    public function scopeDevolvidosComParceiros($query, $representante_id)
+    {
+        return $query->with('movimentacoes', 'parceiro', 'adiamentos')
+            ->whereHas('movimentacoes', function ($query) {
+                $query->whereIn('status', ['Devolvido', 'Resgatado']);
+            })
+            ->doesnthave('entrega')
+            ->whereNotNull('parceiro_id')
+            ->where('representante_id', $representante_id)
+            ->where('data_parcela', '>=', '2023-03-17')
+            ->orderBy('parceiro_id')
+            ->orderBy('data_parcela')
+            ->orderBy('valor_parcela');
+    }
+    
+    public function scopeDevolvidosNoEscritorio($query, $representante_id)
+    {
+        return $query->with('pagamentos_representantes')
+        ->where('representante_id', $representante_id)
+        ->whereHas('entrega', function ($query) {
+            $query->whereNull('entregue_representante');
+            $query->whereNotNull('entregue_parceiro');
+        })
+        ->orWhere(function (Builder $query) use ($representante_id) {
+            $query->whereNull('parceiro_id')
+            ->whereHas('movimentacoes', function ($query) {
+                $query->whereIn('status', ['Resgatado', 'Devolvido']);
+            })
+            ->doesnthave('entrega')
+            ->where('representante_id', $representante_id);
+        })
+        ->orderBy('status')
+        ->orderBy('nome_cheque')
+        ->orderBy('data_parcela');
+    }
+    
     // public function cliente()
     // {
     //     return $this->hasOneThrough(Cliente::class, Venda::class);

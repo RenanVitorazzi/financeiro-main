@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Movimentação diária @data($data)</title>
+    <title>{{$titulo}}</title>
 </head>
 <style>
     table { 
@@ -28,7 +28,7 @@
     }
 </style>
 <body>
-    <h3>Movimentação diária - @data($data)</h3>
+    <h3>{{$titulo}}</h3>
     @if (!$cc_representante->isEmpty())
         <table>
             <thead>

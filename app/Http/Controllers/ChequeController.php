@@ -206,21 +206,11 @@ class ChequeController extends Controller
 
     public function consulta_cheque(Request $request)
     {
-        // dd($request);
-        // if (!$request->todosCheques) {
+  
         $filtrarChequesDosUltimosAnos = !$request->todosCheques 
             ? 'AND data_parcela >= CURDATE() - INTERVAL 6 MONTH'
             : '';
-        // } 
-        // $cheques = Parcela::with(['venda.cliente.pessoa.nome', 'representante', 'parceiro', 'adiamentos'])
-        //     ->whereIn('status', ['Devolvido', 'Resgatado', 'Aguardando pagamento', 'Aguardando envio'])
-        //     ->where($request->tipo_select, '=', $request->texto_pesquisa)
-
-        //     ->orWhere('nome_cheque', 'like', '%'. $request->texto_pesquisa . '%')
-
-        //     ->where('forma_pagamento', 'Cheque')
-        //     ->get()
-        //     ->toArray();
+            
         $nome_cliente = '%'.$request->texto_pesquisa.'%';
 
         $cheques = DB::select('SELECT

@@ -61,8 +61,8 @@ Carteira de cheques
 <?php endif; ?>
     <tbody>
         <?php $__empty_1 = true; $__currentLoopData = $cheques; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cheque): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <tr class="<?php echo e(($cheque->data_parcela < Carbon\Carbon::now()) ? 'table-danger' : ''); ?>">
-                <td><?php echo date('d/m/Y', strtotime($cheque->data_parcela)); ?></td>
+            <tr class="<?php echo e((($cheque->adiamentos->nova_data ?? $cheque->data_parcela) < Carbon\Carbon::now()) ? 'table-danger' : ''); ?>">
+                <td><?php echo date('d/m/Y', strtotime($cheque->adiamentos->nova_data ?? $cheque->data_parcela)); ?></td>
                 <td><?php echo e($cheque->nome_cheque); ?></td>
                 <td><?php echo e($cheque->representante->pessoa->nome ?? ''); ?></td>
                 <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>

@@ -513,11 +513,13 @@ class FornecedorController extends Controller
             ->whereDate('created_at', '=', $data)
             ->get();
 
+        $titulo = 'Movimentação diária '.  date("d/m/Y", strtotime($data));
+
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView(
             'fornecedor.pdf.mov_diario',
             compact(
-                'data',
+                'titulo',
                 'cc_fornecedor',
                 'cc_representante',
                 'cheques',
@@ -526,6 +528,61 @@ class FornecedorController extends Controller
             )
         );
 
+        return $pdf->stream();
+    }
+
+    public function pdf_movimentacao($dataInicio, $dataFim)
+    {
+        $cc_fornecedor = Fornecedor::query()
+            ->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome')
+            ->whereBetween('created_at', [$dataInicio, $dataFim])
+            ->get();
+
+        $cc_representante = Representante::query()
+            ->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome')
+            ->whereBetween('created_at', [$dataInicio, $dataFim])
+            ->get();
+
+        $cheques = Parcela::query()
+            ->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome', 'adiamentos')
+            ->whereHas('movimentacoes', function (Builder $query) use ($dataInicio, $dataFim) {
+                $query->whereBetween('data', [$dataInicio, $dataFim]);
+            })
+            ->get()
+            ->groupBy('status');
+            
+        // $cheques = MovimentacaoCheque::query()
+        //     ->with('parcela')
+        //     ->whereDate('data', '=', $data)
+        //     ->where('status', 'LIKE', 'Adiado')
+        //     ->get();
+            // dd($cheques);
+        // dd($cheques->has('Resgatado'));
+
+        $despesas = Despesa::query()
+            ->whereBetween('data_vencimento', [$dataInicio, $dataFim])
+            ->with('local')
+            ->get();
+
+        $recebimentos = PagamentosRepresentantes::query()
+            ->whereBetween('created_at', [$dataInicio, $dataFim])
+            ->get();
+
+        $titulo = 'Movimentação ' . date("d/m/Y", strtotime($dataInicio)) .' até '. date("d/m/Y", strtotime($dataFim));
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView(
+            'fornecedor.pdf.mov_diario',
+            compact(
+                'titulo',
+                'cc_fornecedor',
+                'cc_representante',
+                'cheques',
+                'despesas',
+                'recebimentos'
+            )
+        );
+        
         return $pdf->stream();
     }
 

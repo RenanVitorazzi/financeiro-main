@@ -6,6 +6,7 @@ Representantes
 <div class='mb-2 d-flex justify-content-between'>
     <h3>Representantes</h3>
     <div class="d-flex">
+        <div class="btn btn-danger mr-2" id='btnMostrarInativos'>Mostrar Inativos</div>
         <?php if (isset($component)) { $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoImprimir::class, []); ?>
 <?php $component->withName('botao-imprimir'); ?>
@@ -47,7 +48,7 @@ Representantes
             <th>Nome</th>
             <th>Peso</th>
             <th>Fator</th>
-            <!-- <th>Devolvidos</th> -->
+            
             <th></th>
         </tr>
      <?php echo $__env->renderComponent(); ?>
@@ -58,23 +59,31 @@ Representantes
 <?php endif; ?>
     <tbody>
         <?php $__empty_1 = true; $__currentLoopData = $representantes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $representante): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-        <?php if($representante->conta_corrente_sum_peso_agregado < 0|| $representante->conta_corrente_sum_fator_agregado < 0): ?>
-            <tr>
-                <td><?php echo e($representante->pessoa->nome); ?></td>
-                <td><?php echo number_format($representante->conta_corrente_sum_peso_agregado, 2, ',', '.'); ?></td>
-                <td><?php echo number_format($representante->conta_corrente_sum_fator_agregado, 1, ',', '.'); ?></td>
-                <td>
-                    <a class="btn btn-dark"
-                        title="Acerto de documentos"
-                        target='_blank'
-                        href="<?php echo e(route('pdf_acerto_documento', $representante->id)); ?>">
-                        Acertos
-                    </a>
+        <tr class="<?php echo e(!$representante->inativo ?: 'd-none inativo table-danger'); ?>">
+            <td>
+                <?php echo e($representante->pessoa->nome); ?>
+
+                <?php if($representante->inativo): ?>
+                    <span class='text-muted'>(Inativo)</span>
+                <?php endif; ?>
+            </td>
+            <td><?php echo number_format($representante->conta_corrente_sum_peso_agregado, 2, ',', '.'); ?></td>
+            <td><?php echo number_format($representante->conta_corrente_sum_fator_agregado, 1, ',', '.'); ?></td>
+            <td>
+                <?php if(!$representante->inativo): ?>    
+                    <?php if(!$representante->atacado): ?>
+                        <a class="btn btn-dark"
+                            title="Acerto de documentos"
+                            target='_blank'
+                            href="<?php echo e(route('pdf_acerto_documento', $representante->id)); ?>">
+                            Acertos
+                        </a>
+                    <?php endif; ?>
                     <a class="btn btn-dark"
                         title="Cheques Devolvidos "
                         target='_blank'
                         href="<?php echo e(route('pdf_cc_representante', $representante->id)); ?>">
-                        Chs Devolvidos
+                        Cheques Devolvidos
                     </a>
                     <a class="btn btn-dark"
                         title="Conta Corrente"
@@ -82,16 +91,38 @@ Representantes
                         href="<?php echo e(route('conta_corrente_representante.show', $representante->id)); ?>">
                         Conta Corrente
                     </a>
+                    <?php if(!$representante->atacado): ?>
+                        <a class="btn btn-dark"
+                            title="Vendas"
+                            target='_blank'
+                            href="<?php echo e(route('venda.show', $representante->id)); ?>">
+                            Vendas
+                        </a>
+                    <?php endif; ?>
+                <?php endif; ?>
 
-                    <a class="btn btn-dark"
-                        title="Vendas"
-                        target='_blank'
-                        href="<?php echo e(route('venda.show', $representante->id)); ?>">
-                        Vendas
-                    </a>
-                    
-                </td>
-            <?php endif; ?>
+                <?php if(!$representante->atacado): ?>
+                <a class="btn btn-dark" title="Dashboard" href="<?php echo e(route('representanteDashboard', $representante)); ?>">
+                    <i class="fas fa-eye"></i>
+                </a>
+                <?php else: ?>
+                <a class="btn btn-dark" title="Detalhes" href="<?php echo e(route('representantes.show', $representante->id)); ?>">
+                    <i class="fas fa-eye"></i>
+                </a>
+                <?php endif; ?>
+                
+                <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
+<?php $component->withName('botao-editar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['href' => ''.e(route('representantes.edit', $representante->id)).'']); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal13702a75d66702067dad623af293364e28e151a7)): ?>
+<?php $component = $__componentOriginal13702a75d66702067dad623af293364e28e151a7; ?>
+<?php unset($__componentOriginal13702a75d66702067dad623af293364e28e151a7); ?>
+<?php endif; ?>
+            </td>
         </tr>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <tr>
@@ -111,6 +142,12 @@ Representantes
 <?php if(Session::has('message')): ?>
     toastr["success"]("<?php echo e(Session::get('message')); ?>")
 <?php endif; ?>
+$("#btnMostrarInativos").click( (e) => {
+    $(e.currentTarget).toggleClass('btn-danger')
+        .toggleClass('btn-dark')
+
+    $(".inativo").toggleClass('d-none')
+})
 </script>
 <?php $__env->stopSection(); ?>
 

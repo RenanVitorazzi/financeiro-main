@@ -48,7 +48,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>@data($infoRepresentante[$representante->id]['Data'])</td>
+                <td>@data($data_inicio)</td>
                 <td colspan=3>SALDO ANTERIOR</td>
                 <td>@moeda($saldo_total)</td>
             </tr>

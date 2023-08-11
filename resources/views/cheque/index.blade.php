@@ -27,8 +27,8 @@ Carteira de cheques
     </x-table-header>
     <tbody>
         @forelse ($cheques as $cheque)
-            <tr class="{{ ($cheque->data_parcela < Carbon\Carbon::now()) ? 'table-danger' : '' }}">
-                <td>@data($cheque->data_parcela)</td>
+            <tr class="{{ (($cheque->adiamentos->nova_data ?? $cheque->data_parcela) < Carbon\Carbon::now()) ? 'table-danger' : '' }}">
+                <td>@data($cheque->adiamentos->nova_data ?? $cheque->data_parcela)</td>
                 <td>{{ $cheque->nome_cheque }}</td>
                 <td>{{ $cheque->representante->pessoa->nome ?? '' }}</td>
                 <td>@moeda($cheque->valor_parcela)</td>
