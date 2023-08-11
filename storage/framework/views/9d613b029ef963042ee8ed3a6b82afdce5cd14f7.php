@@ -19,6 +19,7 @@ Cadastro de despesa
 <form method="POST" action="<?php echo e(route('despesas.store')); ?>">
     <?php echo csrf_field(); ?>
     <div class="row">
+        <div class="col-12" id='alertarLancamentoDuplicado'></div>
         <div class="col-6 form-group">
             <label for="nome">Nome da despesa</label>
             <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
@@ -138,13 +139,38 @@ Cadastro de despesa
         $("#modal-title2").text('Despesas Fixas')
         $("#modal2").modal("show")
         let html = ``
+        let tbody = ``
+
+        FIXAS.forEach(element => {
+            tbody += `
+                <tr class="${( element.despesas.length > 0 ) ? 'table-warning': ''}">
+                    <td>${element.nome}</td>
+                    <td>${element.valor}</td>
+                    <td>${element.dia_vencimento}</td>
+                    <td>${element.local.nome}</td>
+                    <td>
+                        <div class="btn btn-secondary puxarInfos"
+                            data-nome="${element.nome}"
+                            data-valor="${element.valor}"
+                            data-dia_vencimento="${element.dia_vencimento}"
+                            data-local_id="${element.local_id}"
+                            data-id="${element.id}"
+                            data-despesas="${element.despesas.length}"
+                        >
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </td>
+                </tr>
+            `
+        });
+
         html += `
             <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
 <?php $component->withName('table'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes([]); ?>
+<?php $component->withAttributes(['id' => 'tableFixas']); ?>
                 <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
 <?php $component->withName('table-header'); ?>
@@ -162,32 +188,7 @@ Cadastro de despesa
 <?php $component = $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36; ?>
 <?php unset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36); ?>
 <?php endif; ?>
-                <tbody>
-        `
-            FIXAS.forEach(element => {
-                console.log(element)
-                html += `
-                    <tr>
-                        <td>${element.nome}</td>
-                        <td>${element.valor}</td>
-                        <td>${element.dia_vencimento}</td>
-                        <td>${element.local.nome}</td>
-                        <td>
-                            <div class="btn btn-secondary puxarInfos"
-                                data-nome="${element.nome}"
-                                data-valor="${element.valor}"
-                                data-dia_vencimento="${element.dia_vencimento}"
-                                data-local_id="${element.local_id}"
-                                data-id="${element.id}"
-                            >
-                                <i class="fas fa-check"></i>
-                            </div>
-                        </td>
-                `
-            });
-
-        html += `
-                </tbody>
+                <tbody>${tbody}</tbody>
              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6)): ?>
@@ -198,6 +199,9 @@ Cadastro de despesa
         $("#modal-body2").html(html)
 
         $(".puxarInfos").click( (e) => {
+            
+            $("#alertarLancamentoDuplicado").html(``)
+
             let target = $(e.currentTarget)
 
             $("#nome").val(target.data('nome'))
@@ -217,10 +221,22 @@ Cadastro de despesa
             $("#fixas_id").val(target.data('id'))
 
             $("#modal2").modal("hide")
+
+            if (target.data('despesas') > 0) {
+                alertarPagamento()
+            }
         })
+
+        $("#tableFixas").dataTable()
     })
 
-
+    function alertarPagamento() {
+        $("#alertarLancamentoDuplicado").html(`
+            <h5 class='alert alert-warning'>
+                Já existe uma despesa lançada para este mês!
+            </h5>
+        `)
+    }
 </script>
 <?php $__env->stopSection(); ?>
 

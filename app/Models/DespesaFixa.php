@@ -17,6 +17,6 @@ class DespesaFixa extends Model
     } 
 
     public function despesas() {
-        return $this->belongsTo(Despesa::class);
+        return $this->hasMany(Despesa::class, 'fixas_id');
     } 
 }

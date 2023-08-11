@@ -48,7 +48,7 @@
         </thead>
         <tbody>
             <tr>
-                <td><?php echo date('d/m/Y', strtotime($infoRepresentante[$representante->id]['Data'])); ?></td>
+                <td><?php echo date('d/m/Y', strtotime($data_inicio)); ?></td>
                 <td colspan=3>SALDO ANTERIOR</td>
                 <td><?php echo 'R$ ' . number_format($saldo_total, 2, ',', '.'); ?></td>
             </tr>

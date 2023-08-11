@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Movimentação diária <?php echo date('d/m/Y', strtotime($data)); ?></title>
+    <title><?php echo e($titulo); ?></title>
 </head>
 <style>
     table { 
@@ -28,7 +28,7 @@
     }
 </style>
 <body>
-    <h3>Movimentação diária - <?php echo date('d/m/Y', strtotime($data)); ?></h3>
+    <h3><?php echo e($titulo); ?></h3>
     <?php if(!$cc_representante->isEmpty()): ?>
         <table>
             <thead>

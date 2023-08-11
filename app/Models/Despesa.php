@@ -15,4 +15,8 @@ class Despesa extends Model
     public function local() {
         return $this->belongsTo(Local::class);
     } 
+
+    public function fixa() {
+        return $this->belongsTo(DespesaFixa::class);
+    } 
 }

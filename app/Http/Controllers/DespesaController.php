@@ -60,11 +60,13 @@ class DespesaController extends Controller
     public function create(Request $request)
     {
         $locais = Local::all();
-        $fixas = DespesaFixa::with('local')
+        $fixas = DespesaFixa::with(['local', 'despesas' => function ($query) {
+                $query->whereMonth('data_vencimento', DB::raw('MONTH(CURDATE())'));
+            }])
             ->orderBy('local_id')
             ->get()
             ->toJson();
-
+        
         $data = NULL;
         $descricao = NULL;
         $valor = NULL;
@@ -182,14 +184,14 @@ class DespesaController extends Controller
 
     public function pdf_despesa_mensal ($mes)
     {
-        $despesas = ModelsDespesa::where(DB::raw('MONTH(data_vencimento)'), DB::raw($mes))
+        $despesas = ModelsDespesa::where(DB::raw('MONTH(data_vencimento)'),  $mes)
             ->where(DB::raw('YEAR(data_vencimento)'), DB::raw('YEAR(CURDATE())'))
             ->orderBy('local_id')
             ->orderBy('data_vencimento')
             ->get();
 
         $local = Local::all();
-        // dd($despesas->where('local_id', 1)->sum('valor'));
+
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('despesa.pdf.pdf_despesa_mensal', compact('despesas', 'mes', 'local') );
 

@@ -770,9 +770,8 @@ Procurar cheque
             </form>
         `)
         campo_pagamento.fadeIn()    
-        
+
         enviarFormRecebimento()
-        
     }
 
     function enviarFormRecebimento() {
@@ -804,6 +803,7 @@ Procurar cheque
     
                     MODAL.modal("hide")
                     procurarPagamentos($("#parcela_id").val())
+                    $("#form_procura_cheque").submit()
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
                     var response = JSON.parse(jqXHR.responseText)

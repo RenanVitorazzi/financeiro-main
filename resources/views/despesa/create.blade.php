@@ -20,6 +20,7 @@ Cadastro de despesa
 <form method="POST" action="{{ route('despesas.store')}}">
     @csrf
     <div class="row">
+        <div class="col-12" id='alertarLancamentoDuplicado'></div>
         <div class="col-6 form-group">
             <label for="nome">Nome da despesa</label>
             <x-input name="nome" type="text" value="{{ old('nome') }}"></x-input>
@@ -69,8 +70,33 @@ Cadastro de despesa
         $("#modal-title2").text('Despesas Fixas')
         $("#modal2").modal("show")
         let html = ``
+        let tbody = ``
+
+        FIXAS.forEach(element => {
+            tbody += `
+                <tr class="${( element.despesas.length > 0 ) ? 'table-warning': ''}">
+                    <td>${element.nome}</td>
+                    <td>${element.valor}</td>
+                    <td>${element.dia_vencimento}</td>
+                    <td>${element.local.nome}</td>
+                    <td>
+                        <div class="btn btn-secondary puxarInfos"
+                            data-nome="${element.nome}"
+                            data-valor="${element.valor}"
+                            data-dia_vencimento="${element.dia_vencimento}"
+                            data-local_id="${element.local_id}"
+                            data-id="${element.id}"
+                            data-despesas="${element.despesas.length}"
+                        >
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </td>
+                </tr>
+            `
+        });
+
         html += `
-            <x-table>
+            <x-table id='tableFixas'>
                 <x-table-header>
                     <th>Nome</th>
                     <th>Valor</th>
@@ -78,37 +104,15 @@ Cadastro de despesa
                     <th>Local</th>
                     <th></th>
                 </x-table-header>
-                <tbody>
-        `
-            FIXAS.forEach(element => {
-                console.log(element)
-                html += `
-                    <tr>
-                        <td>${element.nome}</td>
-                        <td>${element.valor}</td>
-                        <td>${element.dia_vencimento}</td>
-                        <td>${element.local.nome}</td>
-                        <td>
-                            <div class="btn btn-secondary puxarInfos"
-                                data-nome="${element.nome}"
-                                data-valor="${element.valor}"
-                                data-dia_vencimento="${element.dia_vencimento}"
-                                data-local_id="${element.local_id}"
-                                data-id="${element.id}"
-                            >
-                                <i class="fas fa-check"></i>
-                            </div>
-                        </td>
-                `
-            });
-
-        html += `
-                </tbody>
+                <tbody>${tbody}</tbody>
             </x-table>
         `
         $("#modal-body2").html(html)
 
         $(".puxarInfos").click( (e) => {
+            
+            $("#alertarLancamentoDuplicado").html(``)
+
             let target = $(e.currentTarget)
 
             $("#nome").val(target.data('nome'))
@@ -128,9 +132,21 @@ Cadastro de despesa
             $("#fixas_id").val(target.data('id'))
 
             $("#modal2").modal("hide")
+
+            if (target.data('despesas') > 0) {
+                alertarPagamento()
+            }
         })
+
+        $("#tableFixas").dataTable()
     })
 
-
+    function alertarPagamento() {
+        $("#alertarLancamentoDuplicado").html(`
+            <h5 class='alert alert-warning'>
+                Já existe uma despesa lançada para este mês!
+            </h5>
+        `)
+    }
 </script>
 @endsection

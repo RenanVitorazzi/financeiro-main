@@ -300,7 +300,17 @@ Editar representante
             </div>
         </div>
     </div>
+    <div class="form-group">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="inativo" id="inativo" value="1"
+                <?php echo e(!$representante->inativo ?: 'checked'); ?>
 
+            >
+            <label class="form-check-label" for="inativo">
+                Fornecedor Inativo
+            </label>
+        </div>
+    </div>
     <input type="submit" class='btn btn-success'>
 </form>
 <?php $__env->stopSection(); ?>
