@@ -35,7 +35,7 @@ class DespesaController extends Controller
             ->whereNotIn('id', $idFixasPagas)   
             ->where(function ($query) {
                 $query->whereNull('data_quitacao')
-                    ->orWhere('data_quitacao', '>=', date('Y-m-d'));
+                    ->orWhere('data_quitacao', '>', date('Y-m-d'));
             })
             // ->orderBy('local_id')
             ->orderBy('dia_vencimento')
@@ -63,6 +63,8 @@ class DespesaController extends Controller
         $fixas = DespesaFixa::with(['local', 'despesas' => function ($query) {
                 $query->whereMonth('data_vencimento', DB::raw('MONTH(CURDATE())'));
             }])
+            ->whereNull('data_quitacao')
+            ->orWhere('data_quitacao', '>', date('Y-m-d'))
             ->orderBy('local_id')
             ->get()
             ->toJson();
@@ -93,17 +95,6 @@ class DespesaController extends Controller
             );
 
         return redirect()->route('despesas.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**

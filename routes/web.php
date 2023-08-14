@@ -21,6 +21,7 @@ use App\Http\Controllers\OpController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\RecebimentosController;
 use App\Http\Controllers\EntregaParcelaController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -60,7 +61,6 @@ Route::group(['middleware' => ['auth']], function() {
         Route::resource('representantes', RepresentanteController::class);
         Route::resource('parceiros', ParceiroController::class);
         
-
         //? Financeiro
         Route::resource('conta_corrente', ContaCorrenteController::class);
         Route::resource('troca_cheques', TrocaChequeController::class);
@@ -117,7 +117,6 @@ Route::group(['middleware' => ['auth']], function() {
         Route::resource('conta_corrente_anexo', ContaCorrenteAnexoController::class)->only([
             'index', 'create', 'store', 'destroy'
         ]);
-
         Route::get('consulta_cheque', [ChequeController::class, 'consulta_cheque'])->name('consulta_cheque');
         Route::get('consulta_parcela_pagamento', [ChequeController::class, 'consulta_parcela_pagamento'])->name('consulta_parcela_pagamento');
         Route::get('procurar_pagamento', [ChequeController::class, 'procurar_pagamento'])->name('procurar_pagamento');

@@ -11,6 +11,8 @@ use App\Models\Consignado;
 use App\Models\ContaCorrente;
 use App\Models\ContaCorrenteRepresentante;
 use App\Models\EntregaParcela;
+use App\Models\MovimentacaoCheque;
+use App\Models\PagamentosRepresentantes;
 use App\Models\Parceiro;
 use App\Models\Parcela;
 use App\Models\Pessoa;
@@ -130,6 +132,69 @@ class RepresentanteController extends Controller {
         $contaCorrente = ContaCorrenteRepresentante::where('representante_id', $representante->id)->get();
         //TODO 
         // FAZER QUERY DE CHEQUES DEVOLVIDOS -> PROVAVELMETENTE CRIAR UM SERVICE
+        $infoRepresentante = [
+            1 => [
+                'Saldo' => -24269,
+                'Data' => '2023-04-13'
+            ],
+            5 => [
+                'Saldo' => -33974,
+                'Data' => '2023-04-13'
+            ],
+            8 => [
+                'Saldo' => 0,
+                'Data' => '2023-07-05'
+            ],
+            12 => [
+                'Saldo' => 0,
+                'Data' => '2023-07-05'
+            ],
+            20 => [
+                'Saldo' => -51400,
+                'Data' => '2023-04-13'
+            ],
+            23 => [
+                'Saldo' => -26486,
+                'Data' => '2023-04-13'
+            ],
+            24 => [
+                'Saldo' => 0,
+                'Data' => '2023-04-13'
+            ],
+            26 => [
+                'Saldo' => 0,
+                'Data' => '2023-07-05'
+            ],
+            'Default' => [
+                'Saldo' => 0,
+                'Data' => '2023-01-02'
+            ]
+        ];
+        
+        $saldo_total = $infoRepresentante['Default']['Saldo'];
+        $data_inicio = $infoRepresentante['Default']['Data'];
+
+        if (array_key_exists($representante->id, $infoRepresentante)) {
+            $saldo_total = $infoRepresentante[$representante->id]['Saldo'];
+            $data_inicio = $infoRepresentante[$representante->id]['Data'];
+        }
+        $pagamentosRepresentantes = PagamentosRepresentantes::query()
+            ->select('data', 'observacao', 'valor')
+            ->where('representante_id', $representante->id)
+            ->whereNull('baixado')
+            ->whereNull('parcela_id')
+            ->get();
+
+        $entregas = Parcela::query()
+            ->withSum('pagamentos_representantes', 'valor')
+            ->where('representante_id', $representante->id)
+            ->whereHas('entrega', function ($query) use ($data_inicio) {
+                $query->where('entregue_representante', '>=', $data_inicio);
+            })
+            ->get();
+    
+    
+        $saldoContaCorrenteChsDevolvidos = ($saldo_total - $entregas->sum('valor_parcela') ) + ($entregas->sum('pagamentos_representantes_sum_valor') + $pagamentosRepresentantes->sum('valor'));
 
         $acertos = Parcela::query()
             ->with('venda')
@@ -155,7 +220,6 @@ class RepresentanteController extends Controller {
             ->where('representante_id', $representante->id)
             ->whereNull('baixado')
             ->get();
-            // dd($consignados);
         
         return view('representante.dashboard', 
             compact(
@@ -166,7 +230,8 @@ class RepresentanteController extends Controller {
                 'consignados',
                 'contaCorrente',
                 'representante',
-                'acertos'
+                'acertos',
+                'saldoContaCorrenteChsDevolvidos'
             )
         );
 
@@ -281,7 +346,7 @@ class RepresentanteController extends Controller {
                 $representante_id
             ]
         );
-
+        
         $chequesNaoEntregues = Parcela::devolvidosNoEscritorio($representante_id)->get();
             
         $chequesComParceiros = Parcela::devolvidosComParceiros($representante_id)->get();

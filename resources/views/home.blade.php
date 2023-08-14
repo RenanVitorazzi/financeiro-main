@@ -132,6 +132,7 @@
 </x-table>
 @if (auth()->user()->is_admin)
     <a class="btn btn-dark" target="_blank" href="{{ route('pdf_diario2') }}">Impresso diário</a>
+    <a class="btn btn-dark" target="_blank" href="{{ route('pdf_mov_diario', \Carbon\Carbon::now()->format('Y-m-d')) }}">Movimentação diária</a>
 @endif
 @endsection
 @section('script')
