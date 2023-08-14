@@ -81,11 +81,11 @@ Dashboard <?php echo e($pessoa->nome); ?>
             <div class="card-body">
                 <h5 class="card-title">Cheques Devolvidos</h5>
                 <p class="card-text">
-                    <div>Conta corrente: <b class='text-danger'>TO DO </b> </div>
+                    <div>Conta corrente: <b class='text-danger'><?php echo 'R$ ' . number_format($saldoContaCorrenteChsDevolvidos, 2, ',', '.'); ?> </b> </div>
                     <div>Na empresa (<?php echo e($devolvidosNoEscritorio->count()); ?>): <?php echo 'R$ ' . number_format($devolvidosNoEscritorio->sum('valor_parcela'), 2, ',', '.'); ?> </div>
                     <div>Nos parceiros (<?php echo e($devolvidosComParceiros->count()); ?>): <?php echo 'R$ ' . number_format($devolvidosComParceiros->sum('valor_parcela'), 2, ',', '.'); ?></div>
                 </p>
-                <a href="<?php echo e(route('pdf_cc_representante', $representante->id)); ?>" class="btn btn-primary">Relatório de Vendas</a>
+                <a href="<?php echo e(route('pdf_cc_representante', $representante->id)); ?>" class="btn btn-primary">Impresso do conta corrente</a>
             </div>
         </div>
     </div>

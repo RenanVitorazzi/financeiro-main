@@ -80,11 +80,11 @@ Dashboard {{ $pessoa->nome }}
             <div class="card-body">
                 <h5 class="card-title">Cheques Devolvidos</h5>
                 <p class="card-text">
-                    <div>Conta corrente: <b class='text-danger'>TO DO </b> </div>
+                    <div>Conta corrente: <b class='text-danger'>@moeda($saldoContaCorrenteChsDevolvidos) </b> </div>
                     <div>Na empresa ({{ $devolvidosNoEscritorio->count() }}): @moeda($devolvidosNoEscritorio->sum('valor_parcela')) </div>
                     <div>Nos parceiros ({{ $devolvidosComParceiros->count() }}): @moeda($devolvidosComParceiros->sum('valor_parcela'))</div>
                 </p>
-                <a href="{{route('pdf_cc_representante', $representante->id) }}" class="btn btn-primary">Relatório de Vendas</a>
+                <a href="{{route('pdf_cc_representante', $representante->id) }}" class="btn btn-primary">Impresso do conta corrente</a>
             </div>
         </div>
     </div>

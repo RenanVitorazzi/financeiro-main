@@ -217,6 +217,7 @@
 <?php endif; ?>
 <?php if(auth()->user()->is_admin): ?>
     <a class="btn btn-dark" target="_blank" href="<?php echo e(route('pdf_diario2')); ?>">Impresso diário</a>
+    <a class="btn btn-dark" target="_blank" href="<?php echo e(route('pdf_mov_diario', \Carbon\Carbon::now()->format('Y-m-d'))); ?>">Movimentação diária</a>
 <?php endif; ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
