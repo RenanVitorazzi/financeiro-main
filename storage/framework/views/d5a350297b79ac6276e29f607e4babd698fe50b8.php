@@ -46,7 +46,7 @@
             <tbody>
                 <?php $__empty_1 = true; $__currentLoopData = $cc_representante; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $representante): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <tr>
-                        <td><?php echo e($representante->nome); ?></td>
+                        <td><?php echo e($representante->representante->pessoa->nome); ?></td>
                         <td><?php echo e($representante->balanco); ?></td>
                         <td><?php echo number_format($representante->peso, 2, ',', '.'); ?></td>
                         <td><?php echo number_format($representante->fator, 1, ',', '.'); ?></td>
@@ -69,24 +69,22 @@
                     <th colspan = 4>Fornecedores</th>
                 </tr>
                 <tr>
-                    <th>Representante</th>
+                    <th>Fornecedor</th>
                     <th>Balanço</th>
                     <th>Peso</th>
                     <th>Observação</th>
                 </tr>
             </thead>
             <tbody>
-                <?php $__empty_1 = true; $__currentLoopData = $cc_fornecedor; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fornecedor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php $__empty_1 = true; $__currentLoopData = $cc_fornecedor; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $registro_cc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <tr>
-                        <td><?php echo e($fornecedor->nome); ?></td>
-                        <td><?php echo e($fornecedor->balanco); ?></td>
-                        <td><?php echo number_format($fornecedor->peso, 2, ',', '.'); ?></td>
+                        <td><?php echo e($registro_cc->fornecedor->pessoa->nome); ?></td>
+                        <td><?php echo e($registro_cc->balanco == 'Débito' ? 'Compra' : 'Fechamento'); ?></td>
+                        <td><?php echo number_format($registro_cc->peso, 2, ',', '.'); ?></td>
                         <td>
-                            <?php echo e($fornecedor->observacao); ?>
+                            <?php echo e($registro_cc->observacao); ?>
 
-                            <?php if($fornecedor->balanco == 'Crédito'): ?>
-                                <?php echo 'R$ ' . number_format($fornecedor->valor, 2, ',', '.'); ?> / <?php echo 'R$ ' . number_format($fornecedor->cotacao, 2, ',', '.'); ?>
-                            <?php endif; ?>
+                            
                         </td>
                     </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

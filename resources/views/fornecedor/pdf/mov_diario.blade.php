@@ -46,7 +46,7 @@
             <tbody>
                 @forelse ($cc_representante as $representante)
                     <tr>
-                        <td>{{$representante->nome}}</td>
+                        <td>{{$representante->representante->pessoa->nome}}</td>
                         <td>{{$representante->balanco}}</td>
                         <td>@peso($representante->peso)</td>
                         <td>@fator($representante->fator)</td>
@@ -69,23 +69,23 @@
                     <th colspan = 4>Fornecedores</th>
                 </tr>
                 <tr>
-                    <th>Representante</th>
+                    <th>Fornecedor</th>
                     <th>Balanço</th>
                     <th>Peso</th>
                     <th>Observação</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($cc_fornecedor as $fornecedor)
+                @forelse ($cc_fornecedor as $registro_cc)
                     <tr>
-                        <td>{{$fornecedor->nome}}</td>
-                        <td>{{$fornecedor->balanco}}</td>
-                        <td>@peso($fornecedor->peso)</td>
+                        <td>{{$registro_cc->fornecedor->pessoa->nome}}</td>
+                        <td>{{$registro_cc->balanco == 'Débito' ? 'Compra' : 'Fechamento'}}</td>
+                        <td>@peso($registro_cc->peso)</td>
                         <td>
-                            {{$fornecedor->observacao}}
-                            @if($fornecedor->balanco == 'Crédito')
-                                @moeda($fornecedor->valor) / @moeda($fornecedor->cotacao)
-                            @endif
+                            {{$registro_cc->observacao}}
+                            {{-- @if($registro_cc->balanco == 'Crédito')
+                                @moeda($registro_cc->valor) / @moeda($registro_cc->cotacao)
+                            @endif --}}
                         </td>
                     </tr>
                 @empty
