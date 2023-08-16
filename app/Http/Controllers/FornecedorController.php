@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequestFormPessoa;
+use App\Http\Requests\UpdateFornecedorRequest;
 use App\Models\Adiamento;
 use App\Models\Fornecedor;
 use App\Models\Pessoa;
@@ -31,6 +32,7 @@ class FornecedorController extends Controller
             //     $query->whereNull('peso_agregado');
             // }])
             ->withSum('contaCorrente', 'peso_agregado')
+            ->orderBy('inativo')
             ->orderBy('conta_corrente_sum_peso_agregado')
             ->get();
 
@@ -100,9 +102,10 @@ class FornecedorController extends Controller
         return view('fornecedor.edit', compact('fornecedor'));
     }
 
-    public function update(RequestFormPessoa $request, $id)
+    public function update(UpdateFornecedorRequest $request, $id)
     {
         $fornecedor = Fornecedor::findOrFail($id);
+        $fornecedor->update(['inativo' => $request->inativo]);
 
         $pessoa = Pessoa::findOrFail($fornecedor->pessoa_id);
 
@@ -478,20 +481,21 @@ class FornecedorController extends Controller
 
     public function pdf_mov_diario($data)
     {
-        $cc_fornecedor = Fornecedor::query()
-            ->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome')
+        $cc_fornecedor = ContaCorrente::query()
+            ->with('fornecedor.pessoa:id,nome')
             ->whereDate('created_at', $data)
             ->get();
-
-        $cc_representante = Representante::query()
-            ->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome')
+        
+        $cc_representante = ContaCorrenteRepresentante::query()
+            ->with('representante.pessoa:id,nome')
             ->whereDate('created_at', $data)
             ->get();
 
         $cheques = Parcela::query()
             ->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome', 'adiamentos')
             ->whereHas('movimentacoes', function (Builder $query) use ($data) {
-                $query->whereDate('data', '=', $data);
+                $query->where(DB::raw('DATE(data)'), $data)
+                    ->whereNotIn('status', ['Pago parceiro', 'Pago representante']);
             })
             ->get()
             ->groupBy('status');
@@ -546,7 +550,8 @@ class FornecedorController extends Controller
         $cheques = Parcela::query()
             ->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome', 'adiamentos')
             ->whereHas('movimentacoes', function (Builder $query) use ($dataInicio, $dataFim) {
-                $query->whereBetween('data', [$dataInicio, $dataFim]);
+                $query->whereBetween(DB::raw('DATE(data)'), [$dataInicio, $dataFim])
+                    ->whereNotIn('status', ['Pago parceiro', 'Pago representante']);
             })
             ->get()
             ->groupBy('status');

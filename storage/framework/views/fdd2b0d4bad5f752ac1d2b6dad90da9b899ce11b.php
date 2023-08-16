@@ -12,6 +12,7 @@ Fornecedores
 <div class='mb-2 d-flex justify-content-between'>
     <h3> Fornecedores </h3>
     <div>
+        <div class="btn btn-danger mr-2" id='btnMostrarInativos'>Mostrar Inativos</div>
         <?php if (isset($component)) { $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoImprimir::class, []); ?>
 <?php $component->withName('botao-imprimir'); ?>
@@ -36,28 +37,52 @@ Fornecedores
 <?php endif; ?>
     </div>
 </div>
-<div class='row'>
-    <div class="col-12">
-        <ul class="d-flex list-group list-group">
-            <?php $__empty_1 = true; $__currentLoopData = $fornecedores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fornecedor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+<?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
+<?php $component->withName('table'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['class' => 'table-striped']); ?>
+    <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
+<?php $component->withName('table-header'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
+        <tr>
+            <th>Nome</th>
+            <th>Saldo</th>
+            <th></th>
+        </tr>
+     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36)): ?>
+<?php $component = $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36; ?>
+<?php unset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36); ?>
+<?php endif; ?>
+    <tbody>
+        <?php $__empty_1 = true; $__currentLoopData = $fornecedores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fornecedor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+        <tr class="<?php echo e(!$fornecedor->inativo ?: 'd-none inativo table-danger'); ?>">
+            <td>
+                <?php echo e($fornecedor->pessoa->nome); ?>
 
-                <li class='list-group-item d-flex justify-content-between'>
-                    <div class='mt-2'>
-                        <span><?php echo e($fornecedor->pessoa->nome); ?> </span>
-                        <span>(<?php echo number_format($fornecedor->conta_corrente_sum_peso_agregado, 2, ',', '.'); ?>g)</span>
-                        <?php if(!$lancamentos_pendentes->where('fornecedor_id', $fornecedor->id)->isEmpty()): ?>
-                            <a class="font-weight-bold ml-2 badge badge-pill badge-danger"
-                                href="<?php echo e(route('conta_corrente.edit', $lancamentos_pendentes->where('fornecedor_id', $fornecedor->id)->first()->id )); ?>"
-                            >
-                                Lançamento pendente   
-                            </a>
-                        <?php endif; ?>
-                    </div>
-                    <div class='d-flex'>
-                        <a class="btn btn-dark mr-2" title="Conta corrente" href="<?php echo e(route('fornecedores.show', $fornecedor->id)); ?>">
-                            <i class="fas fa-chart-area"></i>
-                        </a>
-                        <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
+                <?php if($fornecedor->inativo): ?>
+                    <span class='text-muted'>(Inativo)</span>
+                <?php endif; ?>
+                <?php if(!$lancamentos_pendentes->where('fornecedor_id', $fornecedor->id)->isEmpty()): ?>
+                    <a class="font-weight-bold ml-2 badge badge-pill badge-danger"
+                        href="<?php echo e(route('conta_corrente.edit', $lancamentos_pendentes->where('fornecedor_id', $fornecedor->id)->first()->id )); ?>"
+                    >
+                        Lançamento pendente   
+                    </a>
+                <?php endif; ?>
+            </td>
+            <td><?php echo number_format($fornecedor->conta_corrente_sum_peso_agregado, 2, ',', '.'); ?> g</td>
+            <td>
+                <a class="btn btn-dark mr-2" title="Conta corrente" href="<?php echo e(route('fornecedores.show', $fornecedor->id)); ?>">
+                    <i class="fas fa-chart-area"></i>
+                </a>
+                <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
 <?php $component->withName('botao-editar'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -68,28 +93,32 @@ Fornecedores
 <?php $component = $__componentOriginal13702a75d66702067dad623af293364e28e151a7; ?>
 <?php unset($__componentOriginal13702a75d66702067dad623af293364e28e151a7); ?>
 <?php endif; ?>
-                        <?php if (isset($component)) { $__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247 = $component; } ?>
+                <?php if (isset($component)) { $__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoExcluir::class, []); ?>
 <?php $component->withName('botao-excluir'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes(['action' => ''.e(route('fornecedores.destroy', $fornecedor->id)).'']); ?>
-                         <?php echo $__env->renderComponent(); ?>
+                 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247)): ?>
 <?php $component = $__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247; ?>
 <?php unset($__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247); ?>
 <?php endif; ?>
-                    </div>
-                </li>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                <li class='list-group-item list-group-item-danger'>Nenhum registro criado!</li>
-            <?php endif; ?>
-        </ul>
-    </div>
-    
+            </td>
+        </tr>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <tr>
+                <td colspan=3>Nenhum registro criado!</td>
+        <?php endif; ?>
+    </tbody>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6)): ?>
+<?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
+<?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
+<?php endif; ?>
 
-</div>
 
 
 <?php $__env->stopSection(); ?>
@@ -99,6 +128,12 @@ Fornecedores
     <?php if(Session::has('message')): ?>
         toastr["success"]("<?php echo e(Session::get('message')); ?>")
     <?php endif; ?>
+    $("#btnMostrarInativos").click( (e) => {
+        $(e.currentTarget).toggleClass('btn-danger')
+            .toggleClass('btn-dark')
+
+        $(".inativo").toggleClass('d-none')
+    })
 </script>
 <?php $__env->stopSection(); ?>
 
