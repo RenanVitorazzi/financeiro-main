@@ -70,7 +70,7 @@ Entrega de cheques
                 <td><?php echo date('d/m/Y', strtotime($cheque->data_parcela)); ?></td>
                 <td><?php echo e($cheque->nome_cheque); ?></td>
                 <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>
-                <td><?php echo e($cheque->numero_cheque); ?></td>
+                <td><?php echo e($cheque->numero_cheque); ?> REPRESENTANTE: <?php echo e($cheque->representante_id); ?></td>
                 <td><?php echo e($cheque->status); ?> <?php echo e($cheque->motivo); ?></td>
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

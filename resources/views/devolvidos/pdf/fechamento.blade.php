@@ -32,9 +32,10 @@
     <table>
         <thead>
             <tr>
-               <th colspan=6>Devolvidos</th>
+               <th colspan=7>Devolvidos</th>
             </tr>
             <tr>
+                <th>#</th>
                 <th>Cliente</th>
                 <th>Valor</th>
                 <th>Data</th>
@@ -46,6 +47,7 @@
         <tbody>
             @forelse ($cheques_devolvidos as $cheque_devolvido)
                 <tr>
+                    <td>{{$loop->iteration}}</td>
                     <td>{{ $cheque_devolvido->nome_cheque, 0, 35 }}</td>
                     <td>@moeda($cheque_devolvido->valor_parcela)</td>
                     <td>@data($cheque_devolvido->data_parcela)</td>
@@ -55,13 +57,13 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan=6>Nenhum registro</td>
+                    <td colspan=7>Nenhum registro</td>
                 </tr>
             @endforelse
         </tbody>
         <tfoot>
             <tr>
-                <td colspan=5><b>Total</b></td>
+                <td colspan=6><b>Total</b></td>
                 <td colspan=1><b>@moeda($juros_totais[0]->juros_totais)</b></td>
             </tr>
         </tfoot>

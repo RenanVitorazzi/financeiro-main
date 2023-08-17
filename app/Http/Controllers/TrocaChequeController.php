@@ -240,6 +240,7 @@ class TrocaChequeController extends Controller
         );
 
         $total_cheques_mes = DB::select('SELECT
+                YEAR(IF(a.nova_data, MAX(a.nova_data), p.data_parcela)) as ano,
                 MONTH(IF(a.nova_data, MAX(a.nova_data), p.data_parcela)) as mes,
                 SUM(valor_parcela) as total_mes,
                 SUM(t.valor_juros) as total_juros_mes,
@@ -252,7 +253,7 @@ class TrocaChequeController extends Controller
                 adiamentos a ON a.parcela_id = p.id
             WHERE
                 troca_id = ?
-            GROUP BY MONTH(p.data_parcela)
+            GROUP BY YEAR(p.data_parcela), MONTH(p.data_parcela)
             ORDER BY 1, 2',
             [$id]
         );
