@@ -303,11 +303,11 @@ class ChequeController extends Controller
     {
         $representante = Representante::findOrFail($representante_id);
 
-        $parcelas = Parcela::where([
+        $parcelas = Parcela::with('adiamentos')
+        ->where([
             ['data_parcela','>=', DB::raw('CURDATE()')],
             ['representante_id', $representante_id],
-            ['forma_pagamento', 'Cheque'],
-            ['status', 'Aguardando'],
+            ['forma_pagamento', 'Cheque']
         ])
         // ->orderBy('nome_cheque')
         ->orderBy('data_parcela')
@@ -315,8 +315,7 @@ class ChequeController extends Controller
 
         ->orderBy('numero_cheque')
         ->get();
-        // dd($parcelas);
-
+    
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('cheque.pdf.pdf_cheques', compact('parcelas', 'representante') );
 

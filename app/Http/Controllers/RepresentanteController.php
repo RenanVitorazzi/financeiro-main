@@ -82,7 +82,11 @@ class RepresentanteController extends Controller {
             ->whereHas('entrega', function ($query) {
                 $query->whereNull('entregue_representante')
                     ->whereNotNull('entregue_parceiro');
-            })->get();
+            })
+            ->where('status', '<>', 'Pago')
+            ->orderBy('data_parcela')
+            ->orderBy('valor_parcela')
+            ->get();
 
         return view('representante.show', compact('representante', 'devolvidos'));
     }
@@ -283,7 +287,7 @@ class RepresentanteController extends Controller {
             ],
             12 => [
                 'Saldo' => 0,
-                'Data' => '2023-07-05'
+                'Data' => '2023-08-17'
             ],
             20 => [
                 'Saldo' => -51400,
@@ -347,9 +351,15 @@ class RepresentanteController extends Controller {
             ]
         );
         
-        $chequesNaoEntregues = Parcela::devolvidosNoEscritorio($representante_id)->get();
-            
-        $chequesComParceiros = Parcela::devolvidosComParceiros($representante_id)->get();
+        $chequesNaoEntregues = Parcela::query()
+            ->devolvidosNoEscritorio($representante_id)
+            ->withSum('pagamentos_representantes', 'valor')
+            ->get();
+        
+        $chequesComParceiros = Parcela::query()
+            ->devolvidosComParceiros($representante_id)
+            ->withSum('pagamentos_representantes', 'valor')
+            ->get();
 
         $pdf = App::make('dompdf.wrapper');
         $hoje = date('Y-m-d');

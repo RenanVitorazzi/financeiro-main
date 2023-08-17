@@ -56,7 +56,7 @@ class EntregaParcelaController extends Controller
         $parceiro = Parceiro::findOrFail($parceiro_id);
 
         $cheques = DB::select('SELECT
-                p.data_parcela, nome_cheque, numero_cheque, valor_parcela, mc.motivo, mc.status, p.id
+                p.data_parcela, nome_cheque, numero_cheque, valor_parcela, mc.motivo, mc.status, p.id, p.representante_id
             FROM
                 parcelas p
                     INNER JOIN

@@ -32,9 +32,10 @@
     <table>
         <thead>
             <tr>
-               <th colspan=6>Devolvidos</th>
+               <th colspan=7>Devolvidos</th>
             </tr>
             <tr>
+                <th>#</th>
                 <th>Cliente</th>
                 <th>Valor</th>
                 <th>Data</th>
@@ -46,6 +47,7 @@
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $cheques_devolvidos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cheque_devolvido): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
+                    <td><?php echo e($loop->iteration); ?></td>
                     <td><?php echo e($cheque_devolvido->nome_cheque, 0, 35); ?></td>
                     <td><?php echo 'R$ ' . number_format($cheque_devolvido->valor_parcela, 2, ',', '.'); ?></td>
                     <td><?php echo date('d/m/Y', strtotime($cheque_devolvido->data_parcela)); ?></td>
@@ -55,13 +57,13 @@
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
-                    <td colspan=6>Nenhum registro</td>
+                    <td colspan=7>Nenhum registro</td>
                 </tr>
             <?php endif; ?>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan=5><b>Total</b></td>
+                <td colspan=6><b>Total</b></td>
                 <td colspan=1><b><?php echo 'R$ ' . number_format($juros_totais[0]->juros_totais, 2, ',', '.'); ?></b></td>
             </tr>
         </tfoot>
