@@ -21,17 +21,10 @@ class HomeController extends Controller
 
     public function index()
     {
-        $depositos = Parcela::where([
-                ['data_parcela','<=', DB::raw('CURDATE()')],
-                ['parceiro_id', NULL],
-                ['status', 'Aguardando'],
-                ['forma_pagamento', 'Cheque'],
-            ])
-            ->orderBy('data_parcela')
-            ->orderBy('valor_parcela')
-            ->orderBy('nome_cheque')
+        
+        $depositos = Parcela::vencidosCarteira()
             ->get();
-
+        // dd($depositos);
         $qtdDiasParaSexta = 5 - Carbon::now()->dayOfWeek;
 
         // $idFixasPagas = ModelsDespesa::with('local')

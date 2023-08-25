@@ -6,7 +6,9 @@
         {{ session('status') }}
     </div>
 @endif
-<title>Home</title>
+@section('title')
+Home
+@endsection
 {{-- @if($fixasNaoPagas->count() > 0)
     <div class="alert alert-warning">
         Você tem {{ $fixasNaoPagas->count() }} despesa para pagar nos próximos 7 dias
@@ -37,7 +39,7 @@
 
             @forelse ($depositos as $cheque)
                 <tr>
-                    <td>{{ $loop->index + 1 }}</td>
+                    <td>{{ $loop->index + 1 }} {{$cheque->id}}</td>
                     <td>{{ $cheque->nome_cheque }}</td>
                     <td>@data($cheque->data_parcela)</td>
                     <td>@moeda($cheque->valor_parcela)</td>

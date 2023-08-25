@@ -287,7 +287,7 @@ class RepresentanteController extends Controller {
             ],
             12 => [
                 'Saldo' => 0,
-                'Data' => '2023-08-17'
+                'Data' => '2023-08-24'
             ],
             20 => [
                 'Saldo' => -51400,
@@ -410,6 +410,10 @@ class RepresentanteController extends Controller {
                 'Saldo' => -33974,
                 'Data' => '2023-04-13'
             ],
+            12 => [
+                'Saldo' => 0,
+                'Data' => '2023-08-24'
+            ],
             20 => [
                 'Saldo' => -51400,
                 'Data' => '2023-04-13'
@@ -421,6 +425,10 @@ class RepresentanteController extends Controller {
             24 => [
                 'Saldo' => 0,
                 'Data' => '2023-04-13'
+            ],
+            26 => [
+                'Saldo' => 0,
+                'Data' => '2023-08-24'
             ],
         ];
         $saldos = DB::select('SELECT

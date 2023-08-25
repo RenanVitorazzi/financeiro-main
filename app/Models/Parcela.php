@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use MovimentacoesCheques;
 
 class Parcela extends Model
@@ -136,6 +137,28 @@ class Parcela extends Model
         ->orderBy('data_parcela');
     }
     
+    public function scopeVencidosCarteira($query)
+    {
+        return $query->with('adiamentos')
+        ->where(function ($query3) {
+            $query3->where([
+                    ['data_parcela','<=', DB::raw('CURDATE()')],
+                    ['status', '=', 'Aguardando']
+                ])
+                ->orWhereHas('adiamentos', function (Builder $query2) {
+                    $query2->where('nova_data', '<=', DB::raw('CURDATE()'));
+                });
+        })
+        ->where([
+            ['parceiro_id', NULL],
+            ['forma_pagamento', 'Cheque']
+        ])
+        ->whereIn('status', ['Aguardando', 'Adiado'])
+        ->orderBy('data_parcela')
+        ->orderBy('valor_parcela')
+        ->orderBy('nome_cheque');
+    }
+
     // public function cliente()
     // {
     //     return $this->hasOneThrough(Cliente::class, Venda::class);
