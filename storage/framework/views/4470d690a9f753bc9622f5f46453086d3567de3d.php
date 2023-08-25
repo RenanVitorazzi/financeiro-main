@@ -24,6 +24,7 @@
     } */
     h3 {
         text-align: center;
+        margin-top: 0;
     }
     .titular {
         font-size: 10px;
@@ -69,6 +70,17 @@
                         <td></td>
                         <?php
                             $saldo_total -= $saldo->valor_total_debito;
+                        ?>
+                        <td><?php echo 'R$ ' . number_format($saldo_total, 2, ',', '.'); ?></td>
+                    </tr>
+                <?php elseif($saldo->balanco == 'Crédito' && $saldo->valor_total_debito < 0): ?>
+                    <tr>
+                        <td><?php echo date('d/m/Y', strtotime($saldo->data_entrega)); ?></td>
+                        <td><?php echo e($saldo->descricao); ?></td>
+                        <td><?php echo 'R$ ' . number_format($saldo->valor_total_debito, 2, ',', '.'); ?></td>
+                        <td></td>
+                        <?php
+                            $saldo_total += $saldo->valor_total_debito;
                         ?>
                         <td><?php echo 'R$ ' . number_format($saldo_total, 2, ',', '.'); ?></td>
                     </tr>

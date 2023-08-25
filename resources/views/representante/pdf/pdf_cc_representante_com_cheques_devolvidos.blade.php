@@ -24,6 +24,7 @@
     } */
     h3 {
         text-align: center;
+        margin-top: 0;
     }
     .titular {
         font-size: 10px;
@@ -69,6 +70,17 @@
                         <td></td>
                         @php
                             $saldo_total -= $saldo->valor_total_debito;
+                        @endphp
+                        <td>@moeda($saldo_total)</td>
+                    </tr>
+                @elseif($saldo->balanco == 'Crédito' && $saldo->valor_total_debito < 0)
+                    <tr>
+                        <td>@data($saldo->data_entrega)</td>
+                        <td>{{ $saldo->descricao }}</td>
+                        <td>@moeda($saldo->valor_total_debito)</td>
+                        <td></td>
+                        @php
+                            $saldo_total += $saldo->valor_total_debito;
                         @endphp
                         <td>@moeda($saldo_total)</td>
                     </tr>

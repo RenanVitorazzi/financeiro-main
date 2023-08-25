@@ -27,7 +27,7 @@ class ContaCorrente extends Model {
 
     public function scopeExtrato($query, $fornecedor_id)
     {
-        return $query->select('*', DB::raw('SUM(peso_agregado) OVER ( ORDER BY id, data) AS saldo') )
+        return $query->select('*', DB::raw('SUM(peso_agregado) OVER ( ORDER BY data, id) AS saldo') )
             ->where('fornecedor_id', $fornecedor_id)
             ->orderBy('data')
             ->orderBy('id')

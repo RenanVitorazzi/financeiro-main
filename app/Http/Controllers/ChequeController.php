@@ -272,21 +272,9 @@ class ChequeController extends Controller
 
     public function depositar_diario()
     {
-        $parcelas = Parcela::where([
-            ['data_parcela','<=', DB::raw('CURDATE()')],
-            ['parceiro_id', NULL],
-            ['forma_pagamento', 'Cheque'],
-            ['status', 'Aguardando']
-        ])->pluck('id');
-
-        Parcela::where([
-            ['data_parcela','<=', DB::raw('CURDATE()')],
-            ['parceiro_id', NULL],
-            ['forma_pagamento', 'Cheque'],
-            ['status', 'Aguardando']
-        ])->update(['status' => 'Depositado']);
-
-        $hoje = date('Y-m-d');
+        $parcelas = Parcela::vencidosCarteira()->pluck('id');
+        
+        Parcela::vencidosCarteira()->update(['status' => 'Depositado']);
 
         foreach($parcelas as $parcela) {
             $movCheque = MovimentacaoCheque::create([

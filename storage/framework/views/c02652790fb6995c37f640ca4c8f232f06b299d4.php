@@ -5,7 +5,9 @@
 
     </div>
 <?php endif; ?>
-<title>Home</title>
+<?php $__env->startSection('title'); ?>
+Home
+<?php $__env->stopSection(); ?>
 
 
 <?php if(count($depositos) > 0): ?>
@@ -57,7 +59,7 @@
 
             <?php $__empty_1 = true; $__currentLoopData = $depositos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cheque): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td><?php echo e($loop->index + 1); ?></td>
+                    <td><?php echo e($loop->index + 1); ?> <?php echo e($cheque->id); ?></td>
                     <td><?php echo e($cheque->nome_cheque); ?></td>
                     <td><?php echo date('d/m/Y', strtotime($cheque->data_parcela)); ?></td>
                     <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>
