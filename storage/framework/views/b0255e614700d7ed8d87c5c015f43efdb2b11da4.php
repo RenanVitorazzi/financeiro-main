@@ -48,21 +48,12 @@
         </thead>
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $carteira; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $carteira_mensal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                <?php if($loop->iteration >= 7 && !$loop->last): ?>
-                    <?php echo e($totalCarteiraMaisSeisMeses += $carteira_mensal->total_mes); ?>
-
-                <?php endif; ?>
-                <?php if($loop->last): ?>
-                    <tr>
-                        <td>Próximos meses</td>
-                        <td><?php echo 'R$ ' . number_format($totalCarteiraMaisSeisMeses, 2, ',', '.'); ?></td>
-                    </tr>
-                <?php elseif($loop->iteration < 7): ?>
+                
                     <tr>
                         <td><?php echo e($carteira_mensal->month); ?>/<?php echo e($carteira_mensal->year); ?></td>
                         <td><?php echo 'R$ ' . number_format($carteira_mensal->total_mes, 2, ',', '.'); ?></td>
                     </tr>
-                <?php endif; ?>
+                
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan=2>Nenhum registro</td>
@@ -147,27 +138,17 @@
                 </tr>
             <?php endif; ?>
             <tfoot>
-                <tr>
-                    <td>ESTOQUE</td>
-                    <td><?php echo number_format($estoque->sum('peso_agregado'), 2, ',', '.'); ?></td>
-                    <td><?php echo number_format($estoque->sum('fator_agregado'), 1, ',', '.'); ?></td>
-                    <td><?php echo number_format($estoque->sum('peso_agregado') + ($estoque->sum('fator_agregado') / 32), 2, ',', '.'); ?></td>
-                </tr>
+                
                 <tr>
                     <td><b>Total</b></td>
-                    <td><b><?php echo number_format(abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado'), 2, ',', '.'); ?></b></td>
+                    
+                    
+                    <td><?php echo number_format($representantes->sum('conta_corrente_sum_peso_agregado'), 2, ',', '.'); ?></td>
+                    <td><?php echo number_format($representantes->sum('conta_corrente_sum_fator_agregado'), 1, ',', '.'); ?></td>
                     <td>
                         <b>
-                            <?php echo number_format(abs($representantes->sum('conta_corrente_sum_fator_agregado'))
-                                + $estoque->sum('fator_agregado'), 1, ',', '.'); ?>
-                        </b>
-                    </td>
-                    <td>
-                        <b>
-                            <?php echo number_format(abs($representantes->sum('conta_corrente_sum_peso_agregado'))
-                                + abs($representantes->sum('conta_corrente_sum_fator_agregado') / 32 )
-                                + $estoque->sum('peso_agregado')
-                                + ($estoque->sum('fator_agregado') / 32), 2, ',', '.'); ?>
+                            <?php echo number_format($representantes->sum('conta_corrente_sum_peso_agregado')
+                                + ($representantes->sum('conta_corrente_sum_fator_agregado') / 32 ), 2, ',', '.'); ?>
                         </b>
                     </td>
                 </tr>

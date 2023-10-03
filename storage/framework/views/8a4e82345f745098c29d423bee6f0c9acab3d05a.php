@@ -41,8 +41,9 @@
                 <th>Titular</th>
                 <th>Número</th>
                 <th>Parceiro</th>
-                <th>Valor cheque</th>
-                
+                <th>Valor</th>
+                <th>Pagamentos</th>
+                <th>Total devedor</th>
             </tr>
         </thead>
         <tbody>
@@ -60,17 +61,30 @@
                     <td><?php echo e($cheque->numero_cheque); ?></td>
                     <td><?php echo e($cheque->parceiro->pessoa->nome ?? 'Carteira'); ?></td>
                     <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>
+                    <td>
+                        <?php $__empty_2 = true; $__currentLoopData = $cheque->pagamentos_representantes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pagamentos): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
+                            <p><?php echo date('d/m/Y', strtotime($pagamentos->data)); ?> - <?php echo 'R$ ' . number_format($pagamentos->valor, 2, ',', '.'); ?> <?php echo e($pagamentos->confirmado == 1 ? '' : '(Não confirmado)'); ?></p>
+                            <?php
+                                $totalPago += $pagamentos->valor;
+                            ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo 'R$ ' . number_format($cheque->valor_parcela - $cheque->pagamentos_representantes->sum('valor'), 2, ',', '.'); ?></td>
+
                     
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
-                    <td colspan=5>Nenhum registro</td>
+                    <td colspan=7>Nenhum registro</td>
                 </tr>
             <?php endif; ?>
             <tfoot>
                 <tr>
                     <td colspan=4><b>Total</b></td>
                     <td><b><?php echo 'R$ ' . number_format($cheques->sum('valor_parcela'), 2, ',', '.'); ?></b></td>
+                    <td><b><?php echo 'R$ ' . number_format($totalPago, 2, ',', '.'); ?></b></td>
+                    <td><b><?php echo 'R$ ' . number_format($cheques->sum('valor_parcela') - $totalPago, 2, ',', '.'); ?></b></td>
                 </tr>
             </tfoot>
         </tbody>

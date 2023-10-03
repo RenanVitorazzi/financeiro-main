@@ -4,36 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Relatório de Vendas </title>
+    <title>{{ $representante->pessoa->nome }}  Relatório de Vendas </title>
 </head>
 <style>
+    .marcatexto {
+        box-shadow: 15px 0 0 0 #000, -5px 0 0 0 #000;
+        background: #000;
+        display: inline;
+        padding: 3px 0 !important;
+        position: relative;
+    }
+    
     table {
         width: 100%;
         border-collapse: collapse;
         font-size: 12px;
         /* page-break-inside: avoid; */
-        /* page-break-before: no; */
+        page-break-before: no;
     }
     td, th {
         border: 1px solid black;
         text-align: center;
     }
+    td {
+        /* height: 1PX; */
+        font-size: 10px;
+    }
     th {
-        background-color:black;
-        color:white;
+        background-color:rgb(216, 216, 216);
+        /* color:white; */
     }
     /* tr:nth-child(even) {
         background-color: #a9acb0;
     } */
     h1, h3 {
         margin-top: 0;
+        margin-bottom: 0;
         text-align: center;
     }
     .nome {
-        font-size:10px;
+        font-size: 9px;
+        text-align: left;
+        padding-left: 3px;
     }
     .fator {
-        background-color: #a9acb0;
+        background-color: #dfdfdf;
+    }
+    tfoot {
+        font-weight: bolder;
+    }
+
+    .tabela_pix {
+        width: 49%;
+        float: right;
+    }
+    .tabela_dh {
+        width: 49%;
+        float: left;
+    }
+    .page_break { 
+        page-break-before: always; 
     }
 </style>
 <body>
@@ -55,7 +85,7 @@
             @forelse ($vendas as $venda)
                 <tr>
                     <td rowspan=2>@data($venda->data_venda)</td>
-                    <td rowspan=2 class='nome'>{{substr($venda->cliente->pessoa->nome,0,25)}}</td>
+                    <td rowspan=2 class='nome'>{{$venda->cliente->pessoa->nome}}</td>
                     <td rowspan=2>{{ $venda->metodo_pagamento }}</td>
                     <td>P</td>
                     <td>@peso($venda->peso)</td>
@@ -90,6 +120,7 @@
             </tfoot>
         </tbody>
     </table>
+   
     <br>
 
     <table>
@@ -122,21 +153,38 @@
                     @moeda(($totalVendaFatorAVista / $vendas->where('metodo_pagamento', 'À vista')->sum('fator')) * $vendas->sum('fator') * ($comissaoRepresentante["porcentagem_fator"] / 100))
                 </td>
             </tr>
+            
             <tr>
-                <td colspan=4><b>Total</b></td>
+                <td colspan=4><b>Total comissão - sem desconto</b></td>
                 <td><b>@moeda(
                     ($totalVendaPesoAVista / $vendas->where('metodo_pagamento', 'À vista')->sum('peso')) * $vendas->sum('peso') * ($comissaoRepresentante["porcentagem_peso"] / 100)
                     +
                     ($totalVendaFatorAVista / $vendas->where('metodo_pagamento', 'À vista')->sum('fator')) * $vendas->sum('fator') * ($comissaoRepresentante["porcentagem_fator"] / 100)
                 )</b></td>
             </tr>
+            <tr>
+                <td colspan=4><b>Descontos (Pagamento retirado do pedido)</b></td>
+                <td>@moeda($pagamentos->whereNotNull('recebido_representante')->sum('valor_parcela'))</td>
+            </tr>
+            <tr>
+                <td colspan=4><b>Total</b></td>
+                <td><b>@moeda(
+                    ($totalVendaPesoAVista / $vendas->where('metodo_pagamento', 'À vista')->sum('peso')) * $vendas->sum('peso') * ($comissaoRepresentante["porcentagem_peso"] / 100)
+                    +
+                    ($totalVendaFatorAVista / $vendas->where('metodo_pagamento', 'À vista')->sum('fator')) * $vendas->sum('fator') * ($comissaoRepresentante["porcentagem_fator"] / 100)
+                    -
+                    ($pagamentos->whereNotNull('recebido_representante')->sum('valor_parcela') )
+                )</b></td>
+            </tr>
         </tbody>
     </table>
+
     <br>
-    <table>
+
+    <table class='page_break'>
         <thead>
             <tr>
-                <th>Forma Pagamento</th>
+                <th>Forma de pagamento</th>
                 <th>Status</th>
                 <th>Valor</th>
             </tr>
@@ -163,6 +211,109 @@
             </tfoot>
         </tbody>
     </table>
+
+    <br>
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan=4>Descontos</th>
+            </tr>
+            {{-- <tr>
+                <th>Data</th>
+                <th>Cliente</th>
+                <th>Valor</th>
+            </tr> --}}
+        </thead>
+        <tbody>
+            @forelse ($pagamentos->whereNotNull('recebido_representante') as $descontos)
+                <tr>
+                    <td>@data($descontos->data_parcela)</td>
+                    <td>{{$descontos->venda->cliente->pessoa->nome}}</td>
+                    <td>{{$descontos->forma_pagamento}}</td>
+                    <td>@moeda($descontos->valor_parcela)</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan=4>Nenhum desconto</td>
+                </tr>
+            @endforelse
+            <tfoot>
+                <tr>
+                    <td colspan=3>Total</td>
+                    <td>@moeda($pagamentos->whereNotNull('recebido_representante')->sum('valor_parcela'))</td>
+                </tr>
+            </tfoot>
+        </tbody> 
+    </table>
+
+    <br>
+
+    <table class='tabela_dh'>
+        <thead>
+            <tr>
+                <th colspan=3>Pagamentos em dinheiro</th>
+            </tr>
+            {{-- <tr>
+                <th>Cliente</th>
+                <th>Valor</th>
+            </tr> --}}
+        </thead>
+        <tbody>
+            @forelse ($pagamentos->where('forma_pagamento', 'like', 'Dinheiro')->sortBy('data_parcela') as $dh)
+            <tr>
+                <td>@data($dh->data_parcela)</td>
+                <td>{{$dh->venda->cliente->pessoa->nome}}</td>
+                <td>@moeda($dh->valor_parcela)</td>
+            </tr>
+            @empty
+                <tr>
+                    <td colspan=3>Nenhuma venda recebida com dinheiro</td>
+                </tr>
+            @endforelse
+            <tfoot>
+                <tr>
+                    <td colspan=2>Total</td>
+                    <td>@moeda($pagamentos->where('forma_pagamento', 'like', 'Dinheiro')->sum('valor_parcela'))</td>
+                </tr>
+            </tfoot>
+        </tbody>
+    </table>
+    
+    <table class='tabela_pix'>
+        <thead>
+            <tr>
+                <th colspan=3>Pagamentos em pix</th>
+            </tr>
+            {{-- <tr>
+                <th>Data</th>
+                <th>Cliente</th>
+                <th>Valor</th>
+            </tr> --}}
+        </thead>
+        <tbody>
+            @forelse ($pagamentos->where('forma_pagamento', 'like', 'Pix')->sortBy('data_parcela') as $pix)
+            <tr>
+                <td>@data($pix->data_parcela)</td>
+                <td>{{$pix->venda->cliente->pessoa->nome}}</td>
+                <td>@moeda($pix->valor_parcela)</td>
+            </tr>
+            @empty
+                <tr>
+                    <td colspan=3>Nenhuma venda recebida com pix</td>
+                </tr>
+            @endforelse
+            <tfoot>
+                <tr>
+                    <td colspan=2>Total</td>
+                    <td>@moeda($pagamentos->where('forma_pagamento', 'like', 'Pix')->sum('valor_parcela'))</td>
+                </tr>
+            </tfoot>
+        </tbody>
+
+
+    </table>
+
 </body>
 </html>
 

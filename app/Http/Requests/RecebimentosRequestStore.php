@@ -24,7 +24,7 @@ class RecebimentosRequestStore extends FormRequest
      */
     public function rules()
     {
-        $forma_pagamento = ['Pix', 'Depósito', 'Dinheiro', 'TED', 'DOC', 'Cheque'];
+        $forma_pagamento = ['Pix', 'Depósito', 'Dinheiro', 'TED', 'DOC', 'Cheque', 'Acerto'];
 
         return [
             'data' => ['date', 'required'],

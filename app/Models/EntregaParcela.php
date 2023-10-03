@@ -17,10 +17,10 @@ class EntregaParcela extends Model
         return $this->belongsTo(Parcela::class);
     } 
 
-    protected static function booted(): void
-    {
-        static::addGlobalScope('enviado', function (Builder $builder) {
-            $builder->whereNull('enviado');
-        });
-    }
+    // protected static function booted(): void
+    // {
+    //     static::addGlobalScope('enviado', function (Builder $builder) {
+    //         $builder->whereNull('enviado');
+    //     });
+    // }
 }

@@ -960,8 +960,9 @@ unset($__errorArgs, $__bag); ?>
                     return
                 }
             })
+        } else {
+            form.submit();
         }
-        form.submit();
     })
 </script>
 <?php $__env->stopSection(); ?>

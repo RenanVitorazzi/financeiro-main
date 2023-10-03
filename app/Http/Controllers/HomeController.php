@@ -55,7 +55,9 @@ class HomeController extends Controller
         //     ORDER BY pa.id'
         // );
 
-        $adiamentos = Parcela::adiamentosDoDia(date('Y-m-d'));
+        $adiamentos = Parcela::adiamentosDoDia(date('Y-m-d'))
+            ->orderBy('parceiro_id')
+            ->get();
             
         $ops = Parcela::ops()
             ->with('representante.pessoa', 'venda.cliente.pessoa', 'pagamentos_representantes')

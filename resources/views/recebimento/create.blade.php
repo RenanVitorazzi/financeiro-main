@@ -95,6 +95,7 @@ Adicionar recebimento
                         <option value='Depósito' {{ old('forma_pagamento') == 'Depósito' ? 'selected' : '' }} > Depósito </option>
                         <option value='DOC' {{ old('forma_pagamento') == 'DOC' ? 'selected' : '' }} > DOC </option>
                         <option value='Dinheiro' {{ old('forma_pagamento') == 'Dinheiro' ? 'selected' : '' }} > Dinheiro </option>
+                        <option value='Acerto' {{ old('forma_pagamento') == 'Acerto' ? 'selected' : '' }} > Acerto </option>
                     </x-select>
                 </div>
                 <div class="col-4 form-group">

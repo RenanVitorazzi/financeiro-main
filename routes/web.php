@@ -47,6 +47,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('pdf_consignados/{representante_id}', [ConsignadoController::class, 'pdf_consignados'])->name('pdf_consignados');
 
     Route::group(['middleware' => ['is_admin']], function() {
+        Route::post('zerar_parceiro/{parceiro_id}', [ParceiroController::class, 'zerar_parceiro'])->name('zerar_parceiro');
+
         Route::post('recebimentos/createApi', [RecebimentosController::class, 'recebimentoCreateApi'])->name('recebimentoCreateApi');
 
         Route::post('resgatar_cheque/{id}', [TrocaChequeController::class, 'resgatar_cheque'])->name('resgatar_cheque');
@@ -112,6 +114,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pdf_cc_representante_com_cheques_devolvidos/{representante_id}', [RepresentanteController::class, 'pdf_cc_representante_com_cheques_devolvidos'])->name('pdf_cc_representante_com_cheques_devolvidos');
         Route::get('pdf_historico_cliente/{cliente_id}', [ClienteController::class, 'pdf_historico_cliente'])->name('pdf_historico_cliente');
         Route::get('pdf_consignados_geral', [ConsignadoController::class, 'pdf_consignados_geral'])->name('pdf_consignados_geral');
+        Route::get('pdf_prorrogacao/{dia}', [AdiamentosController::class, 'pdf_prorrogacao'])->name('pdf_prorrogacao');
 
         //? Anexos
         Route::resource('conta_corrente_anexo', ContaCorrenteAnexoController::class)->only([

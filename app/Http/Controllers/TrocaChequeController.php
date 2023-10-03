@@ -239,9 +239,27 @@ class TrocaChequeController extends Controller
             [$id]
         );
 
+        // $total_cheques_mes = DB::select('SELECT
+        //         YEAR(IF(a.nova_data, MAX(a.nova_data), p.data_parcela)) as ano,
+        //         MONTH(IF(a.nova_data, MAX(a.nova_data), p.data_parcela)) as mes,
+        //         SUM(valor_parcela) as total_mes,
+        //         SUM(t.valor_juros) as total_juros_mes,
+        //         SUM(t.valor_liquido) as total_liquido_mes
+        //     FROM
+        //         parcelas p
+        //             INNER JOIN
+        //         trocas_parcelas t ON t.parcela_id = p.id
+        //             LEFT JOIN
+        //         adiamentos a ON a.parcela_id = p.id
+        //     WHERE
+        //         troca_id = ?
+        //     GROUP BY YEAR(p.data_parcela), MONTH(p.data_parcela)
+        //     ORDER BY 1, 2',
+        //     [$id]
+        // );
         $total_cheques_mes = DB::select('SELECT
-                YEAR(IF(a.nova_data, MAX(a.nova_data), p.data_parcela)) as ano,
-                MONTH(IF(a.nova_data, MAX(a.nova_data), p.data_parcela)) as mes,
+                YEAR(p.data_parcela) as ano,
+                MONTH(p.data_parcela) as mes,
                 SUM(valor_parcela) as total_mes,
                 SUM(t.valor_juros) as total_juros_mes,
                 SUM(t.valor_liquido) as total_liquido_mes

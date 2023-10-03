@@ -66,11 +66,7 @@ class Parcela extends Model
         return $query->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome', 'adiamentos')
         ->whereHas('adiamentos', function (Builder $query) use ($dia) {
             $query->whereDate('created_at', '=', $dia);
-        })
-        ->orderBy('representante_id')
-        ->orderBy('data_parcela')
-        ->orderBy('valor_parcela')
-        ->get();
+        });
     }
 
     public function scopeOps($query)
@@ -123,6 +119,7 @@ class Parcela extends Model
         ->whereHas('entrega', function ($query) {
             $query->whereNull('entregue_representante');
             $query->whereNotNull('entregue_parceiro');
+            $query->whereNull('enviado');
         })
         ->orWhere(function (Builder $query) use ($representante_id) {
             $query->whereNull('parceiro_id')
@@ -164,13 +161,13 @@ class Parcela extends Model
     //     return $this->hasOneThrough(Cliente::class, Venda::class);
     // }
 
-    protected static function booted()
-    {
-        if (auth()->user()->is_representante) {
-            static::addGlobalScope('user', function (Builder $builder) {
-                $builder->where('representante_id', auth()->user()->is_representante);
-            });
-        }
-    }
+    // protected static function booted()
+    // {
+    //     if (auth()->user()->is_representante) {
+    //         static::addGlobalScope('user', function (Builder $builder) {
+    //             $builder->where('representante_id', auth()->user()->is_representante);
+    //         });
+    //     }
+    // }
 
 }
