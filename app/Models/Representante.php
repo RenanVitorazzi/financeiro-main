@@ -47,14 +47,14 @@ class Representante extends Model
         return $query->where('atacado', NULL);
     }
 
-    protected static function booted()
-    {
-        if (auth()->user()->is_representante && !auth()->user()->is_admin) {
-            static::addGlobalScope('user', function (Builder $builder) {
-                $builder->where('id', auth()->user()->is_representante);
-            });
-        }
-    }
+    // protected static function booted()
+    // {
+    //     if (auth()->user()->is_representante && !auth()->user()->is_admin) {
+    //         static::addGlobalScope('user', function (Builder $builder) {
+    //             $builder->where('id', auth()->user()->is_representante);
+    //         });
+    //     }
+    // }
 }
 
 ?>

@@ -41,8 +41,9 @@
                 <th>Titular</th>
                 <th>Número</th>
                 <th>Parceiro</th>
-                <th>Valor cheque</th>
-                
+                <th>Valor</th>
+                <th>Pagamentos</th>
+                <th>Total devedor</th>
             </tr>
         </thead>
         <tbody>
@@ -60,17 +61,30 @@
                     <td>{{ $cheque->numero_cheque }}</td>
                     <td>{{ $cheque->parceiro->pessoa->nome ?? 'Carteira'}}</td>
                     <td>@moeda($cheque->valor_parcela)</td>
+                    <td>
+                        @forelse ($cheque->pagamentos_representantes as $pagamentos)
+                            <p>@data($pagamentos->data) - @moeda($pagamentos->valor) {{ $pagamentos->confirmado == 1 ? '' : '(Não confirmado)'}}</p>
+                            @php
+                                $totalPago += $pagamentos->valor;
+                            @endphp
+                            @empty
+                        @endforelse
+                    </td>
+                    <td>@moeda($cheque->valor_parcela - $cheque->pagamentos_representantes->sum('valor'))</td>
+
                     {{-- <td>{{ $parceiros->where('id', '=', $cheque->parceiro_id)->first() }}</td> --}}
                 </tr>
             @empty
                 <tr>
-                    <td colspan=5>Nenhum registro</td>
+                    <td colspan=7>Nenhum registro</td>
                 </tr>
             @endforelse
             <tfoot>
                 <tr>
                     <td colspan=4><b>Total</b></td>
                     <td><b>@moeda($cheques->sum('valor_parcela'))</b></td>
+                    <td><b>@moeda($totalPago)</b></td>
+                    <td><b>@moeda($cheques->sum('valor_parcela') - $totalPago)</b></td>
                 </tr>
             </tfoot>
         </tbody>

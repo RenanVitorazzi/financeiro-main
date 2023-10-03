@@ -4,24 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\baixarDebitosRepresentantesRequest;
 use App\Http\Requests\RequestFormPessoa;
-use App\Http\Requests\UpdateFormPessoa;
 use App\Http\Requests\UpdateFormRepresentante;
 use App\Models\Adiamento;
 use App\Models\Consignado;
-use App\Models\ContaCorrente;
 use App\Models\ContaCorrenteRepresentante;
-use App\Models\EntregaParcela;
-use App\Models\MovimentacaoCheque;
 use App\Models\PagamentosRepresentantes;
-use App\Models\Parceiro;
 use App\Models\Parcela;
 use App\Models\Pessoa;
 use App\Models\Representante;
 use App\Models\Venda;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class RepresentanteController extends Controller {
 
@@ -136,45 +131,58 @@ class RepresentanteController extends Controller {
         $contaCorrente = ContaCorrenteRepresentante::where('representante_id', $representante->id)->get();
         //TODO 
         // FAZER QUERY DE CHEQUES DEVOLVIDOS -> PROVAVELMETENTE CRIAR UM SERVICE
-        $infoRepresentante = [
-            1 => [
-                'Saldo' => -24269,
-                'Data' => '2023-04-13'
-            ],
-            5 => [
-                'Saldo' => -33974,
-                'Data' => '2023-04-13'
-            ],
-            8 => [
-                'Saldo' => 0,
-                'Data' => '2023-07-05'
-            ],
-            12 => [
-                'Saldo' => 0,
-                'Data' => '2023-07-05'
-            ],
-            20 => [
-                'Saldo' => -51400,
-                'Data' => '2023-04-13'
-            ],
-            23 => [
-                'Saldo' => -26486,
-                'Data' => '2023-04-13'
-            ],
-            24 => [
-                'Saldo' => 0,
-                'Data' => '2023-04-13'
-            ],
-            26 => [
-                'Saldo' => 0,
-                'Data' => '2023-07-05'
-            ],
-            'Default' => [
-                'Saldo' => 0,
-                'Data' => '2023-01-02'
-            ]
-        ];
+        // $infoRepresentante = [
+        //     1 => [
+        //         'Saldo' => -24269,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     5 => [
+        //         'Saldo' => -33974,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     8 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-07-05'
+        //     ],
+        //     12 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-07-05'
+        //     ],
+        //     20 => [
+        //         'Saldo' => -51400,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     23 => [
+        //         'Saldo' => -26486,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     24 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     26 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-07-05'
+        //     ],
+        //     'Default' => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-01-02'
+        //     ]
+        // ];
         
+        // $saldo_total = $infoRepresentante['Default']['Saldo'];
+        // $data_inicio = $infoRepresentante['Default']['Data'];
+
+        // if (array_key_exists($representante->id, $infoRepresentante)) {
+        //     $saldo_total = $infoRepresentante[$representante->id]['Saldo'];
+        //     $data_inicio = $infoRepresentante[$representante->id]['Data'];
+        // }
+
+        $arquivo_json = Storage::disk('public')
+        ->get('comissao_representantes/conta_corrente_cheques.json');
+
+        $infoRepresentante = json_decode($arquivo_json, true);
+
         $saldo_total = $infoRepresentante['Default']['Saldo'];
         $data_inicio = $infoRepresentante['Default']['Data'];
 
@@ -182,6 +190,7 @@ class RepresentanteController extends Controller {
             $saldo_total = $infoRepresentante[$representante->id]['Saldo'];
             $data_inicio = $infoRepresentante[$representante->id]['Data'];
         }
+
         $pagamentosRepresentantes = PagamentosRepresentantes::query()
             ->select('data', 'observacao', 'valor')
             ->where('representante_id', $representante->id)
@@ -272,44 +281,51 @@ class RepresentanteController extends Controller {
     {
         $representante = Representante::findOrFail($representante_id);
         
-        $infoRepresentante = [
-            1 => [
-                'Saldo' => -24269,
-                'Data' => '2023-04-13'
-            ],
-            5 => [
-                'Saldo' => -33974,
-                'Data' => '2023-04-13'
-            ],
-            8 => [
-                'Saldo' => 0,
-                'Data' => '2023-07-05'
-            ],
-            12 => [
-                'Saldo' => 0,
-                'Data' => '2023-08-24'
-            ],
-            20 => [
-                'Saldo' => -51400,
-                'Data' => '2023-04-13'
-            ],
-            23 => [
-                'Saldo' => -26486,
-                'Data' => '2023-04-13'
-            ],
-            24 => [
-                'Saldo' => 0,
-                'Data' => '2023-04-13'
-            ],
-            26 => [
-                'Saldo' => 0,
-                'Data' => '2023-07-05'
-            ],
-            'Default' => [
-                'Saldo' => 0,
-                'Data' => '2023-01-02'
-            ]
-        ];
+        $arquivo_json = Storage::disk('public')
+            ->get('comissao_representantes/conta_corrente_cheques.json');
+
+        $infoRepresentante = json_decode($arquivo_json, true);
+        // dd($infoRepresentante);
+
+        // $comissaoRepresentante = $comissao_array[$representante->id] ?? $comissao_array["Default"];
+        // $infoRepresentante = [
+        //     1 => [
+        //         'Saldo' => -24269,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     5 => [
+        //         'Saldo' => -33974,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     8 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-07-05'
+        //     ],
+        //     12 => [
+        //         'Saldo' => -23272.90,
+        //         'Data' => '2023-10-04'
+        //     ],
+        //     20 => [
+        //         'Saldo' => -51400,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     23 => [
+        //         'Saldo' => -26486,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     24 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     26 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-07-05'
+        //     ],
+        //     'Default' => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-01-02'
+        //     ]
+        // ];
         
         $saldo_total = $infoRepresentante['Default']['Saldo'];
         $data_inicio = $infoRepresentante['Default']['Data'];
@@ -401,36 +417,50 @@ class RepresentanteController extends Controller {
     public function pdf_cc_representante_com_cheques_devolvidos($representante_id)
     {
         $representante = Representante::findOrFail($representante_id);
-        $infoRepresentante = [
-            1 => [
-                'Saldo' => -24269,
-                'Data' => '2023-04-13'
-            ],
-            5 => [
-                'Saldo' => -33974,
-                'Data' => '2023-04-13'
-            ],
-            12 => [
-                'Saldo' => 0,
-                'Data' => '2023-08-24'
-            ],
-            20 => [
-                'Saldo' => -51400,
-                'Data' => '2023-04-13'
-            ],
-            23 => [
-                'Saldo' => -26486,
-                'Data' => '2023-04-13'
-            ],
-            24 => [
-                'Saldo' => 0,
-                'Data' => '2023-04-13'
-            ],
-            26 => [
-                'Saldo' => 0,
-                'Data' => '2023-08-24'
-            ],
-        ];
+
+        $arquivo_json = Storage::disk('public')
+        ->get('comissao_representantes/conta_corrente_cheques.json');
+
+        $infoRepresentante = json_decode($arquivo_json, true);
+
+        $saldo_total = $infoRepresentante['Default']['Saldo'];
+        $data_inicio = $infoRepresentante['Default']['Data'];
+
+        if (array_key_exists($representante_id, $infoRepresentante)) {
+            $saldo_total = $infoRepresentante[$representante_id]['Saldo'];
+            $data_inicio = $infoRepresentante[$representante_id]['Data'];
+        }
+
+        // $infoRepresentante = [
+        //     1 => [
+        //         'Saldo' => -24269,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     5 => [
+        //         'Saldo' => -33974,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     12 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-08-24'
+        //     ],
+        //     20 => [
+        //         'Saldo' => -51400,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     23 => [
+        //         'Saldo' => -26486,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     24 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-04-13'
+        //     ],
+        //     26 => [
+        //         'Saldo' => 0,
+        //         'Data' => '2023-08-24'
+        //     ],
+        // ];
         $saldos = DB::select('SELECT
                 (sum(p.valor_parcela) - (SELECT COALESCE(SUM(pr.valor), 0) FROM pagamentos_representantes pr WHERE pr.deleted_at is null  and representante_id = ? AND pr.parcela_id in (SELECT ep1.parcela_id FROM entrega_parcela ep1 where ep1.entregue_representante = ep.entregue_representante) ) ) as valor_total_debito,
                 ep.entregue_representante as data_entrega,
@@ -456,13 +486,13 @@ class RepresentanteController extends Controller {
                     $representante_id,
                     'Devolvido',
                     'Resgatado',
-                    $infoRepresentante[$representante_id]['Data'],
+                    $data_inicio,
                     'Crédito',
                     $representante_id
                 ]
             );
 
-        $saldo_total = $infoRepresentante[$representante_id]['Saldo'];
+        // $saldo_total = $infoRepresentante[$representante_id]['Saldo'];
 
         $contaCorrenteRepresentante = ContaCorrenteRepresentante::where('representante_id', $representante->id)
             ->get();
@@ -483,11 +513,12 @@ class RepresentanteController extends Controller {
         $hoje = date('Y-m-d');
         
         $cheques = Parcela::devolvidosComParceiros($representante_id)->get();
-        
+        $totalPago = 0;
+
         $pdf = App::make('dompdf.wrapper');
 
         $pdf->loadView('representante.pdf.pdf_cheques_devolvidos_parceiros',
-            compact('cheques', 'representante', 'hoje')
+            compact('cheques', 'representante', 'hoje', 'totalPago')
         );
         return $pdf->stream();
     }

@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequestFormPessoa;
+use App\Models\MovimentacaoCheque;
+use App\Models\PagamentosParceiros as ModelsPagamentosParceiros;
 use App\Models\Parceiro;
+use App\Models\Parcela;
 use App\Models\Pessoa;
+use App\Models\TrocaParcela;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use PagamentosParceiros;
 
 class ParceiroController extends Controller
 {
@@ -123,7 +128,10 @@ class ParceiroController extends Controller
                     p2.numero_cheque
                 FROM parcelas p2
                 INNER JOIN troca_adiamentos ta2
-                    ON ta2.parcela_id = p2.id AND ta2.pago is null AND p2.parceiro_id = ? AND ta2.deleted_at is null
+                    ON ta2.parcela_id = p2.id 
+                    AND ta2.pago is null 
+                    AND p2.parceiro_id = ? 
+                    AND ta2.deleted_at is null
             UNION ALL
                 SELECT
                     pp.data as rank2,
@@ -146,6 +154,47 @@ class ParceiroController extends Controller
         $pdf->loadView('parceiro.pdf.pdf_cc_parceiro', compact('saldos', 'parceiro', 'saldo_total', 'hoje') );
 
         return $pdf->stream();
+    }
+
+    public function zerar_parceiro ($parceiro_id) {
+        
+        if(auth()->user()->id !== 1) {
+            // dd($parceiro_id);
+            return false;
+        }
+
+        //!! baixar movimentacoes_cheques -> adicionar pago_parceiro em todos
+        //!! baixar troca_adiamentos
+        //!! baixar pagamentos_parceiros
+
+        // ModelsPagamentosParceiros::where([
+        //     ['parceiro_id', $parceiro_id],
+        //     ['baixado', NULL]
+        // ])->get();
+
+        // TrocaParcela::where([
+        //     ['parceiro_id', $parceiro_id],
+        //     ['pago', NULL]
+        // ])->get();
+
+            //TODO TRANSFORMAR STRING EM ARRAY
+        $queryParcelas = DB::select("SELECT CONCAT(p.id) as cheques_id
+            FROM
+                movimentacoes_cheques mc
+            INNER JOIN
+                parcelas p ON p.id = mc.parcela_id
+            WHERE
+                p.parceiro_id = ? AND mc.status IN (?, ?)
+                AND mc.parcela_id NOT IN  (SELECT parcela_id
+                FROM movimentacoes_cheques
+                WHERE status like ?
+                and deleted_at is null
+                AND parcela_id = mc.parcela_id)",
+                [$parceiro_id, 'Devolvido', 'Resgatado', 'Pago parceiro']
+        );
+        // DD($queryParcelas);
+        Parcela::whereIn('id', [$queryParcelas])->get();
+
     }
 }
 

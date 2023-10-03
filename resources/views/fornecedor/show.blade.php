@@ -63,7 +63,7 @@ Conta Corrente - {{ $fornecedor->pessoa->nome }}
                         <i class="fas {{ $contaCorrente->balanco == 'Crédito' ? 'fa-angle-up' : 'fa-angle-down' }}"></i>
                     </td>
                     <td>{{ $contaCorrente->observacao }}
-                        <b>{{$contaCorrente->conferido ? 'CONFERIDO: '. $contaCorrente->conferido->format('m/d/Y') : ''}}</b>
+                        <b>{{$contaCorrente->conferido ? 'CONFERIDO: '. $contaCorrente->conferido->format('d/m/Y') : ''}}</b>
                     </td>
                     <td class="{{ $contaCorrente->balanco > 0 ? 'text-success' : 'text-danger' }}">@peso($contaCorrente->saldo)</td>
                     <td>

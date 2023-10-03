@@ -62,8 +62,14 @@ Home
 @endif
 
 <x-table id="adiamentos">
-    <x-tableheader id="copiarAdiamentos" style="cursor:pointer">
-        <th colspan=8>Prorrogações</th>
+    <x-tableheader 
+    {{-- id="copiarAdiamentos" style="cursor:pointer" --}}
+    >
+        <th colspan=8>Prorrogações
+            <a style='float:right' class='btn btn-light' href="{{route('pdf_prorrogacao', 0)}}" target='_blank'>
+                Impresso
+            </a>
+        </th>
     </x-tableheader>
 
     <x-tableheader>

@@ -99,7 +99,7 @@ Conta Corrente - <?php echo e($fornecedor->pessoa->nome); ?>
                     </td>
                     <td><?php echo e($contaCorrente->observacao); ?>
 
-                        <b><?php echo e($contaCorrente->conferido ? 'CONFERIDO: '. $contaCorrente->conferido->format('m/d/Y') : ''); ?></b>
+                        <b><?php echo e($contaCorrente->conferido ? 'CONFERIDO: '. $contaCorrente->conferido->format('d/m/Y') : ''); ?></b>
                     </td>
                     <td class="<?php echo e($contaCorrente->balanco > 0 ? 'text-success' : 'text-danger'); ?>"><?php echo number_format($contaCorrente->saldo, 2, ',', '.'); ?></td>
                     <td>

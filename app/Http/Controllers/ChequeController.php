@@ -186,20 +186,48 @@ class ChequeController extends Controller
     public function carteira_cheque_total ()
     {
 
-        $carteira = Parcela::select(DB::raw('sum(valor_parcela) as `valor`, YEAR(data_parcela) year, LPAD (MONTH(data_parcela),2,0) month'))
-            ->where([
-                ['forma_pagamento', 'Cheque'],
-                ['status', '=', 'Aguardando'],
-                ['parceiro_id', NULL],
-            ])
-            //['data_parcela', '>=', DB::raw('curdate()')],
-            ->groupBy('month', 'year')
-            ->orderBy('year')
-            ->orderBy('month')
-            ->get();
+        $carteira = DB::select('SELECT
+                sum(valor_parcela) as total_mes,
+                MONTH(IF(par.status = ?,
+                    (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
+                    par.data_parcela
+                )) as month,
+                YEAR(IF(par.status = ?,
+                    (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
+                    par.data_parcela
+                )) as year
+            FROM
+                parcelas par
+            WHERE
+                par.status in (?,?)
+                    AND par.deleted_at IS NULL
+                    AND parceiro_id IS NULL
+                    AND forma_pagamento LIKE ?
+                    GROUP BY YEAR( IF(par.status = ?,
+                    (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
+                    par.data_parcela
+                ) ), MONTH( IF(par.status = ?,
+                    (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
+                    par.data_parcela
+                ) )
+            ORDER BY 3,2',
+            ['Adiado', 'Adiado', 'Adiado', 'Aguardando', 'Cheque', 'Adiado', 'Adiado']
+        );
+
+        $totalCarteira =  DB::select('SELECT
+                sum(valor_parcela) as totalCarteira
+            FROM
+                parcelas par
+            WHERE
+                par.status in (?,?)
+                    AND par.deleted_at IS NULL
+                    AND parceiro_id IS NULL
+                    AND forma_pagamento LIKE ?',
+            ['Adiado', 'Aguardando', 'Cheque']
+        );
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('cheque.pdf.carteira', compact('carteira') );
+        $pdf->loadView('cheque.pdf.carteira', compact('carteira', 'totalCarteira') );
 
         return $pdf->stream();
     }
@@ -295,7 +323,8 @@ class ChequeController extends Controller
         ->where([
             ['data_parcela','>=', DB::raw('CURDATE()')],
             ['representante_id', $representante_id],
-            ['forma_pagamento', 'Cheque']
+            ['forma_pagamento', 'LIKE', 'Cheque'],
+            ['status', 'LIKE', 'Aguardando']
         ])
         // ->orderBy('nome_cheque')
         ->orderBy('data_parcela')

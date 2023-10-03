@@ -191,6 +191,7 @@ Adicionar recebimento
                         <option value='Depósito' <?php echo e(old('forma_pagamento') == 'Depósito' ? 'selected' : ''); ?> > Depósito </option>
                         <option value='DOC' <?php echo e(old('forma_pagamento') == 'DOC' ? 'selected' : ''); ?> > DOC </option>
                         <option value='Dinheiro' <?php echo e(old('forma_pagamento') == 'Dinheiro' ? 'selected' : ''); ?> > Dinheiro </option>
+                        <option value='Acerto' <?php echo e(old('forma_pagamento') == 'Acerto' ? 'selected' : ''); ?> > Acerto </option>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>

@@ -737,8 +737,9 @@ Adicionar vendas
                     return
                 }
             })
+        } else {
+            form.submit();
         }
-        form.submit();
     })
 </script>
 @endsection

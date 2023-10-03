@@ -17,6 +17,12 @@ Parceiros
                 <span class="text-muted">{{ $parceiro->porcentagem_padrao }}%</span>
             </div>
             <div class='d-flex'>
+                @if(auth()->user()->is_admin && auth()->user()->id == 1)
+                    <form action="{{ route('zerar_parceiro', $parceiro->id) }}" method="POST">
+                        @csrf
+                        <button class="btn btn-warning mr-2 btn-zerar">Baixar</button>
+                    </form>
+                @endif
                 <a class="btn btn-dark mr-2" href="{{ route('pdf_cc_parceiro', $parceiro->id) }}">Conta Corrente</a>
                 <x-botao-editar class="mr-2" href="{{ route('parceiros.edit', $parceiro->id) }}"></x-botao-editar>
                 <x-botao-excluir action="{{ route('parceiros.destroy', $parceiro->id) }}"></x-botao-excluir>
@@ -34,5 +40,42 @@ Parceiros
     @if(Session::has('message'))
         toastr["success"]("{{ Session::get('message') }}")
     @endif
+
+    $(".btn-zerar").each( (index, element) => {
+        let parceiro_id = $(element).data('id')
+
+        $(element).click( (e) => {
+            let parceiro_id = $(e.currentTarget).data('id')
+            console.log(parceiro_id);
+            swal.fire({
+                title: 'Tem certeza de que deseja baixar o conta corrente?',
+                icon: 'warning',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                showCancelButton: true,
+                showCloseButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    zerarContaCorrente(parceiro_id)
+
+                    Swal.fire({
+                        title: 'Sucesso!',
+                        icon: 'success'
+                    })
+
+                } else {
+                    Swal.fire({
+                        title: 'Cancelado!',
+                        icon: 'warning'
+                    })
+                }
+            })
+        })
+    })
+
+    function zerarContaCorrente (parceiro_id) {
+        
+    }
+   
 </script>
 @endsection

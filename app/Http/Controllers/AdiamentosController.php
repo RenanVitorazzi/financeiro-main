@@ -124,4 +124,26 @@ class AdiamentosController extends Controller
         
         return $pdf->stream();
     }
+
+    public function pdf_prorrogacao ($dia) 
+    {
+        if ($dia == 0) {
+            $dia = date('Y-m-d');
+        }
+        $cheques = Parcela::query()
+            ->with('movimentacoes', function($query) use ($dia) {
+                $query->whereDate('data', $dia)
+                ->whereIn('status', ['Resgatado', 'Adiado']);
+            })
+            ->whereHas('movimentacoes', function($query) use ($dia) {
+                $query->whereDate('data', $dia)
+                ->whereIn('status', ['Resgatado', 'Adiado']);
+            })
+        ->get();
+        
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('adiamento.pdf.pdf_prorrogacao', compact('cheques', 'dia') );
+        
+        return $pdf->stream();    
+    }
 }

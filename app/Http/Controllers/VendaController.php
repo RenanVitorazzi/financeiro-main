@@ -244,7 +244,7 @@ class VendaController extends Controller
                     ->where('representante_id', '=', $representante_id);
             })
         ->get();
-            // dd($pagamentos->groupBy('forma_pagamento')->groupBy('status'));
+            // dd($pagamentos->where('forma_pagamento', 'like', 'Dinheiro')->first()->venda->cliente->pessoa->nome);
         $pagamentosPorForma = $pagamentos->groupBy('forma_pagamento');
 
         $pagamentosTotal = $pagamentos->sum('valor_parcela');
@@ -301,12 +301,14 @@ class VendaController extends Controller
             WHERE
                 p.deleted_at IS NULL
                 AND v.deleted_at IS NULL
+                AND v.enviado_conta_corrente IS NOT NULL
                 AND r.id = ?
                 AND (
                 p.forma_pagamento like 'Cheque' AND p.status like 'Aguardando Envio'
                 OR
                 p.forma_pagamento != 'Cheque' AND p.status != 'Pago'
                 )
+                
             ORDER BY 2, data_parcela , valor_parcela",
             [$representante_id]
         );

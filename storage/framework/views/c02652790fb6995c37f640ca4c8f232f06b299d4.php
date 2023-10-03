@@ -97,8 +97,12 @@ Home
 <?php $component->withName('tableheader'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['id' => 'copiarAdiamentos','style' => 'cursor:pointer']); ?>
-        <th colspan=8>Prorrogações</th>
+<?php $component->withAttributes([]); ?>
+        <th colspan=8>Prorrogações
+            <a style='float:right' class='btn btn-light' href="<?php echo e(route('pdf_prorrogacao', 0)); ?>" target='_blank'>
+                Impresso
+            </a>
+        </th>
      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalfb92ff36a55f0dcdf5fe1bf02e275a6bc7af5477)): ?>

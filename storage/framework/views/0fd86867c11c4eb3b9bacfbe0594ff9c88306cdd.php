@@ -27,6 +27,12 @@ Parceiros
                 <span class="text-muted"><?php echo e($parceiro->porcentagem_padrao); ?>%</span>
             </div>
             <div class='d-flex'>
+                <?php if(auth()->user()->is_admin && auth()->user()->id == 1): ?>
+                    <form action="<?php echo e(route('zerar_parceiro', $parceiro->id)); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
+                        <button class="btn btn-warning mr-2 btn-zerar">Baixar</button>
+                    </form>
+                <?php endif; ?>
                 <a class="btn btn-dark mr-2" href="<?php echo e(route('pdf_cc_parceiro', $parceiro->id)); ?>">Conta Corrente</a>
                 <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
@@ -64,6 +70,43 @@ Parceiros
     <?php if(Session::has('message')): ?>
         toastr["success"]("<?php echo e(Session::get('message')); ?>")
     <?php endif; ?>
+
+    $(".btn-zerar").each( (index, element) => {
+        let parceiro_id = $(element).data('id')
+
+        $(element).click( (e) => {
+            let parceiro_id = $(e.currentTarget).data('id')
+            console.log(parceiro_id);
+            swal.fire({
+                title: 'Tem certeza de que deseja baixar o conta corrente?',
+                icon: 'warning',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                showCancelButton: true,
+                showCloseButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    zerarContaCorrente(parceiro_id)
+
+                    Swal.fire({
+                        title: 'Sucesso!',
+                        icon: 'success'
+                    })
+
+                } else {
+                    Swal.fire({
+                        title: 'Cancelado!',
+                        icon: 'warning'
+                    })
+                }
+            })
+        })
+    })
+
+    function zerarContaCorrente (parceiro_id) {
+        
+    }
+   
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\CAIXA\Desktop\Sistema\financeiro-main\resources\views/parceiro/index.blade.php ENDPATH**/ ?>

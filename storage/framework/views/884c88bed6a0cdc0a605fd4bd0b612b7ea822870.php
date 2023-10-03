@@ -582,7 +582,7 @@ Procurar cheque
                     tableBodyPagamentos += `
                         <tr class = ${element.confirmado ? '' : 'table-danger'}>
                             <td>${transformaData(element.data)}</td>
-                            <td>${element.conta.nome}</td>
+                            <td>${element.conta ? element.conta.nome : 'NI'}</td>
                             <td>${element.forma_pagamento}</td>
                             <td>${element.confirmado ? 'Sim' : 'Não'}</td>
                             <td>${moeda.format(valorTratado)}</td>

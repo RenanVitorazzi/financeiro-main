@@ -43,7 +43,7 @@ Nova troca de cheques
                 @forelse ($cheques as $cheque)
                     <tr>
                         <td>
-                            <input type="checkbox" name="cheque_id[]" value="{{ $cheque->id }}">
+                            <input type="checkbox" name="cheque_id[]" value={{ $cheque->id }}>
                         </td>
                         <td>{{ $cheque->nome_cheque }}</td>
                         <td>{{ $cheque->nome }}</td>
