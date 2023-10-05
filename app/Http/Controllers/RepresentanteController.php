@@ -285,47 +285,6 @@ class RepresentanteController extends Controller {
             ->get('comissao_representantes/conta_corrente_cheques.json');
 
         $infoRepresentante = json_decode($arquivo_json, true);
-        // dd($infoRepresentante);
-
-        // $comissaoRepresentante = $comissao_array[$representante->id] ?? $comissao_array["Default"];
-        // $infoRepresentante = [
-        //     1 => [
-        //         'Saldo' => -24269,
-        //         'Data' => '2023-04-13'
-        //     ],
-        //     5 => [
-        //         'Saldo' => -33974,
-        //         'Data' => '2023-04-13'
-        //     ],
-        //     8 => [
-        //         'Saldo' => 0,
-        //         'Data' => '2023-07-05'
-        //     ],
-        //     12 => [
-        //         'Saldo' => -23272.90,
-        //         'Data' => '2023-10-04'
-        //     ],
-        //     20 => [
-        //         'Saldo' => -51400,
-        //         'Data' => '2023-04-13'
-        //     ],
-        //     23 => [
-        //         'Saldo' => -26486,
-        //         'Data' => '2023-04-13'
-        //     ],
-        //     24 => [
-        //         'Saldo' => 0,
-        //         'Data' => '2023-04-13'
-        //     ],
-        //     26 => [
-        //         'Saldo' => 0,
-        //         'Data' => '2023-07-05'
-        //     ],
-        //     'Default' => [
-        //         'Saldo' => 0,
-        //         'Data' => '2023-01-02'
-        //     ]
-        // ];
         
         $saldo_total = $infoRepresentante['Default']['Saldo'];
         $data_inicio = $infoRepresentante['Default']['Data'];

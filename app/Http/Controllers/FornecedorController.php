@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class FornecedorController extends Controller
 {
@@ -214,107 +215,141 @@ class FornecedorController extends Controller
             ->orderBy('atacado')
             ->get();
 
-        $adiamentos = Parcela::withSum('adiamentos', 'juros_totais')
-            ->whereHas('adiamentos')
-            ->get();
+        // $adiamentos = Parcela::withSum('adiamentos', 'juros_totais')
+        //     ->whereHas('adiamentos')
+        //     ->get();
 
 
-        $parceiros = DB::select('SELECT
-                SUM(juros_totais) AS totalJuros, pe.nome AS nomeParceiro
-            FROM
-                troca_adiamentos t
-                    INNER JOIN
-                parcelas p ON p.id = t.parcela_id
-                    INNER JOIN
-                parceiros pa ON pa.id = p.parceiro_id
-                    INNER JOIN
-                pessoas pe ON pe.id = pa.pessoa_id
-            WHERE
-                t.pago IS NULL
-                AND t.deleted_at IS NULL
-                AND pa.deleted_at IS NULL
-            GROUP BY pa.id
-        ');
+        // $parceiros = DB::select('SELECT
+        //         SUM(juros_totais) AS totalJuros, pe.nome AS nomeParceiro
+        //     FROM
+        //         troca_adiamentos t
+        //             INNER JOIN
+        //         parcelas p ON p.id = t.parcela_id
+        //             INNER JOIN
+        //         parceiros pa ON pa.id = p.parceiro_id
+        //             INNER JOIN
+        //         pessoas pe ON pe.id = pa.pessoa_id
+        //     WHERE
+        //         t.pago IS NULL
+        //         AND t.deleted_at IS NULL
+        //         AND pa.deleted_at IS NULL
+        //     GROUP BY pa.id
+        // ');
 
-        $mes = date('m');
-        $Op = DB::select('SELECT
-                MONTH(p.data_parcela) AS mes,
-                SUM(p.valor_parcela) AS total_devedor,
-                SUM((SELECT SUM(valor) FROM pagamentos_representantes pr WHERE pr.parcela_id = p.id  AND pr.deleted_at is null)) AS total_pago
-            FROM
-                parcelas p
-                    LEFT JOIN
-                vendas v ON v.id = p.venda_id
-                    INNER JOIN
-                clientes c ON c.id = v.cliente_id
-                    INNER JOIN
-                pessoas pe ON pe.id = c.pessoa_id
-            WHERE
-                p.forma_pagamento IN (?, ?, ?)
-                    AND p.status LIKE ?
-                    AND year(p.data_parcela) = year(CURDATE())
-                    AND v.deleted_at is null
-                AND p.deleted_at is null
-                    GROUP BY MONTH(p.data_parcela)
-                    ORDER BY 1',
-            ['Cheque' , 'Pix', 'Transferência Bancária', 'Aguardando Pagamento']
-        );
+        // $mes = date('m');
+        // $Op = DB::select('SELECT
+        //         MONTH(p.data_parcela) AS mes,
+        //         SUM(p.valor_parcela) AS total_devedor,
+        //         SUM((SELECT SUM(valor) FROM pagamentos_representantes pr WHERE pr.parcela_id = p.id  AND pr.deleted_at is null)) AS total_pago
+        //     FROM
+        //         parcelas p
+        //             LEFT JOIN
+        //         vendas v ON v.id = p.venda_id
+        //             INNER JOIN
+        //         clientes c ON c.id = v.cliente_id
+        //             INNER JOIN
+        //         pessoas pe ON pe.id = c.pessoa_id
+        //     WHERE
+        //         p.forma_pagamento IN (?, ?, ?)
+        //             AND p.status LIKE ?
+        //             AND year(p.data_parcela) = year(CURDATE())
+        //             AND v.deleted_at is null
+        //         AND p.deleted_at is null
+        //             GROUP BY MONTH(p.data_parcela)
+        //             ORDER BY 1',
+        //     ['Cheque' , 'Pix', 'Transferência Bancária', 'Aguardando Pagamento']
+        // );
 
-        $chequesAguardandoEnvio = DB::select('SELECT
-            SUM(VALOR_PARCELA) AS valor, MONTH(data_parcela) AS mes
-            FROM parcelas where forma_pagamento like ?
-            AND status like ?
-            AND deleted_at is null
-            GROUP BY MONTH(data_parcela)
-            ORDER BY MONTH(data_parcela)',
-            ['Cheque', 'Aguardando Envio']
-        );
-        $chequesAguardandoEnvioTotal = 0;
-        $totalDevedorGeral = 0;
-        $totalPagoGeral = 0;
-        $opsVencidasDevedoras = 0;
-        $opsPagas = 0;
+        // $chequesAguardandoEnvio = DB::select('SELECT
+        //     SUM(VALOR_PARCELA) AS valor, MONTH(data_parcela) AS mes
+        //     FROM parcelas where forma_pagamento like ?
+        //     AND status like ?
+        //     AND deleted_at is null
+        //     GROUP BY MONTH(data_parcela)
+        //     ORDER BY MONTH(data_parcela)',
+        //     ['Cheque', 'Aguardando Envio']
+        // );
+
+        // $chequesAguardandoEnvioTotal = 0;
+        // $totalDevedorGeral = 0;
+        // $totalPagoGeral = 0;
+        // $opsVencidasDevedoras = 0;
+        // $opsPagas = 0;
 
         $estoque = Estoque::all();
 
-        // $pagamentoMed = DB::select('SELECT
-        //     (SELECT IFNULL(sum(peso), 0) FROM conta_corrente WHERE balanco like ? and fornecedor_id = f.id AND deleted_at is null)
-        //     -
-        //     ((SELECT IFNULL(sum(peso)/2, 0) FROM conta_corrente WHERE balanco like ? and fornecedor_id = f.id AND (datediff(curdate(), data) between 30 and 59) AND deleted_at is null ) +
-        //     (SELECT IFNULL(sum(peso), 0) FROM conta_corrente WHERE balanco like ? and fornecedor_id = f.id AND (datediff(curdate(), data) >= 60) AND deleted_at is null ) ) AS total,
-        //     (SELECT nome from pessoas WHERE f.pessoa_id = id) as fornecedor,
-        //     f.id as fornecedor_id
-        //     FROM fornecedores f',
-        //     [
-        //         'Crédito', 'Débito', 'Débito'
-        //     ]
-        // );
         $hoje = date('d/m/Y');
-        $totalCarteiraMaisSeisMeses = 0;
+        // $totalCarteiraMaisSeisMeses = 0;
 
+        $arquivo_json = Storage::disk('public')
+            ->get('comissao_representantes/conta_corrente_cheques.json');
+
+        $infoRepresentante = json_decode($arquivo_json, true);
+        $saldo_total = $infoRepresentante['Default']['Saldo'];
+        $data_inicio = $infoRepresentante['Default']['Data'];
+        $saldoContaCorrenteChsDevolvidos = [];
+        $totalGeralDeTodosChequesDevolvidos = 0;
+
+        foreach ($representantes as $key => $representante) {
+            // dd($representantes);
+            if (($representante->conta_corrente_sum_peso_agregado != 0 || $representante->conta_corrente_sum_fator_agregado != 0)) {
+                if (array_key_exists($representante->id, $infoRepresentante)) {
+                    $saldo_total = $infoRepresentante[$representante->id]['Saldo'];
+                    $data_inicio = $infoRepresentante[$representante->id]['Data'];
+                }
+        
+                $pagamentosRepresentantes = PagamentosRepresentantes::query()
+                    ->select('data', 'observacao', 'valor')
+                    ->where('representante_id', $representante->id)
+                    ->whereNull('baixado')
+                    ->whereNull('parcela_id')
+                    ->get();
+
+                $entregas = Parcela::query()
+                    ->withSum('pagamentos_representantes', 'valor')
+                    ->where('representante_id', $representante->id)
+                    ->whereHas('entrega', function ($query) use ($data_inicio) {
+                        $query->where('entregue_representante', '>=', $data_inicio);
+                    })
+                    ->get();
+                
+                $devolvidosComParceiros = Parcela::withSum('pagamentos_representantes', 'valor')->devolvidosComParceiros($representante->id)->get();
+                $devolvidosNoEscritorio = Parcela::withSum('pagamentos_representantes', 'valor')->devolvidosNoEscritorio($representante->id)->get();
+
+                $totalDevolvidoParceiros = $devolvidosComParceiros->sum('pagamentos_representantes_sum_valor') - $devolvidosComParceiros->sum('valor_parcela');
+                $totalDevolvidoEscritorio =  $devolvidosNoEscritorio->sum('pagamentos_representantes_sum_valor') - $devolvidosNoEscritorio->sum('valor_parcela');
+
+                $contaCorrente = ($saldo_total - $entregas->sum('valor_parcela') ) + ($entregas->sum('pagamentos_representantes_sum_valor') + $pagamentosRepresentantes->sum('valor'));
+                
+                $totalGeralDevolvidos =  $totalDevolvidoParceiros + $totalDevolvidoEscritorio + $contaCorrente;
+                
+                $chequesEmAberto[$representante->id] = [
+                    'parceiros' => $totalDevolvidoParceiros,
+                    'escritorio' => $totalDevolvidoEscritorio,
+                    'contaCorrente' => $contaCorrente,
+                    'totalGeral' => $totalGeralDevolvidos
+                ]; 
+                
+                $totalGeralDeTodosChequesDevolvidos += $totalGeralDevolvidos;
+            }
+        }
+        // dd($chequesEmAberto[1]);
         $pdf = App::make('dompdf.wrapper');
         $pdf->setPaper('A4', 'landscape');
         $pdf->loadView(
-            'fornecedor.pdf.diario2',
+            'fornecedor.pdf.diario3',
             compact(
                 'fornecedores',
                 'carteira',
                 'representantes',
                 'devolvidos',
-                'adiamentos',
                 'hoje',
-                'parceiros',
                 'totalCarteira',
-                'Op',
-                'mes',
-                'opsVencidasDevedoras',
-                'opsPagas',
-                'totalDevedorGeral',
-                'totalPagoGeral',
-                'chequesAguardandoEnvio',
-                'chequesAguardandoEnvioTotal',
                 'estoque',
-                'totalCarteiraMaisSeisMeses'
+                'chequesEmAberto',
+                'totalGeralDevolvidos',
+                'totalGeralDeTodosChequesDevolvidos'
             )
         );
 

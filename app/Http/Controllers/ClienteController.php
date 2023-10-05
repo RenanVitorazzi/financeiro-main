@@ -186,4 +186,28 @@ class ClienteController extends Controller
 
         return $pdf->stream();
     }
+
+    public function etiqueta_endereco ($pessoa_id)
+    {
+        if ($pessoa_id == 0) {
+            $pessoa = (object)[
+                'nome' => 'Fernanda Zulmira Vitorazzi',
+                'logradouro' => 'Rua Anísio Haddad',
+                'numero' => '8001',
+                'bairro' => 'Georgina Business Park',
+                'complemento' => 'Torre Madrid Norte, Sala 306',
+                'municipio' => 'São José do Rio Preto',
+                'estado' => 'SP',
+                'cep' => '15091-751'
+            ];
+        } else {
+            $pessoa = Pessoa::findOrFail($pessoa_id);
+        }
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->setPaper([0,0,230,115]);
+        $pdf->loadView('cliente.pdf.etiqueta_endereco', compact('pessoa') );
+
+        return $pdf->stream();
+    }
 }

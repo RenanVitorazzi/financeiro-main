@@ -115,6 +115,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pdf_historico_cliente/{cliente_id}', [ClienteController::class, 'pdf_historico_cliente'])->name('pdf_historico_cliente');
         Route::get('pdf_consignados_geral', [ConsignadoController::class, 'pdf_consignados_geral'])->name('pdf_consignados_geral');
         Route::get('pdf_prorrogacao/{dia}', [AdiamentosController::class, 'pdf_prorrogacao'])->name('pdf_prorrogacao');
+        Route::get('etiqueta_endereco/{pessoa_id}', [ClienteController::class, 'etiqueta_endereco'])->name('etiqueta_endereco');
 
         //? Anexos
         Route::resource('conta_corrente_anexo', ContaCorrenteAnexoController::class)->only([
