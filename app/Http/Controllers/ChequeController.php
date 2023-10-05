@@ -444,7 +444,6 @@ class ChequeController extends Controller
             ];
         }
     
-
         if ($parcela->parceiro_id) {
             $parceiro = Parceiro::query()
                 ->findOrFail($parcela->parceiro_id);
@@ -461,7 +460,7 @@ class ChequeController extends Controller
 
         if (!$movimentacoes->isEmpty()) {
             foreach ($movimentacoes as $key => $movimentacao) {
-                $adiamento = Adiamento::find($movimentacao->adiamento_id);
+                $adiamento = Adiamento::withoutGlobalScopes()->find($movimentacao->adiamento_id);
                 
                 switch ($movimentacao->status) :
                     case 'Adiado': 
@@ -498,6 +497,13 @@ class ChequeController extends Controller
                 $arrayDatas[] = [
                     'data' => date('Y-m-d', strtotime($entregas->entregue_parceiro)), 
                     'desc' => 'ENTREGUE DO PARCEIRO PARA O ESCRITÓRIO'
+                ];
+            }
+
+            if ($entregas->entregue_parceiro && $entregas->enviado) {
+                $arrayDatas[] = [
+                    'data' => date('Y-m-d', strtotime($entregas->enviado)), 
+                    'desc' => 'ENVIADO POR '. $entregas->empresa .': '.$entregas->codigo_rastreio 
                 ];
             }
         }

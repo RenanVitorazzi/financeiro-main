@@ -14,7 +14,7 @@ use App\Models\TrocaParcela;
 use DateTime;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use TrocaAdiamento;
+use App\Models\TrocaAdiamento;
 
 class AdiamentosController extends Controller
 {
@@ -130,6 +130,7 @@ class AdiamentosController extends Controller
         if ($dia == 0) {
             $dia = date('Y-m-d');
         }
+
         $cheques = Parcela::query()
             ->with('movimentacoes', function($query) use ($dia) {
                 $query->whereDate('data', $dia)
@@ -139,10 +140,17 @@ class AdiamentosController extends Controller
                 $query->whereDate('data', $dia)
                 ->whereIn('status', ['Resgatado', 'Adiado']);
             })
+            ->with(['adiamentos' => fn ($query)  => $query->withoutGlobalScopes()])
         ->get();
         
+        $antigosAdiamentos = TrocaAdiamento::whereIn('parcela_id', $cheques->pluck('id'))
+            ->onlyTrashed()
+            ->latest()
+            ->get()
+            ->unique('parcela_id');
+
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('adiamento.pdf.pdf_prorrogacao', compact('cheques', 'dia') );
+        $pdf->loadView('adiamento.pdf.pdf_prorrogacao', compact('cheques', 'dia', 'antigosAdiamentos') );
         
         return $pdf->stream();    
     }
