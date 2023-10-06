@@ -461,26 +461,28 @@ class ChequeController extends Controller
         if (!$movimentacoes->isEmpty()) {
             foreach ($movimentacoes as $key => $movimentacao) {
                 $adiamento = Adiamento::withoutGlobalScopes()->find($movimentacao->adiamento_id);
-                
-                switch ($movimentacao->status) :
-                    case 'Adiado': 
-                        $desc = 'ADIADO (' . 
-                                date('d/m/Y', strtotime($parcela->data_parcela)) 
-                                . ' PARA ' . 
-                                date('d/m/Y', strtotime($adiamento->nova_data)) 
-                                . ')';
-                        break;
-                    case 'Devolvido':
-                        $desc = 'DEVOLVIDO (ALÍNEA '. $movimentacao->motivo . ')';
-                        break;
-                    default:    
-                        $desc = mb_strtoupper($movimentacao->status); 
-                endswitch;
+                // dd($movimentacoes);
+                if ($adiamento) {
+                    switch ($movimentacao->status) :
+                        case 'Adiado': 
+                            $desc = 'ADIADO (' . 
+                                    date('d/m/Y', strtotime($parcela->data_parcela)) 
+                                    . ' PARA ' . 
+                                    date('d/m/Y', strtotime($adiamento->nova_data)) 
+                                    . ')';
+                            break;
+                        case 'Devolvido':
+                            $desc = 'DEVOLVIDO (ALÍNEA '. $movimentacao->motivo . ')';
+                            break;
+                        default:    
+                            $desc = mb_strtoupper($movimentacao->status); 
+                    endswitch;
+                    $arrayDatas[] = [
+                        'data' => date('Y-m-d', strtotime($movimentacao->data)), 
+                        'desc' => $desc
+                    ];
+                }
 
-                $arrayDatas[] = [
-                    'data' => date('Y-m-d', strtotime($movimentacao->data)), 
-                    'desc' => $desc
-                ];
             }
         }
     

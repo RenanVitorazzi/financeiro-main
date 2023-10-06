@@ -7,9 +7,12 @@
     <title>Relatório Geral</title>
 </head>
 <style>
+    /* * {
+        margin: 5 5 5 5;
+    } */
     table {
         border-collapse: collapse;
-        font-size: 14px;
+        font-size: 12px;
         page-break-inside: avoid;
         width:100%;
     }
@@ -24,8 +27,10 @@
         border: 2px solid rgb(255, 255, 255);
         width: 50%;
         padding-top:0px;
-        margin-top:0px;
+        margin-top: 0px;
+        vertical-align: top;
     }
+    
 </style>
 <body>
 
@@ -104,8 +109,7 @@
             </td>
         </tr>
     </table>
-   
-    <br>
+
 
     <table>
         <tr>
@@ -139,23 +143,30 @@
                                 <td colspan=4>Nenhum registro</td>
                             </tr>
                         <?php endif; ?>
+                        <tr>
+                            <td>ESTOQUE</td>
+                            <td><?php echo number_format($estoque->sum('peso_agregado'), 2, ',', '.'); ?></td>
+                            <td><?php echo number_format($estoque->sum('fator_agregado'), 1, ',', '.'); ?></td>
+                            <td><?php echo number_format($estoque->sum('peso_agregado') + ($estoque->sum('fator_agregado') / 32), 2, ',', '.'); ?></td>
+                        </tr>
                         <tfoot>
                             
                             <tr>
                                 <td><b>Total</b></td>
+                                <td><b><?php echo number_format(abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado'), 2, ',', '.'); ?></b></td>
+                                <td><b><?php echo number_format(abs($representantes->sum('conta_corrente_sum_fator_agregado'))+ $estoque->sum('fator_agregado'), 1, ',', '.'); ?></b></td>
                                 
                                 
-                                <td><?php echo number_format($representantes->sum('conta_corrente_sum_peso_agregado'), 2, ',', '.'); ?></td>
-                                <td><?php echo number_format($representantes->sum('conta_corrente_sum_fator_agregado'), 1, ',', '.'); ?></td>
                                 <td>
                                     <b>
-                                        <?php echo number_format($representantes->sum('conta_corrente_sum_peso_agregado')
-                                            + ($representantes->sum('conta_corrente_sum_fator_agregado') / 32 ), 2, ',', '.'); ?>
+                                        <?php echo number_format(abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado') +
+                                            (abs($representantes->sum('conta_corrente_sum_fator_agregado'))/32 + $estoque->sum('fator_agregado') / 32), 2, ',', '.'); ?>
                                     </b>
                                 </td>
                             </tr>
                         </tfoot>
                     </tbody>
+                   
                 </table>
             </td>
             <td class='tabela_invisivel'>

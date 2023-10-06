@@ -142,7 +142,7 @@ class AdiamentosController extends Controller
             })
             ->with(['adiamentos' => fn ($query)  => $query->withoutGlobalScopes()])
         ->get();
-        
+        // dd($cheques);
         $antigosAdiamentos = TrocaAdiamento::whereIn('parcela_id', $cheques->pluck('id'))
             ->onlyTrashed()
             ->latest()
