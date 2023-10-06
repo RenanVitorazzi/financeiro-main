@@ -208,6 +208,7 @@ class FornecedorController extends Controller
         );
 
         $devolvidos = Parcela::where('status', 'Devolvido')->get();
+        $estoque = Estoque::get();
 
         $representantes = Representante::with('pessoa')
             ->withSum('conta_corrente', 'peso_agregado')
@@ -340,6 +341,7 @@ class FornecedorController extends Controller
         $pdf->loadView(
             'fornecedor.pdf.diario3',
             compact(
+                'estoque',
                 'fornecedores',
                 'carteira',
                 'representantes',

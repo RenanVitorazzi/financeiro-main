@@ -7,9 +7,12 @@
     <title>Relatório Geral</title>
 </head>
 <style>
+    /* * {
+        margin: 5 5 5 5;
+    } */
     table {
         border-collapse: collapse;
-        font-size: 14px;
+        font-size: 12px;
         page-break-inside: avoid;
         width:100%;
     }
@@ -24,8 +27,10 @@
         border: 2px solid rgb(255, 255, 255);
         width: 50%;
         padding-top:0px;
-        margin-top:0px;
+        margin-top: 0px;
+        vertical-align: top;
     }
+    
 </style>
 <body>
 
@@ -110,8 +115,7 @@
             </td>
         </tr>
     </table>
-   
-    <br>
+
 
     <table>
         <tr>
@@ -145,30 +149,32 @@
                                 <td colspan=4>Nenhum registro</td>
                             </tr>
                         @endforelse
+                        <tr>
+                            <td>ESTOQUE</td>
+                            <td>@peso($estoque->sum('peso_agregado'))</td>
+                            <td>@fator($estoque->sum('fator_agregado'))</td>
+                            <td>@peso($estoque->sum('peso_agregado') + ($estoque->sum('fator_agregado') / 32) )</td>
+                        </tr>
                         <tfoot>
-                            {{-- <tr>
-                                <td>ESTOQUE</td>
-                                <td>@peso($estoque->sum('peso_agregado'))</td>
-                                <td>@fator($estoque->sum('fator_agregado'))</td>
-                                <td>@peso($estoque->sum('peso_agregado') + ($estoque->sum('fator_agregado') / 32) )</td>
-                            </tr> --}}
+                            
                             <tr>
                                 <td><b>Total</b></td>
-                                {{-- <td><b>@peso(abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado'))</b></td> --}}
-                                {{-- <td><b>@fator(abs($representantes->sum('conta_corrente_sum_fator_agregado'))+ $estoque->sum('fator_agregado'))</b></td> --}}
-                                <td>@peso($representantes->sum('conta_corrente_sum_peso_agregado'))</td>
-                                <td>@fator($representantes->sum('conta_corrente_sum_fator_agregado'))</td>
+                                <td><b>@peso(abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado'))</b></td>
+                                <td><b>@fator(abs($representantes->sum('conta_corrente_sum_fator_agregado'))+ $estoque->sum('fator_agregado'))</b></td>
+                                {{-- <td>@peso($representantes->sum('conta_corrente_sum_peso_agregado'))</td> --}}
+                                {{-- <td>@fator($representantes->sum('conta_corrente_sum_fator_agregado'))</td> --}}
                                 <td>
                                     <b>
                                         @peso(
-                                            $representantes->sum('conta_corrente_sum_peso_agregado')
-                                            + ($representantes->sum('conta_corrente_sum_fator_agregado') / 32 )
+                                            abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado') +
+                                            (abs($representantes->sum('conta_corrente_sum_fator_agregado'))/32 + $estoque->sum('fator_agregado') / 32)
                                         )
                                     </b>
                                 </td>
                             </tr>
                         </tfoot>
                     </tbody>
+                   
                 </table>
             </td>
             <td class='tabela_invisivel'>
