@@ -234,7 +234,7 @@ class ChequeController extends Controller
 
     public function consulta_cheque(Request $request)
     {
-  
+        //! ALTERAR NA FUNÇÃO DE IMPRESSO
         $filtrarChequesDosUltimosAnos = !$request->todosCheques 
             ? 'AND data_parcela >= CURDATE() - INTERVAL 6 MONTH'
             : '';
@@ -295,7 +295,15 @@ class ChequeController extends Controller
             ['Devolvido', 'Adiado']
         );
 
-        return json_encode(['Cheques' => $cheques, 'blackList' => $blackList]);
+        // $tudo = (!$request->todosCheques) ? 'S' : 'N';
+
+        $infoImpressao = [
+            'tipo_select' => $request->tipo_select,
+            'texto_pesquisa' => $request->texto_pesquisa,
+            'tudo' => $request->todosCheques ?? NULL
+        ];
+
+        return json_encode(['Cheques' => $cheques, 'blackList' => $blackList, 'imprimir' => $infoImpressao]);
     }
 
     public function depositar_diario()
@@ -462,26 +470,18 @@ class ChequeController extends Controller
             foreach ($movimentacoes as $key => $movimentacao) {
                 $adiamento = Adiamento::withoutGlobalScopes()->find($movimentacao->adiamento_id);
                 // dd($movimentacoes);
-                if ($adiamento) {
-                    switch ($movimentacao->status) :
-                        case 'Adiado': 
-                            $desc = 'ADIADO (' . 
-                                    date('d/m/Y', strtotime($parcela->data_parcela)) 
-                                    . ' PARA ' . 
-                                    date('d/m/Y', strtotime($adiamento->nova_data)) 
-                                    . ')';
-                            break;
-                        case 'Devolvido':
-                            $desc = 'DEVOLVIDO (ALÍNEA '. $movimentacao->motivo . ')';
-                            break;
-                        default:    
-                            $desc = mb_strtoupper($movimentacao->status); 
-                    endswitch;
-                    $arrayDatas[] = [
-                        'data' => date('Y-m-d', strtotime($movimentacao->data)), 
-                        'desc' => $desc
-                    ];
+                if ($adiamento && $movimentacao->status == 'Adiado') {
+                    $desc = 'ADIADO (' . date('d/m/Y', strtotime($parcela->data_parcela)) . ' PARA ' . date('d/m/Y', strtotime($adiamento->nova_data)) . ')';
+                } else if ($movimentacao->status == 'Devolvido') {
+                    $desc = 'DEVOLVIDO (ALÍNEA '. $movimentacao->motivo . ')';
+                } else {
+                    $desc = mb_strtoupper($movimentacao->status); 
                 }
+                        
+                $arrayDatas[] = [
+                    'data' => date('Y-m-d', strtotime($movimentacao->data)), 
+                    'desc' => $desc
+                ];
 
             }
         }
@@ -515,5 +515,73 @@ class ChequeController extends Controller
         }));
         
         return json_encode($arrayOrdenada); 
+    }
+
+    public function pdf_imprimir_procura_cheque ($tipo_select, $texto_pesquisa, $todosCheques) 
+    {
+        $filtrarChequesDosUltimosAnos = ($todosCheques == 'null') 
+        ? 'AND data_parcela >= CURDATE() - INTERVAL 6 MONTH'
+        : '';
+            
+        $nome_cliente = '%'.$texto_pesquisa.'%';
+
+        $cheques = DB::select('SELECT
+                par.id,
+                UPPER(par.nome_cheque) as nome_cheque,
+                par.data_parcela,
+                par.numero_cheque,
+                Concat(?,Format(valor_parcela, 2, ?) ) AS valor_parcela_tratado,
+                par.valor_parcela,
+                UPPER(par.status) AS status,
+                (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
+                (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = pa.pessoa_id) AS nome_parceiro,
+                par.numero_banco,
+                par.parceiro_id,
+                a.nova_data,
+                v.cliente_id,
+                a.id as adiamento_id
+            FROM
+                parcelas par
+            LEFT JOIN
+                representantes r ON r.id = par.representante_id
+            LEFT JOIN
+                parceiros pa ON pa.id = par.parceiro_id
+            LEFT JOIN
+                adiamentos a ON a.parcela_id = par.id
+            LEFT JOIN
+                vendas v ON par.venda_id = v.id
+            WHERE
+                NOT EXISTS( SELECT id FROM adiamentos AS M2 WHERE M2.parcela_id = a.parcela_id AND M2.id > a.id)
+                AND par.deleted_at IS NULL
+                AND par.forma_pagamento like ?
+                AND  (' . $tipo_select . ' = ?
+                ' . $filtrarChequesDosUltimosAnos . '
+                OR
+                    nome_cheque like ? ' . $filtrarChequesDosUltimosAnos . ')
+                ORDER BY par.data_parcela
+                LIMIT 150',
+            ['R$ ' ,'de_DE', 'Cheque', $texto_pesquisa, $nome_cliente]
+        );
+        // dd($cheques);
+        $blackList = DB::select('SELECT DISTINCT
+                pa.nome_cheque,
+                GROUP_CONCAT(pa.nome_cheque) as nome_cheque,
+                GROUP_CONCAT(v.cliente_id) as cliente_id
+            FROM
+                movimentacoes_cheques p
+                    INNER JOIN
+                parcelas pa ON pa.id = p.parcela_id
+                    LEFT JOIN
+                vendas v ON v.id = pa.venda_id
+            WHERE
+                p.status LIKE ?
+                AND p.parcela_id IN (SELECT parcela_id FROM movimentacoes_cheques WHERE status LIKE ? AND p.parcela_id = parcela_id)',
+            ['Devolvido', 'Adiado']
+        );
+        
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('cheque.pdf.pdf_imprimir_procura_cheque', compact('cheques', 'blackList') );
+
+        return $pdf->stream();
     }
 }

@@ -15,9 +15,11 @@
 </nav>
 <div class='mb-2 d-flex justify-content-between'>
     <h3 class='d-inline' style="color:#212529">Histórico - {{$cliente->pessoa->nome}} </h3> 
-    <x-botao-imprimir href="{{route('pdf_historico_cliente', $cliente->id)}}" target="_blank">
-    
-    </x-botao-imprimir>
+    <div>
+
+        <a class='mr-2 btn btn-dark' href="{{route('etiqueta_endereco', $cliente->pessoa_id)}}" target="_blank">Etiqueta</a>
+        <x-botao-imprimir href="{{route('pdf_historico_cliente', $cliente->id)}}" target="_blank">Histórico</x-botao-imprimir>
+    </div>
 </div>
     @if(Session::has('message'))
         <p class="alert alert-success">{{ Session::get('message') }}</p>

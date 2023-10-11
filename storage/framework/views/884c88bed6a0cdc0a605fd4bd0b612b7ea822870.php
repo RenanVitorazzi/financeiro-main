@@ -463,6 +463,8 @@ Procurar cheque
 
                     })
 
+                    let imp = response.imprimir;
+                    
                     $("#table_div").html(`
                         <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
@@ -477,7 +479,14 @@ Procurar cheque
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
                                 <tr>
-                                    <th colspan=11>Número total de resultado: ${response.Cheques.length}</th>
+                                    <th colspan=11>
+                                        Número total de resultado: ${response.Cheques.length}
+                                        <a target='_blank'
+                                            href="/pdf_imprimir_procura_cheque/${imp.tipo_select}/${imp.texto_pesquisa}/${imp.tudo}"
+                                            class='btn btn-light float-right'>
+                                            Imprimir 
+                                        </a>
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Titular</th>

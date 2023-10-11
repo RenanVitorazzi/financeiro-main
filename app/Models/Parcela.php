@@ -61,6 +61,20 @@ class Parcela extends Model
             ->orderBy('nome_cheque');
     }
 
+    public function scopeAcertos($query, $representante_id) {
+        return $query
+            ->with('venda')
+            ->where([
+                ['forma_pagamento', 'LIKE', 'Cheque'], 
+                ['status', 'LIKE', 'Aguardando Envio'],
+                ['representante_id', $representante_id]
+            ])
+            ->orWhere([
+                ['forma_pagamento', 'NOT LIKE', 'Cheque'], 
+                ['status', 'NOT LIKE', 'Pago'],
+                ['representante_id', $representante_id]
+            ]);
+    }
     public function scopeAdiamentosDoDia($query, $dia)
     {
         return $query->with('representante.pessoa:id,nome', 'parceiro.pessoa:id,nome', 'adiamentos')

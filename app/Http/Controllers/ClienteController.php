@@ -205,7 +205,7 @@ class ClienteController extends Controller
         }
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->setPaper([0,0,230,115]);
+        $pdf->setPaper([0,0,1150,2300], 'landscape');
         $pdf->loadView('cliente.pdf.etiqueta_endereco', compact('pessoa') );
 
         return $pdf->stream();

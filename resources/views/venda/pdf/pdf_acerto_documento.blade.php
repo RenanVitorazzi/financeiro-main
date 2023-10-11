@@ -88,7 +88,6 @@
                     WHERE
                         p.deleted_at IS NULL
                         AND v.deleted_at IS NULL
-                        AND v.enviado_conta_corrente IS NOT NULL
                         AND r.id = ?
                         AND (
                         p.forma_pagamento like 'Cheque' AND p.status like 'Aguardando Envio'
