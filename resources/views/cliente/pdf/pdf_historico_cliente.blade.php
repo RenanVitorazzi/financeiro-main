@@ -19,8 +19,10 @@
     /* tr:nth-child(even) {
         background-color: #d9dde2;
     } */
-    h1 {
+    h5 {
         text-align: center;
+        margin-top: 0px;
+        margin-bottom: 0px;
     }
     .nome {
         font-size:10px;
@@ -30,16 +32,18 @@
     }
 </style>
 <body>
+    <h5>HISTÓRICO {{$cliente->pessoa->nome}}</h5>
+    <br>
     <table>
         <thead>
             <tr>
-                <th colspan = 8>HISTÓRICO {{$cliente->pessoa->nome}}</th>
+                <th colspan = 8>COMPRAS</th>
             </tr>
             <tr>
-                <td>DATA</td>
-                <td colspan=5>COMPRA</td>
-                <td>VALOR</td>
-                <td>PRAZO MÉDIO</td>
+                <th>DATA</th>
+                <th colspan=5>COMPRA</th>
+                <th>VALOR</th>
+                <th>PRAZO MÉDIO</th>
             </tr>
         </thead>
         <tbody>
@@ -93,20 +97,76 @@
                 
             @empty
                 <tr>
-                    <td colspan=7>Nenhum registro</td>
+                    <td colspan=8>NENHUM REGISTRO</td>
                 </tr>
             @endforelse
         </tbody>
         <tfoot>
             <tr>
-                <td colspan=6>Total</td>
+                <td colspan=6>TOTAL</td>
                 <td>@moeda($parcelas->sum('valor_parcela'))</td>
                 <td></td>
             </tr>
         </tfoot>
     </table>
-
-
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th colspan=5>CHEQUES</th>
+            </tr>
+            <tr>
+                <th>NOME</th>
+                <th>BANCO</th>
+                <th>NÚMERO</th>
+                <th>DATA</th>
+                <th>VALOR</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($parcelas->where('forma_pagamento', 'LIKE', 'Cheque')->sortBy('data_parcela') as $parcela)
+                <tr>
+                    <td>{{$parcela->nome_cheque}}</td>
+                    <td>{{$parcela->numero_banco}}</td>
+                    <td>{{$parcela->numero_cheque}}</td>
+                    <td>@data($parcela->data_parcela)</td>
+                    <td>@moeda($parcela->valor_parcela)</td>
+                </tr>                        
+            @empty
+                <tr>
+                    <td colspan=5>NENHUM REGISTRO</td>    
+                </tr>   
+            @endforelse
+        </tbody>
+    </table>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th colspan=4>OUTROS PAGAMENTOS</th>
+            </tr>
+            <tr>
+                <th>NOME</th>
+                <th>FORMA PGTO</th>
+                <th>DATA</th>
+                <th>VALOR</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($parcelas->where('forma_pagamento', '<>', 'Cheque')->sortBy('data_parcela') as $parcela)
+                <tr>
+                    <td>{{$parcela->nome_cheque}}</td>
+                    <td>{{$parcela->forma_pagamento}}</td>
+                    <td>@data($parcela->data_parcela)</td>
+                    <td>@moeda($parcela->valor_parcela)</td>
+                </tr>                        
+            @empty
+                <tr>
+                    <td colspan=4>NENHUM REGISTRO</td>    
+                </tr>   
+            @endforelse
+        </tbody>
+    </table>
 </body>
 </html>
 

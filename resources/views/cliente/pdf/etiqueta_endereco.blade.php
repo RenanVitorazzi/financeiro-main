@@ -9,13 +9,10 @@
 <style>
     * {
         text-transform: uppercase;
-        font-size:8px;
-        margin: 0 0 0 0; 
     }
     div {
-        position: absolute;
-	    bottom: 10px;
-        margin-left: 10px;
+        margin-top:5cm;
+	    margin-left:2cm;
     }
 </style>
 <body>

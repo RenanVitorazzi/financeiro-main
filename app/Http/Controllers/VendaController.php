@@ -294,14 +294,12 @@ class VendaController extends Controller
                 (SELECT UPPER(nome) from pessoas WHERE id = c.pessoa_id) as cliente
             FROM
                 vendas v
-                    INNER JOIN
-                parcelas p ON p.venda_id = v.id
+                    INNER JOIN parcelas p ON p.venda_id = v.id
                     LEFT JOIN clientes c ON c.id = v.cliente_id
                     LEFT JOIN representantes r ON r.id = v.representante_id
             WHERE
                 p.deleted_at IS NULL
                 AND v.deleted_at IS NULL
-                AND v.enviado_conta_corrente IS NOT NULL
                 AND r.id = ?
                 AND (
                 p.forma_pagamento like 'Cheque' AND p.status like 'Aguardando Envio'
@@ -312,7 +310,7 @@ class VendaController extends Controller
             ORDER BY 2, data_parcela , valor_parcela",
             [$representante_id]
         );
-
+        // dd($acertos);
         $representante = Representante::findOrFail($representante_id);
         $hoje = date('Y-m-d');
         $total_divida_valor = 0;

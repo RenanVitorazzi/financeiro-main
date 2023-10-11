@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pdf_consignados_geral', [ConsignadoController::class, 'pdf_consignados_geral'])->name('pdf_consignados_geral');
         Route::get('pdf_prorrogacao/{dia}', [AdiamentosController::class, 'pdf_prorrogacao'])->name('pdf_prorrogacao');
         Route::get('etiqueta_endereco/{pessoa_id}', [ClienteController::class, 'etiqueta_endereco'])->name('etiqueta_endereco');
+        Route::get('pdf_imprimir_procura_cheque/{tipo_select}/{texto_pesquisa}/{todosCheques}', [ChequeController::class, 'pdf_imprimir_procura_cheque'])->name('pdf_imprimir_procura_cheque');
 
         //? Anexos
         Route::resource('conta_corrente_anexo', ContaCorrenteAnexoController::class)->only([
