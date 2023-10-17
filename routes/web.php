@@ -47,7 +47,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('pdf_consignados/{representante_id}', [ConsignadoController::class, 'pdf_consignados'])->name('pdf_consignados');
 
     Route::group(['middleware' => ['is_admin']], function() {
-        Route::post('zerar_parceiro/{parceiro_id}', [ParceiroController::class, 'zerar_parceiro'])->name('zerar_parceiro');
+        Route::get('configurar_cc_parceiros/{parceiro_id}', [ParceiroController::class, 'configurar_cc_parceiros'])->name('configurar_cc_parceiros');
+        Route::post('atualizar_conta_corrente/{parceiro_id}', [ParceiroController::class, 'atualizar_conta_corrente'])->name('atualizar_conta_corrente');
 
         Route::post('recebimentos/createApi', [RecebimentosController::class, 'recebimentoCreateApi'])->name('recebimentoCreateApi');
 
@@ -115,6 +116,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pdf_historico_cliente/{cliente_id}', [ClienteController::class, 'pdf_historico_cliente'])->name('pdf_historico_cliente');
         Route::get('pdf_consignados_geral', [ConsignadoController::class, 'pdf_consignados_geral'])->name('pdf_consignados_geral');
         Route::get('pdf_prorrogacao/{dia}', [AdiamentosController::class, 'pdf_prorrogacao'])->name('pdf_prorrogacao');
+        Route::get('relacao_deb_cred_fornecedores/{data}', [FornecedorController::class, 'relacao_deb_cred_fornecedores'])->name('relacao_deb_cred_fornecedores');
+        Route::get('relacao_deb_cred_representantes/{data}', [RepresentanteController::class, 'relacao_deb_cred_representantes'])->name('relacao_deb_cred_representantes');
         Route::get('etiqueta_endereco/{pessoa_id}', [ClienteController::class, 'etiqueta_endereco'])->name('etiqueta_endereco');
         Route::get('pdf_imprimir_procura_cheque/{tipo_select}/{texto_pesquisa}/{todosCheques}', [ChequeController::class, 'pdf_imprimir_procura_cheque'])->name('pdf_imprimir_procura_cheque');
 

@@ -31,6 +31,7 @@ class EntregaParcelaController extends Controller
             ->whereHas('entrega', function ($query) {
                 $query->whereNull('entregue_representante');
                 $query->whereNotNull('entregue_parceiro');
+                $query->whereNull('enviado');
             })
             ->orWhere(function (Builder $query) use ($representante_id) {
                 $query->whereNull('parceiro_id')

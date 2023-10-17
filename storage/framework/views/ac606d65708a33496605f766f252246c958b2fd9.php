@@ -49,7 +49,7 @@
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes(['id' => 'copiarAdiamentos']); ?>
-            <th colspan=5><?php echo e($parceiro->where('parceiro_id', $parceiro->first()->parceiro_id)->first()->parceiro->pessoa->nome); ?></th>
+            <th colspan=5><?php echo e($parceiro->where('parceiro_id', $parceiro->first()->parceiro_id)->first()->parceiro->pessoa->nome ?? 'CARTEIRA'); ?></th>
          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalfb92ff36a55f0dcdf5fe1bf02e275a6bc7af5477)): ?>

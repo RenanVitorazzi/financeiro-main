@@ -685,4 +685,36 @@ class FornecedorController extends Controller
 
         return $pdf->stream();
     }
+
+    public function relacao_deb_cred_fornecedores ($data) {
+        // $cc = ContaCorrente::where('data', '<=', $data)->groupBy('fornecedor_id')->get();
+        $cc = Fornecedor::query()
+            ->with('pessoa:id,nome')
+            ->withSum(['contaCorrente as credito' => function ($query) use ($data) {
+                $query->whereDate('data', '>=', $data);
+                $query->where('balanco', 'LIKE', 'Crédito');
+            }], 'peso')
+            ->withSum(['contaCorrente as debito' => function ($query) use ($data) {
+                $query->whereDate('data', '>=', $data);
+                $query->where('balanco', 'LIKE', 'Débito');
+            }], 'peso')
+            // ->whereNull('inativo')
+            ->orderBy('debito', 'desc')
+            ->get();
+        
+        // dd($cc);
+        // $fornecedores = Fornecedor::with('pessoa:id,nome')->get();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView(
+            'relatorios.relacao_deb_cred_fornecedores',
+            compact(
+               'data',
+               'cc'
+            )
+        );
+
+        return $pdf->stream();
+    }
+
 }

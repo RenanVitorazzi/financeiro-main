@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AtualizarContaCorrenteParceiro;
 use App\Http\Requests\RequestFormPessoa;
 use App\Models\MovimentacaoCheque;
 use App\Models\PagamentosParceiros as ModelsPagamentosParceiros;
 use App\Models\Parceiro;
 use App\Models\Parcela;
 use App\Models\Pessoa;
+use App\Models\TrocaAdiamento as ModelsTrocaAdiamento;
 use App\Models\TrocaParcela;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use PagamentosParceiros;
+use TrocaAdiamento;
 
 class ParceiroController extends Controller
 {
@@ -156,45 +159,107 @@ class ParceiroController extends Controller
         return $pdf->stream();
     }
 
-    public function zerar_parceiro ($parceiro_id) {
-        
+    public function configurar_cc_parceiros ($parceiro_id) {
         if(auth()->user()->id !== 1) {
-            // dd($parceiro_id);
             return false;
         }
+    
+        $parceiro = Parceiro::with('pessoa:id,nome')->findOrFail($parceiro_id);
 
-        //!! baixar movimentacoes_cheques -> adicionar pago_parceiro em todos
-        //!! baixar troca_adiamentos
-        //!! baixar pagamentos_parceiros
-
-        // ModelsPagamentosParceiros::where([
-        //     ['parceiro_id', $parceiro_id],
-        //     ['baixado', NULL]
-        // ])->get();
-
-        // TrocaParcela::where([
-        //     ['parceiro_id', $parceiro_id],
-        //     ['pago', NULL]
-        // ])->get();
-
-            //TODO TRANSFORMAR STRING EM ARRAY
-        $queryParcelas = DB::select("SELECT CONCAT(p.id) as cheques_id
-            FROM
-                movimentacoes_cheques mc
-            INNER JOIN
-                parcelas p ON p.id = mc.parcela_id
-            WHERE
-                p.parceiro_id = ? AND mc.status IN (?, ?)
-                AND mc.parcela_id NOT IN  (SELECT parcela_id
-                FROM movimentacoes_cheques
-                WHERE status like ?
-                and deleted_at is null
-                AND parcela_id = mc.parcela_id)",
-                [$parceiro_id, 'Devolvido', 'Resgatado', 'Pago parceiro']
+        $saldos = DB::select('SELECT * FROM
+                (SELECT
+                        mc.data as rank2,
+                        p.nome_cheque AS nome_cheque,
+                        p.valor_parcela as valor,
+                        mc.status,
+                        p.numero_cheque,
+                        p.id,
+                        ? as tabela
+                    FROM
+                        movimentacoes_cheques mc
+                            INNER JOIN
+                        parcelas p ON p.id = mc.parcela_id
+                    WHERE
+                        p.parceiro_id = ? AND mc.status IN (?,?)
+                        AND mc.parcela_id NOT IN  (SELECT parcela_id
+                            FROM movimentacoes_cheques
+                            WHERE status like ?
+                            and deleted_at is null
+                            AND parcela_id = mc.parcela_id
+                )
+            UNION ALL
+                SELECT
+                    ta2.created_at as rank2,
+                    p2.nome_cheque AS nome_cheque,
+                    ta2.juros_totais as valor,
+                    ?,
+                    p2.numero_cheque,
+                    ta2.id,
+                    ?
+                FROM parcelas p2
+                INNER JOIN troca_adiamentos ta2
+                    ON ta2.parcela_id = p2.id 
+                    AND ta2.pago is null 
+                    AND p2.parceiro_id = ? 
+                    AND ta2.deleted_at is null
+            UNION ALL
+                SELECT
+                    pp.data as rank2,
+                    UPPER(pp.observacao),
+                    pp.valor,
+                    ?,
+                    pp.forma_pagamento,
+                    pp.id,
+                    ?
+                    FROM pagamentos_parceiros pp WHERE parceiro_id = ?
+                    AND deleted_at is null
+                    and baixado is null
+            ) a order by rank2',
+            [
+                'mc',
+                $parceiro_id, 
+                'Devolvido', 
+                'Resgatado', 
+                'Pago parceiro', 
+                'Prorrogação',
+                'ta', 
+                $parceiro_id, 
+                'Crédito', 
+                'pp',
+                $parceiro_id
+            ]
         );
-        // DD($queryParcelas);
-        Parcela::whereIn('id', [$queryParcelas])->get();
 
+        $saldo_total = 0;
+
+       return view('parceiro.configurar_cc_parceiros', compact('saldo_total', 'parceiro', 'saldos'));
+
+    }
+
+    public function atualizar_conta_corrente (AtualizarContaCorrenteParceiro $request, $parceiro_id) {
+
+        $resultado = DB::transaction(function () use ($request) {
+
+            foreach ($request->mc as $key => $parcela_id) {
+                MovimentacaoCheque::create([
+                    'status' => 'Pago parceiro',
+                    'data' => now(),
+                    'parcela_id' => $parcela_id
+                ]);
+            }
+
+            foreach ($request->ta as $key => $adiamento_id) {
+                ModelsTrocaAdiamento::findOrFail($adiamento_id)->update(['pago' => 1]);
+            }
+            
+            foreach ($request->pp as $key => $pagamento_parceiro_id) {
+                ModelsPagamentosParceiros::findOrFail($pagamento_parceiro_id)->update(['baixado' => 1]);
+            }
+            
+        });
+
+        return redirect()->route('configurar_cc_parceiros', compact('parceiro_id'));
+        
     }
 }
 

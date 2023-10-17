@@ -18,12 +18,12 @@ Parceiros
             </div>
             <div class='d-flex'>
                 @if(auth()->user()->is_admin && auth()->user()->id == 1)
-                    <form action="{{ route('zerar_parceiro', $parceiro->id) }}" method="POST">
-                        @csrf
-                        <button class="btn btn-warning mr-2 btn-zerar">Baixar</button>
-                    </form>
+                    <a href="{{ route('configurar_cc_parceiros', $parceiro->id) }}" class="btn btn-dark mr-2">
+                        <span class='fas fa-cog'></span>
+                    </a>
                 @endif
-                <a class="btn btn-dark mr-2" href="{{ route('pdf_cc_parceiro', $parceiro->id) }}">Conta Corrente</a>
+                {{-- <a class="btn btn-dark mr-2" href="{{ route('pdf_cc_parceiro', $parceiro->id) }}">Conta Corrente</a> --}}
+                <x-botao-imprimir class='mr-2' href="{{ route('pdf_cc_parceiro', $parceiro->id) }}"></x-botao-imprimir>
                 <x-botao-editar class="mr-2" href="{{ route('parceiros.edit', $parceiro->id) }}"></x-botao-editar>
                 <x-botao-excluir action="{{ route('parceiros.destroy', $parceiro->id) }}"></x-botao-excluir>
             </div>
