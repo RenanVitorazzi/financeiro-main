@@ -39,7 +39,7 @@
 
     <x-table id="adiamentos">
         <x-tableheader id="copiarAdiamentos" >
-            <th colspan=5>{{$parceiro->where('parceiro_id', $parceiro->first()->parceiro_id)->first()->parceiro->pessoa->nome}}</th>
+            <th colspan=5>{{$parceiro->where('parceiro_id', $parceiro->first()->parceiro_id)->first()->parceiro->pessoa->nome ?? 'CARTEIRA'}}</th>
         </x-tableheader>
 
         <x-tableheader>

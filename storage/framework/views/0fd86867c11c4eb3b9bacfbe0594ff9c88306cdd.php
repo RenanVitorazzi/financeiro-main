@@ -28,12 +28,22 @@ Parceiros
             </div>
             <div class='d-flex'>
                 <?php if(auth()->user()->is_admin && auth()->user()->id == 1): ?>
-                    <form action="<?php echo e(route('zerar_parceiro', $parceiro->id)); ?>" method="POST">
-                        <?php echo csrf_field(); ?>
-                        <button class="btn btn-warning mr-2 btn-zerar">Baixar</button>
-                    </form>
+                    <a href="<?php echo e(route('configurar_cc_parceiros', $parceiro->id)); ?>" class="btn btn-dark mr-2">
+                        <span class='fas fa-cog'></span>
+                    </a>
                 <?php endif; ?>
-                <a class="btn btn-dark mr-2" href="<?php echo e(route('pdf_cc_parceiro', $parceiro->id)); ?>">Conta Corrente</a>
+                
+                <?php if (isset($component)) { $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\BotaoImprimir::class, []); ?>
+<?php $component->withName('botao-imprimir'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['class' => 'mr-2','href' => ''.e(route('pdf_cc_parceiro', $parceiro->id)).'']); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5)): ?>
+<?php $component = $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5; ?>
+<?php unset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5); ?>
+<?php endif; ?>
                 <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
 <?php $component->withName('botao-editar'); ?>

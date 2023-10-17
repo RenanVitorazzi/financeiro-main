@@ -481,6 +481,43 @@ class RepresentanteController extends Controller {
         );
         return $pdf->stream();
     }
+
+    
+    public function relacao_deb_cred_representantes ($data) {
+        // $cc = ContaCorrente::where('data', '<=', $data)->groupBy('fornecedor_id')->get();
+        $cc = Representante::query()
+            ->with('pessoa:id,nome')
+            ->withSum(['conta_corrente as credito_peso' => function ($query) use ($data) {
+                $query->whereDate('data', '>=', $data);
+                $query->where('balanco', 'LIKE', 'Reposição');
+            }], 'peso')
+            ->withSum(['conta_corrente as debito_peso' => function ($query) use ($data) {
+                $query->whereDate('data', '>=', $data);
+                $query->where('balanco', 'LIKE', 'Venda');
+            }], 'peso')
+            ->withSum(['conta_corrente as credito_fator' => function ($query) use ($data) {
+                $query->whereDate('data', '>=', $data);
+                $query->where('balanco', 'LIKE', 'Reposição');
+            }], 'fator')
+            ->withSum(['conta_corrente as debito_fator' => function ($query) use ($data) {
+                $query->whereDate('data', '>=', $data);
+                $query->where('balanco', 'LIKE', 'Venda');
+            }], 'fator')
+            ->whereNull('inativo')
+            ->orderBy('debito_peso', 'desc')
+            ->get();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView(
+            'relatorios.relacao_deb_cred_representantes',
+            compact(
+               'data',
+               'cc'
+            )
+        );
+
+        return $pdf->stream();
+    }
 }
 
 ?>
