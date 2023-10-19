@@ -19,4 +19,8 @@ class Despesa extends Model
     public function fixa() {
         return $this->belongsTo(DespesaFixa::class);
     } 
+
+    public function conta() {
+        return $this->belongsTo(Conta::class);
+    } 
 }

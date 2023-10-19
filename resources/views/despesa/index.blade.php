@@ -46,6 +46,7 @@ Despesas
         <th>Valor</th>
         <th>Vencimento</th>
         <th>Local</th>
+        <th>Conta do pagamento</th>
         <th></th>
     </x-table-header>
     <tbody>
@@ -55,6 +56,7 @@ Despesas
                 <td>@moeda($despesa->valor)</td>
                 <td>@data($despesa->data_vencimento)</td>
                 <td>{{ $despesa->local->nome }}</td>
+                <td>{{ $despesa->conta->nome ?? ''}}</td>
                 <td>
                     <x-botao-editar class="mr-2" href="{{ route('despesas.edit', $despesa->id) }}"></x-botao-editar>
                     <x-botao-excluir action="{{ route('despesas.destroy', $despesa->id) }}"></x-botao-excluir>

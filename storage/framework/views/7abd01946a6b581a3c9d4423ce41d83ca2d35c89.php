@@ -106,7 +106,7 @@
           </li>
           <li <?php if(route('consignado.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
             <a href="<?php echo e(route('consignado.index')); ?>">
-              <i class="fas fa-users"></i>
+              <i class="far fa-gem"></i>
               <span>Consignados</span>
             </a>
           </li>
@@ -114,7 +114,7 @@
           <?php if(auth()->user()->is_admin): ?>
           <li <?php if(route('estoque.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
             <a href="<?php echo e(route('estoque.index')); ?>">
-            <i class="fas fa-exchange-alt"></i>
+            <i class="fas fa-suitcase"></i>
               <span>Estoque</span>
             </a>
           </li>

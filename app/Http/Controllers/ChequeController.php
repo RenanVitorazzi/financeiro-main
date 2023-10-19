@@ -423,7 +423,9 @@ class ChequeController extends Controller
 
     public function procurar_pagamento(Request $request)
     {
-        return PagamentosRepresentantes::where('parcela_id', $request->parcela_id)->get();
+        return PagamentosRepresentantes::where('parcela_id', $request->parcela_id)
+            ->orderBy('data')
+            ->get();
     }
 
     public function historicoParcela(Request $request)
