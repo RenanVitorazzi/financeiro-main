@@ -92,7 +92,26 @@ Editar despesa
 <?php unset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a); ?>
 <?php endif; ?>
         </div>
-        
+
+        <div class="col-6 form-group">
+            <label for="conta_id">Conta do Pagamento</label>
+            <?php if (isset($component)) { $__componentOriginal9664ac210be45add4be058f3177c16028511e71a = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Select::class, []); ?>
+<?php $component->withName('select'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['name' => 'conta_id']); ?>
+                <option></option>
+                <?php $__currentLoopData = $contas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $conta): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($conta->id); ?>" <?php echo e($despesa->conta_id == $conta->id ? 'selected' : ''); ?>><?php echo e($conta->nome); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+             <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>
+<?php $component = $__componentOriginal9664ac210be45add4be058f3177c16028511e71a; ?>
+<?php unset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a); ?>
+<?php endif; ?>
+        </div>
         
         <div class="col-12 form-group">
             <label for="observacao">Observação</label>

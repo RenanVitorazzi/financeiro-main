@@ -31,6 +31,7 @@ class NovaDespesaRequest extends FormRequest
             'fixas_id' => ['nullable', 'numeric'],
             'data_referencia' => ['nullable', 'date', 'date_format:Y-m-d'],
             'observacao' => ['nullable', 'string', 'max:255'],
+            'conta_id' => ['nullable', 'numeric'],
         ];
     }
 }

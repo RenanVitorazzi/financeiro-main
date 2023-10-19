@@ -6,12 +6,12 @@ use App\Http\Requests\NovaDespesaRequest;
 use App\Models\Despesa as ModelsDespesa;
 use App\Models\DespesaFixa;
 use App\Models\Local;
-use Despesa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DespesaImport;
+use App\Models\Conta;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,12 +41,12 @@ class DespesaController extends Controller
             ->orderBy('dia_vencimento')
             ->get();
             
-        $despesas = ModelsDespesa::with('local')
+        $despesas = ModelsDespesa::with('local', 'conta') 
             ->where(DB::raw('MONTH(data_vencimento)'), DB::raw('MONTH(CURDATE())'))
             ->whereYear('data_vencimento', DB::raw('YEAR(CURDATE())'))
             ->orderBy('local_id')
             ->get();
-
+        
         $mes = date('m');
 
         return view('despesa.index', compact('despesas', 'fixasNaoPagas', 'mes'));
@@ -68,13 +68,15 @@ class DespesaController extends Controller
             ->orderBy('local_id')
             ->get()
             ->toJson();
+
+        $contas = Conta::select('id','nome')->get();
         
         $data = NULL;
         $descricao = NULL;
         $valor = NULL;
         $conta = NULL;
 
-        return view('despesa.create', compact('locais', 'fixas', 'data', 'descricao', 'valor', 'conta' ));
+        return view('despesa.create', compact('locais', 'fixas', 'data', 'descricao', 'valor', 'conta', 'contas'));
     }
 
     /**
@@ -107,8 +109,9 @@ class DespesaController extends Controller
     {
         $locais = Local::all();
         $despesa = ModelsDespesa::with('local')->findOrFail($id);
+        $contas = Conta::select('id','nome')->get();
 
-        return view('despesa.edit', compact('locais', 'despesa'));
+        return view('despesa.edit', compact('locais', 'despesa', 'contas'));
     }
 
     /**

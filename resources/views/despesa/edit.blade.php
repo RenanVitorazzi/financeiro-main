@@ -43,7 +43,16 @@ Editar despesa
                 @endforeach
             </x-select>
         </div>
-        
+
+        <div class="col-6 form-group">
+            <label for="conta_id">Conta do Pagamento</label>
+            <x-select name="conta_id">
+                <option></option>
+                @foreach ($contas as $conta)
+                    <option value="{{ $conta->id }}" {{ $despesa->conta_id == $conta->id ? 'selected' : '' }}>{{ $conta->nome }}</option>
+                @endforeach
+            </x-select>
+        </div>
         
         <div class="col-12 form-group">
             <label for="observacao">Observação</label>

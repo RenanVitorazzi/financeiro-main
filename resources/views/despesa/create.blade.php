@@ -48,15 +48,25 @@ Cadastro de despesa
                 @endforeach
             </x-select>
         </div>
+        
+
         <div class="col-6 form-group">
-            <x-input name="fixas_id" type="hidden" value="{{ old('fixas_id') }}"></x-input>
+            <label for="conta_id">Conta do Pagamento</label>
+            <x-select name="conta_id">
+                <option></option>
+                @foreach ($contas as $conta)
+                    <option value="{{ $conta->id }}" {{ old('conta_id') == $conta->id ? 'selected' : '' }}>{{ $conta->nome }}</option>
+                @endforeach
+            </x-select>
         </div>
 
         <div class="col-12 form-group">
             <label for="observacao">Observação</label>
             <x-text-area name="observacao" type="text" value="{{ old('observacao') }}"></x-text-area>
         </div>
-
+        <div class="col-6 form-group">
+            <x-input name="fixas_id" type="hidden" value="{{ old('fixas_id') }}"></x-input>
+        </div>
     </div>
     {{-- <p>@json($fixas)</p> --}}
     <input type="submit" class='btn btn-success'>

@@ -105,6 +105,7 @@ Despesas
         <th>Valor</th>
         <th>Vencimento</th>
         <th>Local</th>
+        <th>Conta do pagamento</th>
         <th></th>
      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -119,6 +120,7 @@ Despesas
                 <td><?php echo 'R$ ' . number_format($despesa->valor, 2, ',', '.'); ?></td>
                 <td><?php echo date('d/m/Y', strtotime($despesa->data_vencimento)); ?></td>
                 <td><?php echo e($despesa->local->nome); ?></td>
+                <td><?php echo e($despesa->conta->nome ?? ''); ?></td>
                 <td>
                     <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
