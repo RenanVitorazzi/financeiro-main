@@ -9,7 +9,7 @@ use DateTime;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
-class DespesaImport implements ToCollection
+class DespesaImportItau implements ToCollection
 {
     public array $arrayDados = [];
     public $dataInicio;

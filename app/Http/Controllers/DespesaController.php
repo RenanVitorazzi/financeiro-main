@@ -10,10 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\DespesaImport;
+use App\Imports\RelatorioPixImportBradesco;
 use App\Models\Conta;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Excel as ExcelExcel;
 
 class DespesaController extends Controller
 {
@@ -159,10 +160,15 @@ class DespesaController extends Controller
 
     public function importDespesas (Request $request)
     {
-        $import = new DespesaImport;
+        $import = (new RelatorioPixImportBradesco);
         Excel::import($import, $request->file('importacao'));
+        return view('importacao.relatorioPixBradesco', compact('import'));
+        
+        //! ITAÚ - Consolidado emrpesa jurídica (em desuso)
+        // $import = new DespesaImportItau;
+        // Excel::import($import, $request->file('importacao'));
+        // return view('despesa.importacao', compact('import'));
 
-        return view('despesa.importacao', compact('import'));
     }
 
     public function criarDespesaImportacao($data, $descricao, $valor, $conta)
