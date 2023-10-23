@@ -23,7 +23,7 @@ Cadastro de despesa
         <div class="col-12" id='alertarLancamentoDuplicado'></div>
         <div class="col-6 form-group">
             <label for="nome">Nome da despesa</label>
-            <x-input name="nome" type="text" value="{{ old('nome') }}"></x-input>
+            <x-input name="nome" type="text" value="{{ old('nome', $descricao) }}"></x-input>
         </div>
         <div class="col-6 form-group">
             <label for="data_vencimento">Data do vencimento</label>
@@ -54,8 +54,8 @@ Cadastro de despesa
             <label for="conta_id">Conta do Pagamento</label>
             <x-select name="conta_id">
                 <option></option>
-                @foreach ($contas as $conta)
-                    <option value="{{ $conta->id }}" {{ old('conta_id') == $conta->id ? 'selected' : '' }}>{{ $conta->nome }}</option>
+                @foreach ($contas as $contaBanco)
+                    <option value="{{ $contaBanco->id }}" {{ old('conta_id', $conta) == $contaBanco->id ? 'selected' : '' }}>{{ $contaBanco->nome }}</option>
                 @endforeach
             </x-select>
         </div>

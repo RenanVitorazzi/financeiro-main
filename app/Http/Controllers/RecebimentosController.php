@@ -197,13 +197,13 @@ class RecebimentosController extends Controller
         return redirect()->route('recebimentos.index');
     }
 
-    public function criarRecebimentoImportacao($data, $descricao, $valor, $contaImportacao)
+    public function criarRecebimentoImportacao($data, $descricao, $valor, $contaImportacao, $forma_pagamento, $confirmado, $tipo_pagamento, $comprovante_id)
     {
         $contas = Conta::all();
         $parceiros = Parceiro::all();
         $representantes = Representante::all();
 
-        return view('recebimento.create', compact('contas', 'parceiros', 'representantes', 'data', 'descricao', 'valor', 'contaImportacao'));
+        return view('recebimento.create', compact('contas', 'parceiros', 'representantes', 'data', 'descricao', 'valor', 'contaImportacao', 'forma_pagamento',  'confirmado',  'tipo_pagamento',  'comprovante_id'));
     }
 
     public function pdf_confirmar_depositos()
@@ -245,4 +245,22 @@ class RecebimentosController extends Controller
         }
         
     }
+
+    public function linkarPixId(Request $request)
+    {
+        $pr = PagamentosRepresentantes::findOrFail($request->pr_id);
+
+        $pr->update([
+            'confirmado' => 1,
+            'conta_id' => $request->conta_id,
+            'comprovante_id' => $request->comprovante_id
+        ]);
+
+        return response()->json([
+            'status' => 'success', 
+            'data' => [], 
+            'message' => 'Dados atualizados!'
+        ], 200);
+    }
+    
 }

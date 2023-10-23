@@ -27,7 +27,7 @@ Cadastro de despesa
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['name' => 'nome','type' => 'text','value' => ''.e(old('nome')).'']); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['name' => 'nome','type' => 'text','value' => ''.e(old('nome', $descricao)).'']); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7)): ?>
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
@@ -108,8 +108,8 @@ Cadastro de despesa
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes(['name' => 'conta_id']); ?>
                 <option></option>
-                <?php $__currentLoopData = $contas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $conta): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($conta->id); ?>" <?php echo e(old('conta_id') == $conta->id ? 'selected' : ''); ?>><?php echo e($conta->nome); ?></option>
+                <?php $__currentLoopData = $contas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contaBanco): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($contaBanco->id); ?>" <?php echo e(old('conta_id', $conta) == $contaBanco->id ? 'selected' : ''); ?>><?php echo e($contaBanco->nome); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
