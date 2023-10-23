@@ -21,6 +21,7 @@ use App\Http\Controllers\OpController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\RecebimentosController;
 use App\Http\Controllers\EntregaParcelaController;
+use App\Models\PagamentosRepresentantes;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -51,6 +52,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('atualizar_conta_corrente/{parceiro_id}', [ParceiroController::class, 'atualizar_conta_corrente'])->name('atualizar_conta_corrente');
 
         Route::post('recebimentos/createApi', [RecebimentosController::class, 'recebimentoCreateApi'])->name('recebimentoCreateApi');
+        Route::post('recebimentos/importacao/linkarPixId', [RecebimentosController::class, 'linkarPixId'])->name('linkarPixId');
 
         Route::post('resgatar_cheque/{id}', [TrocaChequeController::class, 'resgatar_cheque'])->name('resgatar_cheque');
         Route::post('baixarDebitosRepresentantes/{representante_id}', [RepresentanteController::class, 'baixarDebitosRepresentantes'])->name('baixarDebitosRepresentantes');
@@ -84,7 +86,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('despesa/import', [DespesaController::class, 'importDespesas'])->name('importDespesas');
         Route::view('despesa/importacao', 'despesa.importacao')->name('importacao');
         Route::get('despesas/criarDespesaImportacao/{data}/{descricao}/{valor}/{conta}', [DespesaController::class, 'criarDespesaImportacao'])->name('criarDespesaImportacao');
-        Route::get('recebimentos/criarRecebimentoImportacao/{data}/{descricao}/{valor}/{conta}', [RecebimentosController::class, 'criarRecebimentoImportacao'])->name('criarRecebimentoImportacao');
+        Route::get('recebimentos/criarRecebimentoImportacao/{data}/{descricao}/{valor}/{conta}/{forma_pagamento}/{confirmado}/{tipo_pagamento}/{comprovante_id}', [RecebimentosController::class, 'criarRecebimentoImportacao'])->name('criarRecebimentoImportacao');
 
         //? PDF
         Route::get('pdf_troca/{id}', [TrocaChequeController::class, 'pdf_troca'])->name('pdf_troca');

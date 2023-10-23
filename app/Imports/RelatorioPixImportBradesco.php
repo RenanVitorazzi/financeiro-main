@@ -48,6 +48,10 @@ class RelatorioPixImportBradesco implements ToCollection
                 $pagamentosRepresentantes = PagamentosRepresentantes::query()
                     ->where('valor', $valorCredito)
                     ->whereDate('data', $data)
+                    ->where(function ($query) use ($pixId) {
+                        $query->whereNull('comprovante_id')
+                            ->orWhere('comprovante_id', $pixId);
+                    })
                     ->get();
                 
                 $pagamentoRefVendas= Parcela::query()
@@ -74,10 +78,14 @@ class RelatorioPixImportBradesco implements ToCollection
                 $pagamentosParceiros = ModelsPagamentosParceiros::query()
                     ->where('valor', $valorDebito)
                     ->whereDate('data', $data)
+                    ->where(function ($query) use ($pixId) {
+                        $query->whereNull('comprovante_id')
+                            ->orWhere('comprovante_id', $pixId);
+                    })
                     ->get();
                 
                 $despesas = Despesa::where('valor', $valorDebito)
-                    // ->whereDate('data_vencimento', $data)
+                    ->whereDate('data_vencimento', $data)
                     ->get();
                 
                 $info = [

@@ -183,15 +183,15 @@ Adicionar recebimento
 <?php $component->withName('select'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['name' => 'forma_pagamento','value' => ''.e(old('forma_pagamento')).'']); ?>
+<?php $component->withAttributes(['name' => 'forma_pagamento']); ?>
                         <option></option>
-                        <option value='Pix' <?php echo e(old('forma_pagamento') == 'PIX' ? 'selected' : ''); ?> > PIX </option>
-                        <option value='Cheque' <?php echo e(old('forma_pagamento') == 'Cheque' ? 'selected' : ''); ?> > Cheque </option>
-                        <option value='TED' <?php echo e(old('forma_pagamento') == 'TED' ? 'selected' : ''); ?> > TED </option>
-                        <option value='Depósito' <?php echo e(old('forma_pagamento') == 'Depósito' ? 'selected' : ''); ?> > Depósito </option>
-                        <option value='DOC' <?php echo e(old('forma_pagamento') == 'DOC' ? 'selected' : ''); ?> > DOC </option>
-                        <option value='Dinheiro' <?php echo e(old('forma_pagamento') == 'Dinheiro' ? 'selected' : ''); ?> > Dinheiro </option>
-                        <option value='Acerto' <?php echo e(old('forma_pagamento') == 'Acerto' ? 'selected' : ''); ?> > Acerto </option>
+                        <option value='Pix' <?php echo e(old('forma_pagamento', $forma_pagamento) == 'Pix' ? 'selected' : ''); ?> > PIX </option>
+                        <option value='Cheque' <?php echo e(old('forma_pagamento', $forma_pagamento) == 'Cheque' ? 'selected' : ''); ?> > Cheque </option>
+                        <option value='TED' <?php echo e(old('forma_pagamento', $forma_pagamento) == 'TED' ? 'selected' : ''); ?> > TED </option>
+                        <option value='Depósito' <?php echo e(old('forma_pagamento', $forma_pagamento) == 'Depósito' ? 'selected' : ''); ?> > Depósito </option>
+                        <option value='DOC' <?php echo e(old('forma_pagamento', $forma_pagamento) == 'DOC' ? 'selected' : ''); ?> > DOC </option>
+                        <option value='Dinheiro' <?php echo e(old('forma_pagamento', $forma_pagamento) == 'Dinheiro' ? 'selected' : ''); ?> > Dinheiro </option>
+                        <option value='Acerto' <?php echo e(old('forma_pagamento', $forma_pagamento) == 'Acerto' ? 'selected' : ''); ?> > Acerto </option>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>
@@ -208,7 +208,7 @@ Adicionar recebimento
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes(['name' => 'confirmado']); ?>
                         <option></option>
-                        <option value=1 <?php echo e(old('confirmado') == 'Sim' ? 'selected' : ''); ?> > Sim </option>
+                        <option value=1 <?php echo e(old('confirmado', $confirmado) == '1' ? 'selected' : ''); ?> > Sim </option>
                         <option value=0 <?php echo e(old('confirmado') == 'Não' ? 'selected' : ''); ?> > Não </option>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -226,10 +226,10 @@ Adicionar recebimento
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes(['name' => 'tipo_pagamento','value' => ''.e(old('tipo_pagamento')).'']); ?>
                         <option></option>
-                        <option value=2 <?php echo e(old('tipo_pagamento') == '2' ? 'selected' : ''); ?> > Cliente para a empresa </option>
-                        <option value=1 <?php echo e(old('tipo_pagamento') == '1' ? 'selected' : ''); ?> > Empresa para o parceiro </option>
-                        <option value=3 <?php echo e(old('tipo_pagamento') == '3' ? 'selected' : ''); ?> > Cliente para o parceiro </option>
-                        <option value=4 <?php echo e(old('tipo_pagamento') == '4' ? 'selected' : ''); ?> > Cliente para outro parceiro </option>
+                        <option value=2 <?php echo e(old('tipo_pagamento', $tipo_pagamento) == '2' ? 'selected' : ''); ?> > Cliente para a empresa </option>
+                        <option value=1 <?php echo e(old('tipo_pagamento', $tipo_pagamento) == '1' ? 'selected' : ''); ?> > Empresa para o parceiro </option>
+                        <option value=3 <?php echo e(old('tipo_pagamento', $tipo_pagamento) == '3' ? 'selected' : ''); ?> > Cliente para o parceiro </option>
+                        <option value=4 <?php echo e(old('tipo_pagamento', $tipo_pagamento) == '4' ? 'selected' : ''); ?> > Cliente para outro parceiro </option>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>
@@ -239,11 +239,11 @@ Adicionar recebimento
                 </div>
                 <div class="col-12">
                     <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['type' => 'text','name' => 'comprovante_id','value' => ''.e(old('comprovante_id')).'']]); ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['type' => 'text','name' => 'comprovante_id','value' => ''.e(old('comprovante_id', $comprovante_id)).'']]); ?>
 <?php $component->withName('form-group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['type' => 'text','name' => 'comprovante_id','value' => ''.e(old('comprovante_id')).'']); ?>Comprovante ID <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['type' => 'text','name' => 'comprovante_id','value' => ''.e(old('comprovante_id', $comprovante_id)).'']); ?>Comprovante ID <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>

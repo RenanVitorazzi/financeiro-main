@@ -174,12 +174,13 @@ class DespesaController extends Controller
     public function criarDespesaImportacao($data, $descricao, $valor, $conta)
     {
         $locais = Local::all();
+        $contas = Conta::all();
         $fixas = DespesaFixa::with('local')
             ->orderBy('local_id')
             ->get()
             ->toJson();
 
-        return view('despesa.create', compact('locais', 'fixas', 'data', 'descricao', 'valor', 'conta'));
+        return view('despesa.create', compact('locais', 'fixas', 'data', 'descricao', 'valor', 'conta', 'contas'));
     }
 
     public function pdf_despesa_mensal ($mes)

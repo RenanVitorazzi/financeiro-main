@@ -87,22 +87,22 @@ Adicionar recebimento
                 </div>
                 <div class="col-4 form-group">
                     <label for="forma_pagamento">Forma de Pagamento</label>
-                    <x-select name="forma_pagamento" value="{{ old('forma_pagamento') }}">
+                    <x-select name="forma_pagamento">
                         <option></option>
-                        <option value='Pix' {{ old('forma_pagamento') == 'PIX' ? 'selected' : '' }} > PIX </option>
-                        <option value='Cheque' {{ old('forma_pagamento') == 'Cheque' ? 'selected' : '' }} > Cheque </option>
-                        <option value='TED' {{ old('forma_pagamento') == 'TED' ? 'selected' : '' }} > TED </option>
-                        <option value='Depósito' {{ old('forma_pagamento') == 'Depósito' ? 'selected' : '' }} > Depósito </option>
-                        <option value='DOC' {{ old('forma_pagamento') == 'DOC' ? 'selected' : '' }} > DOC </option>
-                        <option value='Dinheiro' {{ old('forma_pagamento') == 'Dinheiro' ? 'selected' : '' }} > Dinheiro </option>
-                        <option value='Acerto' {{ old('forma_pagamento') == 'Acerto' ? 'selected' : '' }} > Acerto </option>
+                        <option value='Pix' {{ old('forma_pagamento', $forma_pagamento) == 'Pix' ? 'selected' : '' }} > PIX </option>
+                        <option value='Cheque' {{ old('forma_pagamento', $forma_pagamento) == 'Cheque' ? 'selected' : '' }} > Cheque </option>
+                        <option value='TED' {{ old('forma_pagamento', $forma_pagamento) == 'TED' ? 'selected' : '' }} > TED </option>
+                        <option value='Depósito' {{ old('forma_pagamento', $forma_pagamento) == 'Depósito' ? 'selected' : '' }} > Depósito </option>
+                        <option value='DOC' {{ old('forma_pagamento', $forma_pagamento) == 'DOC' ? 'selected' : '' }} > DOC </option>
+                        <option value='Dinheiro' {{ old('forma_pagamento', $forma_pagamento) == 'Dinheiro' ? 'selected' : '' }} > Dinheiro </option>
+                        <option value='Acerto' {{ old('forma_pagamento', $forma_pagamento) == 'Acerto' ? 'selected' : '' }} > Acerto </option>
                     </x-select>
                 </div>
                 <div class="col-4 form-group">
                     <label for="confirmado">Pagamento Confirmado?</label>
                     <x-select name="confirmado">
                         <option></option>
-                        <option value=1 {{ old('confirmado') == 'Sim' ? 'selected' : '' }} > Sim </option>
+                        <option value=1 {{ old('confirmado', $confirmado) == '1' ? 'selected' : '' }} > Sim </option>
                         <option value=0 {{ old('confirmado') == 'Não' ? 'selected' : '' }} > Não </option>
                     </x-select>
                 </div>
@@ -110,14 +110,14 @@ Adicionar recebimento
                     <label for="tipo_pagamento">Pagamento</label>
                     <x-select name="tipo_pagamento" value="{{ old('tipo_pagamento') }}">
                         <option></option>
-                        <option value=2 {{ old('tipo_pagamento') == '2' ? 'selected' : '' }} > Cliente para a empresa </option>
-                        <option value=1 {{ old('tipo_pagamento') == '1' ? 'selected' : '' }} > Empresa para o parceiro </option>
-                        <option value=3 {{ old('tipo_pagamento') == '3' ? 'selected' : '' }} > Cliente para o parceiro </option>
-                        <option value=4 {{ old('tipo_pagamento') == '4' ? 'selected' : '' }} > Cliente para outro parceiro </option>
+                        <option value=2 {{ old('tipo_pagamento', $tipo_pagamento) == '2' ? 'selected' : '' }} > Cliente para a empresa </option>
+                        <option value=1 {{ old('tipo_pagamento', $tipo_pagamento) == '1' ? 'selected' : '' }} > Empresa para o parceiro </option>
+                        <option value=3 {{ old('tipo_pagamento', $tipo_pagamento) == '3' ? 'selected' : '' }} > Cliente para o parceiro </option>
+                        <option value=4 {{ old('tipo_pagamento', $tipo_pagamento) == '4' ? 'selected' : '' }} > Cliente para outro parceiro </option>
                     </x-select>
                 </div>
                 <div class="col-12">
-                    <x-form-group type="text" name="comprovante_id" value="{{ old('comprovante_id') }}">Comprovante ID</x-form-group>
+                    <x-form-group type="text" name="comprovante_id" value="{{ old('comprovante_id', $comprovante_id) }}">Comprovante ID</x-form-group>
                 </div>
                 <!-- <div class="col-4 form-group">
                     <label for="parceiro_id">Parceiro</label>
