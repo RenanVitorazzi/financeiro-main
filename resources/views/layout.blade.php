@@ -183,12 +183,22 @@
                     <span>Entregar/Pegar cheques</span>
                   </a>
                 </li>
-                {{-- <li @if(route('adiamentos.index') == Request::url()) class="ativo" @endif>
+                @if (auth()->user()->id == 1)
+                
+                <li @if(route('import') == Request::url()) class="ativo" @endif>
+                  <a href="{{ route('import') }}">
+                    <i class="fas fa-file-import"></i>
+                    <span>Importar Pix Bradesco</span>
+                  </a>
+                </li>
+                
+                @endif
+                <li @if(route('adiamentos.index') == Request::url()) class="ativo" @endif>
                     <a href="{{ route('adiamentos.index') }}">
                       <i class="fas fa-clock"></i>
                       <span>Prorrogações</span>
                     </a>
-                </li> --}}
+                </li>
                 {{-- <li @if(route('devolvidos.index') == Request::url()) class="ativo" @endif>
                     <a href="{{ route('devolvidos.index') }}">
                       <i class="fas fa-undo-alt"></i>

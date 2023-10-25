@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class NovaDespesaRequest extends FormRequest
 {
@@ -23,6 +24,8 @@ class NovaDespesaRequest extends FormRequest
      */
     public function rules()
     {
+        $formasPagamento = ['Boleto', 'Dinheiro', 'Cheque', 'Cartão de Crédito', 'Cartão de Débito', 'Depósito', 'TED', 'DOC', 'Pix'];
+
         return [
             'nome' => ['required', 'string', 'max:255'],
             'data_vencimento' => ['required', 'date', 'date_format:Y-m-d'],
@@ -32,6 +35,9 @@ class NovaDespesaRequest extends FormRequest
             'data_referencia' => ['nullable', 'date', 'date_format:Y-m-d'],
             'observacao' => ['nullable', 'string', 'max:255'],
             'conta_id' => ['nullable', 'numeric'],
+            'comprovante_id' => ['nullable'],
+            'data_pagamento' => ['required', 'date', 'date_format:Y-m-d'],
+            'forma_pagamento' => ['required', Rule::in($formasPagamento)],
         ];
     }
 }

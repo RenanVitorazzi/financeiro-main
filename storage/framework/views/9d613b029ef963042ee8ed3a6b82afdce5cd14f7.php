@@ -10,7 +10,6 @@ Cadastro de despesa
         <li class="breadcrumb-item active" aria-current="page">Cadastro</li>
     </ol>
 </nav>
-
 <div class="btn btn-dark" id="procurarFixa">
     Procurar despesa fixa <i class="ml-2 fas fa-search"></i>
 </div>
@@ -64,13 +63,13 @@ Cadastro de despesa
         </div>
 
         <div class="col-6 form-group">
-            <label for="data_referencia">Mês de referência</label>
+            <label for="data_pagamento">Data do Pagamento</label>
             <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['name' => 'data_referencia','type' => 'date','value' => ''.e(old('data_referencia')).'']); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['name' => 'data_pagamento','type' => 'date','value' => ''.e(old('data_pagamento', $data)).'']); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7)): ?>
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
@@ -97,10 +96,44 @@ Cadastro de despesa
 <?php unset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a); ?>
 <?php endif; ?>
         </div>
-        
 
         <div class="col-6 form-group">
-            <label for="conta_id">Conta do Pagamento</label>
+            <label for="forma_pagamento">Forma de pagamento</label>
+            <?php if (isset($component)) { $__componentOriginal9664ac210be45add4be058f3177c16028511e71a = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Select::class, []); ?>
+<?php $component->withName('select'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['name' => 'forma_pagamento']); ?>
+                
+                <?php $__currentLoopData = $formasPagamento; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pagamento): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($pagamento); ?>" <?php echo e(old('forma_pagamento', $forma_pagamento) == $pagamento ? 'selected' : ''); ?>><?php echo e($pagamento); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+             <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>
+<?php $component = $__componentOriginal9664ac210be45add4be058f3177c16028511e71a; ?>
+<?php unset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a); ?>
+<?php endif; ?>
+        </div>
+
+        <div class="col-6 form-group">
+            <label for="comprovante_id">Comprovante ID</label>
+            <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
+<?php $component->withName('input'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['name' => 'comprovante_id','type' => 'text','value' => ''.e(old('comprovante_id', $comprovante_id)).'']); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7)): ?>
+<?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
+<?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
+<?php endif; ?>
+        </div>
+
+        <div class="col-6 form-group">
+            <label for="conta_id">Conta</label>
             <?php if (isset($component)) { $__componentOriginal9664ac210be45add4be058f3177c16028511e71a = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Select::class, []); ?>
 <?php $component->withName('select'); ?>

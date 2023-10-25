@@ -65,13 +65,23 @@ Relatório PIX BRADESCO
                                         data-tabela="pagamentos_representantes"
                                         >Relacionar por PIX ID
                                     </span>
-                                    {{-- <i class='fas fa-check fa-lg mt-2'></i> --}}
                                 </div>
                             @endif
                         @empty
-                            <span class='btn btn-dark'>
-                                <span>Lançar recebimento <i class='fas fa-plus ml-2'></i></span>
-                            </span>
+                            <a class="btn btn-dark" target="_blank"
+                                href="{{route('criarRecebimentoImportacao', [
+                                    'data' => $item['data'],
+                                    'descricao' => $item['nome'],
+                                    'valor' => $item['valor'],
+                                    'conta' => $import->conta->id,
+                                    'forma_pagamento' => 'Pix',
+                                    'confirmado' => 1,
+                                    'tipo_pagamento' => 2,
+                                    'comprovante_id' => $item['comprovante_id']
+                                ])}}"
+                            >
+                                Lançar recebimento <i class='fas fa-plus ml-2'></i>
+                            </a>
                             <span class='btn btn-danger botaoIgnorar'>
                                 <span>Ignorar <i class='fas fa-trash ml-2'></i></span>
                             </span>
@@ -82,36 +92,69 @@ Relatório PIX BRADESCO
                     <td>@moeda($item['valor'])</td>
                     <td></td>
                     <td>
-                        @forelse ($item['pagamentosParceiros'] as $pr)
-                            {{-- @dd($pr) --}}
-                            <p>
-                                @if($pr->comprovante_id == $item['comprovante_id'])
-                                    <div class="alert alert-success pointer border border-success relacionarPixId" 
-                                        data-movimentacao_nome="{{$item['nome']}}"
-                                        data-movimentacao_comprovante_id="{{$item['comprovante_id']}}"
-                                        data-pr="{{$pr}}"
-                                        data-tabela="pagamentos_parceiros"
-                                    >
-                                        Pagamento relacionado pelo <b>PIX ID</b>
-                                        <br>
-                                        <i class='fas fa-check fa-lg mt-2'></i>
-                                    </div>
-                                @elseif ($item['valor'] == $pr->valor && $item['data'] == $pr->data && $pr->comprovante_id == NULL)
-                                    <div class="alert alert-success" >
-                                        Pagamento relacionado pela <b>data</b> e <b>valor</b>
-                                        <br>
-                                        <span class='btn btn-success mt-2 relacionarPixId'>Relacionar por PIX ID</span>
-                                        {{-- <i class='fas fa-check fa-lg mt-2'></i> --}}
-                                    </div>
-                                @endif
-                            </p>
-                        @empty
+                        @if ($item['pagamentosParceiros']->isNotEmpty())
+                            @foreach ($item['pagamentosParceiros'] as $pr)
+                                <p>
+                                    @if ($pr->comprovante_id == $item['comprovante_id'])
+                                        <div class="alert alert-success pointer border border-success relacionarPixId" 
+                                            data-movimentacao_nome="{{$item['nome']}}"
+                                            data-movimentacao_comprovante_id="{{$item['comprovante_id']}}"
+                                            data-pr="{{$pr}}"
+                                            data-tabela="pagamentos_parceiros"
+                                        >
+                                            Pagamento relacionado pelo <b>PIX ID</b>
+                                            <br>
+                                            <i class='fas fa-check fa-lg mt-2'></i>
+                                        </div>
+                                    @elseif ($item['valor'] == $pr->valor && $item['data'] == $pr->data && $pr->comprovante_id == NULL)
+                                        <div class="alert alert-success" >
+                                            Pagamento relacionado pela <b>data</b> e <b>valor</b>
+                                            <br>
+                                            <span class='btn btn-success mt-2 relacionarPixId'>Relacionar por PIX ID</span>
+                                        </div>
+                                    @endif
+                                </p>
+                            @endforeach
+                        @elseif ($item['despesas']->isNotEmpty())
+                        {{-- @dd($item['despesas']) --}}
+                            @foreach ($item['despesas'] as $pr)
+                                <p>
+                                    @if ($pr->comprovante_id == $item['comprovante_id'])
+                                        <div class="alert alert-success pointer border border-success relacionarPixIdDespesa" 
+                                            data-movimentacao_nome="{{$item['nome']}}"
+                                            data-movimentacao_comprovante_id="{{$item['comprovante_id']}}"
+                                            data-pr="{{$pr}}"
+                                            data-tabela="despesas"
+                                        >
+                                            Despesa relacionada pelo <b>PIX ID</b>
+                                            <br>
+                                            <i class='fas fa-check fa-lg mt-2'></i>
+                                        </div>
+                                    @elseif ($item['valor'] == $pr->valor && ($item['data'] == $pr->data_pagamento || $item['data'] == $pr->data_vencimento) && $pr->comprovante_id == NULL)
+                                        <div class="alert alert-success relacionarPixIdDespesa" 
+                                            data-movimentacao_nome="{{$item['nome']}}"
+                                            data-movimentacao_comprovante_id="{{$item['comprovante_id']}}"
+                                            data-pr="{{$pr}}"
+                                            data-tabela="despesas"
+                                        >
+                                            Despesa relacionada pela <b>data</b> e <b>valor</b>
+                                            <br>
+                                            <span class='btn btn-success mt-2 '>Relacionar por PIX ID</span>
+                                        </div>
+                                    @endif
+                                </p>
+                            @endforeach
+                        @endif
+
+                        @if ($item['pagamentosParceiros']->isEmpty() && $item['despesas']->isEmpty())
                             <a class="btn btn-dark" target="_blank"
                                 href="{{ route('criarDespesaImportacao', [
                                     'data' => $item['data'],
                                     'descricao' => $item['nome'],
                                     'valor' => $item['valor'],
-                                    'conta' => $import->conta->id
+                                    'conta' => $import->conta->id,
+                                    'forma_pagamento' => 'Pix',
+                                    'comprovante_id' => $item['comprovante_id']
                                 ])}}"
                             >
                                 Despesa <i class='fas fa-plus ml-2'></i>
@@ -136,6 +179,7 @@ Relatório PIX BRADESCO
                             </span>
                         @endif
                     </td>
+                    
                 @endif
             </tr>
         @empty
@@ -177,6 +221,67 @@ Relatório PIX BRADESCO
             consultarInfos(data)
         })
     })
+
+    $(".relacionarPixIdDespesa").each( (index, element) => {
+        $(element).click( (elementoBotao) => {
+            let data = $(elementoBotao.currentTarget).data();
+            consultarInfosDespesa(data)
+        })
+    })
+
+    function consultarInfosDespesa(data) {
+        MODAL_LG.modal("show")
+        MODAL_TITLE.text("INFORMAÇÕES DO PIX")
+        console.log(data)
+        let pr = data.pr;
+        let pixId = data.movimentacao_comprovante_id;
+        let alertPixId = '';
+
+        pagamento_referente = criarHtmlRefPagamento(pr, pixId, data.tabela)
+        $("#limitante").empty()
+
+        if (pr.comprovante_id !== pixId) {
+            MODAL_FOOTER.prepend(`
+                <div id='limitante'>
+                    <form id='formPixDespesa' action="{{ route('linkarPixIdDespesa') }}">
+                        <meta name="csrf-token-pix" content="{{ csrf_token() }}">
+                        <input type='hidden' name='comprovante_id' value=${pixId}> 
+                        <input type='hidden' name='despesa_id' value=${pr.id}> 
+                        <input type='hidden' name='conta_id' value=${CONTA_ID}> 
+                        <button type='submit' class='btn btn-success'>Relacionar PIX ID</button>
+                    </form>
+                </div>
+            `)
+            alertPixId = `<div class='alert alert-success'>PIX ID: <b>${pixId}</b></div>`
+        }
+
+        let html = `
+            <table class='table table-stripped'>
+                <thead>
+                    <tr>
+                        <th>Nome</th>  
+                        <th>Data</th>  
+                        <th>Valor</th>   
+                        <th>Conta</th>  
+                        <th>Local</th>  
+                        <th>Pix ID</th>  
+                    </tr>  
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${data.movimentacao_nome}</td>  
+                        <td>${pr.data_pagamento}</td>  
+                        <td>${pr.valor}</td>  
+                        <td class="${pr.conta_id != CONTA_ID ? 'table-danger': ''}">${pr.conta ? pr.conta.nome : 'Não informada'}</td>  
+                        <td>${pr.local.nome}</td>  
+                        <td>${pr.comprovante_id ?? 'Não informado'}</td>  
+                    </tr>  
+                </tbody>
+            </table>
+        `
+        atualizarPagamentoDespesa()
+        MODAL_BODY.html(html)
+    }
 
     function consultarInfos (data) {
         MODAL_LG.modal("show")
@@ -329,6 +434,59 @@ Relatório PIX BRADESCO
                         },
                         success: (response) => {
                             console.log(response);
+                            location.reload()
+                        },
+                        error: (jqXHR, textStatus, errorThrown) => {
+                
+                            var response = JSON.parse(jqXHR.responseText)
+                            var errorString = ''
+                            $.each( response.errors, function( key, value) {
+                                errorString += '<div>' + value + '</div>'
+                            });
+                    
+                            Swal.fire({
+                                title: 'Erro',
+                                icon: 'error',
+                                html: errorString
+                            })
+                        }
+                    });
+
+                    Swal.fire('Atualizado!', '', 'success')
+                } else if (result.isDenied) {
+                    Swal.fire('Cancelado', '', 'info')
+                }
+            })
+
+        })
+    }
+
+    function atualizarPagamentoDespesa()
+    {
+        $("#formPixDespesa").submit( (e) => {
+            e.preventDefault()
+            let dataForm = $(e.target).serialize()
+            Swal.fire({
+                title: 'Tem certeza?',
+                icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'Sim',
+                denyButtonText: 'Não'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token-pix"]').attr('content')
+                        },
+                        url: $('#formPixDespesa').attr('action'),
+                        data: dataForm,
+                        dataType: 'json',
+                        beforeSend: () => {
+                            swal.showLoading()
+                        },
+                        success: (response) => {
+                            // console.log(response);
                             location.reload()
                         },
                         error: (jqXHR, textStatus, errorThrown) => {

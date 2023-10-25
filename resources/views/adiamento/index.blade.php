@@ -10,44 +10,30 @@ Prorrogações
 <x-table id="tabelaBalanco">
     <x-table-header>
         <tr>
-            {{-- <th>Cliente</th> --}}
             <th>Titular</th>
-            @if (!auth()->user()->is_representante)
+            <th>Parceiro</th>
             <th>Representante</th>
-            @endif
             <th>Data</th>
+            <th>Nova data</th>
             <th>Valor</th>
-            <th>Detalhes</th>
+            <th>Juros</th>
             <th>Ações</th>
         </tr>
     </x-table-header>
     <tbody>
-        @forelse ($cheques as $cheque)
+        @forelse ($prorrogacoes as $prorrogacao)
+        {{-- @dd($parceiros->where('id', $prorrogacao->parcelas->parceiro_id)->first()->pessoa->nome) --}}
             <tr>
-                {{-- <td>{{ $cheque->venda_id ? $cheque->cliente : 'Não informado' }}</td> --}}
-                <td>{{ $cheque->nome_cheque }}</td>
-                @if (!auth()->user()->is_representante)
-                    @if ($cheque->representante_id)
-                    <td>{{ $cheque->representante->pessoa->nome }}</td>
-                    @else
-                    <td></td>
-                    @endif
-                @endif
-                <td>@data($cheque->data_parcela)</td>
-                <td>@moeda($cheque->valor_parcela)</td>
-                <td>{{ $cheque->numero_cheque }} {{ $cheque->observacao}}</td>
+                <td>{{ $prorrogacao->parcelas->nome_cheque }}</td>
+                
+                <td>{{ $parceiros->where('id', $prorrogacao->parcelas->parceiro_id)->first()->pessoa->nome ?? 'CARTEIRA'}}</td>
+                <td>{{ $representantes->where('id', $prorrogacao->parcelas->representante_id)->first()->pessoa->nome }}</td>
+                <td>@data($prorrogacao->parcelas->data_parcela)</td>
+                <td>@data($prorrogacao->nova_data)</td>
+                <td>@moeda($prorrogacao->parcelas->valor_parcela)</td>
+                <td>@moeda($prorrogacao->juros_totais)</td>
                 <td>
-                    @if ($cheque->status !== 'Resgatado')
-                    <div 
-                        class="btn btn-dark btn-adiar" 
-                        data-id="{{ $cheque->id }}" 
-                        data-dia="{{ $cheque->data_parcela }}" 
-                        data-valor="{{ $cheque->valor_parcela }}" 
-                        data-nome="{{ $cheque->nome_cheque }}"
-                    > 
-                        Adiar <i class="far fa-clock"></i> 
-                    </div>
-                    @endif
+                    <x-botao-excluir action="{{ route('adiamentos.destroy', $prorrogacao->id)}}"></x-botao-excluir>
                     
                 </td>
             </tr>
@@ -58,7 +44,6 @@ Prorrogações
         @endforelse
     </tbody>
 </x-table>
-{{ $cheques->links() }}
 @endsection
 @section('script')
 <script>

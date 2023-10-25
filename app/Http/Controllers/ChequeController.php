@@ -323,8 +323,9 @@ class ChequeController extends Controller
         return redirect()->route('home');
     }
 
-    public function pdf_cheques ($representante_id)
+    public function pdf_cheques ($representante_id, $tipo)
     {
+        
         $representante = Representante::findOrFail($representante_id);
 
         $parcelas = Parcela::with('adiamentos')
@@ -333,11 +334,13 @@ class ChequeController extends Controller
             ['representante_id', $representante_id],
             ['forma_pagamento', 'LIKE', 'Cheque'],
             ['status', 'LIKE', 'Aguardando']
-        ])
-        // ->orderBy('nome_cheque')
-        ->orderBy('data_parcela')
+        ]);
+        if ($tipo != 0) {
+            $parcelas = $parcelas->orderBy($tipo);
+        } 
+        
+        $parcelas = $parcelas->orderBy('data_parcela')
         ->orderBy('valor_parcela')
-
         ->orderBy('numero_cheque')
         ->get();
     

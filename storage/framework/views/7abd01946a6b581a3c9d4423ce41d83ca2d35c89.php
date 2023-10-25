@@ -160,7 +160,22 @@
                     <span>Entregar/Pegar cheques</span>
                   </a>
                 </li>
+                <?php if(auth()->user()->id == 1): ?>
                 
+                <li <?php if(route('import') == Request::url()): ?> class="ativo" <?php endif; ?>>
+                  <a href="<?php echo e(route('import')); ?>">
+                    <i class="fas fa-file-import"></i>
+                    <span>Importar Pix Bradesco</span>
+                  </a>
+                </li>
+                
+                <?php endif; ?>
+                <li <?php if(route('adiamentos.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
+                    <a href="<?php echo e(route('adiamentos.index')); ?>">
+                      <i class="fas fa-clock"></i>
+                      <span>Prorrogações</span>
+                    </a>
+                </li>
                 
             
             </ul>

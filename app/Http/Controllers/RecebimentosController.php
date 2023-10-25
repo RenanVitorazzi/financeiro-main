@@ -48,8 +48,24 @@ class RecebimentosController extends Controller
         $descricao = NULL;
         $valor = NULL;
         $contaImportacao = NULL;
+        $forma_pagamento = NULL;
+        $confirmado = NULL;
+        $tipo_pagamento = NULL;
+        $comprovante_id = NULL;
 
-        return view('recebimento.create', compact('contas', 'parceiros', 'representantes', 'data', 'descricao', 'valor', 'contaImportacao'));
+        return view('recebimento.create', 
+            compact('contas', 
+            'parceiros', 
+            'representantes', 
+            'data', 
+            'descricao', 
+            'valor', 
+            'contaImportacao', 
+            'forma_pagamento', 
+            'confirmado', 
+            'tipo_pagamento', 
+            'comprovante_id')
+        );
     }
 
     /**
@@ -203,7 +219,18 @@ class RecebimentosController extends Controller
         $parceiros = Parceiro::all();
         $representantes = Representante::all();
 
-        return view('recebimento.create', compact('contas', 'parceiros', 'representantes', 'data', 'descricao', 'valor', 'contaImportacao', 'forma_pagamento',  'confirmado',  'tipo_pagamento',  'comprovante_id'));
+        return view('recebimento.create', compact('contas', 
+            'parceiros', 
+            'representantes', 
+            'data', 
+            'descricao', 
+            'valor', 
+            'contaImportacao', 
+            'forma_pagamento', 
+            'confirmado', 
+            'tipo_pagamento', 
+            'comprovante_id')
+        );
     }
 
     public function pdf_confirmar_depositos()

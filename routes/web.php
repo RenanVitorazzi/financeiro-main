@@ -21,7 +21,6 @@ use App\Http\Controllers\OpController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\RecebimentosController;
 use App\Http\Controllers\EntregaParcelaController;
-use App\Models\PagamentosRepresentantes;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -53,6 +52,7 @@ Route::group(['middleware' => ['auth']], function() {
 
         Route::post('recebimentos/createApi', [RecebimentosController::class, 'recebimentoCreateApi'])->name('recebimentoCreateApi');
         Route::post('recebimentos/importacao/linkarPixId', [RecebimentosController::class, 'linkarPixId'])->name('linkarPixId');
+        Route::post('recebimentos/importacao/linkarPixIdDespesa', [DespesaController::class, 'linkarPixIdDespesa'])->name('linkarPixIdDespesa');
 
         Route::post('resgatar_cheque/{id}', [TrocaChequeController::class, 'resgatar_cheque'])->name('resgatar_cheque');
         Route::post('baixarDebitosRepresentantes/{representante_id}', [RepresentanteController::class, 'baixarDebitosRepresentantes'])->name('baixarDebitosRepresentantes');
@@ -85,7 +85,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::view('import', 'despesa.import')->name('import');
         Route::post('despesa/import', [DespesaController::class, 'importDespesas'])->name('importDespesas');
         Route::view('despesa/importacao', 'despesa.importacao')->name('importacao');
-        Route::get('despesas/criarDespesaImportacao/{data}/{descricao}/{valor}/{conta}', [DespesaController::class, 'criarDespesaImportacao'])->name('criarDespesaImportacao');
+        Route::get('despesas/criarDespesaImportacao/{data}/{descricao}/{valor}/{conta}/{forma_pagamento}/{comprovante_id}', [DespesaController::class, 'criarDespesaImportacao'])->name('criarDespesaImportacao');
         Route::get('recebimentos/criarRecebimentoImportacao/{data}/{descricao}/{valor}/{conta}/{forma_pagamento}/{confirmado}/{tipo_pagamento}/{comprovante_id}', [RecebimentosController::class, 'criarRecebimentoImportacao'])->name('criarRecebimentoImportacao');
 
         //? PDF
@@ -105,7 +105,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('adiamento_impresso/{representante_id}', [AdiamentosController::class, 'adiamento_impresso'])->name('adiamento_impresso');
         Route::get('cheques_devolvidos/{representante_id}', [DevolvidosController::class, 'cheques_devolvidos'])->name('cheques_devolvidos');
         Route::get('fechamento_representante/{representante_id}', [DevolvidosController::class, 'fechamento_representante'])->name('fechamento_representante');
-        Route::get('pdf_cheques/{representante_id}', [ChequeController::class, 'pdf_cheques'])->name('pdf_cheques');
+        Route::get('pdf_cheques/{representante_id}/{tipo}', [ChequeController::class, 'pdf_cheques'])->name('pdf_cheques');
         Route::get('pdf_relatorio_vendas/{enviado_conta_corrente_id}', [VendaController::class, 'pdf_relatorio_vendas'])->name('pdf_relatorio_vendas');
         Route::get('pdf_conferencia_relatorio_vendas/{representante_id}', [VendaController::class, 'pdf_conferencia_relatorio_vendas'])->name('pdf_conferencia_relatorio_vendas');
         Route::get('pdf_acerto_documento/{representante_id}', [VendaController::class, 'pdf_acerto_documento'])->name('pdf_acerto_documento');
