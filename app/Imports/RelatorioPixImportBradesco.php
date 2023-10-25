@@ -84,8 +84,19 @@ class RelatorioPixImportBradesco implements ToCollection
                     })
                     ->get();
                 
-                $despesas = Despesa::where('valor', $valorDebito)
-                    ->whereDate('data_vencimento', $data)
+                $despesas = Despesa::with('conta','local')
+                    ->where([
+                        ['valor', $valorDebito],
+                        ['forma_pagamento', 'Pix']
+                    ])
+                    ->where(function ($query) use ($pixId) {
+                        $query->whereNull('comprovante_id')
+                            ->orWhere('comprovante_id', $pixId);
+                    })
+                    ->where(function ($query) use ($data) {
+                        $query->whereDate('data_pagamento', $data)
+                        ->orWhereDate('data_vencimento', $data);
+                    })
                     ->get();
                 
                 $info = [

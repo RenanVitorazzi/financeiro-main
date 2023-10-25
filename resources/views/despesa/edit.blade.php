@@ -30,8 +30,8 @@ Editar despesa
         </div>
 
         <div class="col-6 form-group">
-            <label for="data_referencia">Mês de referência</label>
-            <x-input name="data_referencia" type="date" value="{{ $despesa->data_referencia }}"></x-input>
+            <label for="data_pagamento">Data do Pagamento</label>
+            <x-input name="data_pagamento" type="date" value="{{ $despesa->data_pagamento }}"></x-input>
         </div>
 
         <div class="col-6 form-group">
@@ -43,7 +43,20 @@ Editar despesa
                 @endforeach
             </x-select>
         </div>
+        <div class="col-6 form-group">
+            <label for="forma_pagamento">Forma de pagamento</label>
+            <x-select name="forma_pagamento">
+                {{-- <option></option> --}}
+                @foreach ($formasPagamento as $pagamento)
+                    <option value="{{ $pagamento }}" {{ $despesa->forma_pagamento == $pagamento ? 'selected' : '' }}>{{ $pagamento }}</option>
+                @endforeach
+            </x-select>
+        </div>
 
+        <div class="col-6 form-group">
+            <label for="comprovante_id">Comprovante ID</label>
+            <x-input name="comprovante_id" type="text" value="{{ $despesa->comprovante_id }}"></x-input>
+        </div>
         <div class="col-6 form-group">
             <label for="conta_id">Conta do Pagamento</label>
             <x-select name="conta_id">

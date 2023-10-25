@@ -123,7 +123,7 @@
    
     <br>
 
-    <table>
+    <table  class='page_break'>
         <thead>
 
             <tr>
@@ -181,7 +181,7 @@
 
     <br>
 
-    <table class='page_break'>
+    <table>
         <thead>
             <tr>
                 <th>Forma de pagamento</th>

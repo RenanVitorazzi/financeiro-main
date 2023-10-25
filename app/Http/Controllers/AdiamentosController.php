@@ -15,20 +15,20 @@ use DateTime;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use App\Models\TrocaAdiamento;
+use Illuminate\Http\Request;
 
 class AdiamentosController extends Controller
 {
     public function index()
     {
-        $cheques = Parcela::with('representante')
-            ->where([
-                ['forma_pagamento', 'Cheque']
-            ])
-            ->where('status', 'Adiado')
-            ->orderBy('data_parcela')
-            ->paginate(30);
+        $parceiros = Parceiro::with('pessoa:id,nome')->get();
+        $representantes = Representante::with('pessoa:id,nome')->get();
+        $prorrogacoes = Adiamento::with('parcelas')
+            ->orderBy('id', 'desc')
+            ->take(100)
+            ->get();
 
-        return view('adiamento.index', compact('cheques'));
+        return view('adiamento.index', compact('parceiros', 'representantes', 'prorrogacoes'));
     }
 
     public function store(AdiamentoFormRequest $request)
@@ -153,5 +153,35 @@ class AdiamentosController extends Controller
         $pdf->loadView('adiamento.pdf.pdf_prorrogacao', compact('cheques', 'dia', 'antigosAdiamentos') );
         
         return $pdf->stream();    
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        DB::transaction(function () use ($id) {
+
+            $adiamento = Adiamento::with('parcelas')->findOrFail($id);
+            $parcela = $adiamento->parcelas;
+            $adiamento->delete();
+
+            if ($parcela->parceiro_id) {
+                ModelsTrocaAdiamento::where('parcela_id', $parcela->id)->latest()->first()->delete();
+            }
+            
+            $mov = MovimentacaoCheque::where('parcela_id', $parcela->id)->latest('id')->first();
+            
+            if ($mov->status === 'Adiado') {
+                $mov->delete();
+            }
+          
+            $ultimaMov = MovimentacaoCheque::where('parcela_id', $parcela->id)->latest('id')->first();
+            $status = ($ultimaMov) ? 'Aguardando' : $ultimaMov->status;
+            
+            Parcela::where('id', $parcela->id)->update([
+                'status' => $status
+            ]);
+            
+
+            return 'success';
+        });
     }
 }

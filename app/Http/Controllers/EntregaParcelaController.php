@@ -78,13 +78,16 @@ class EntregaParcelaController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request);
         if ($request->tipo_entrega == 'enviado_correio' && $request->tipo == 'entregue_representante') {
             foreach ($request->cheque_id as $index => $parcela_id) {
                 EntregaParcela::updateOrCreate(
                     ['parcela_id' => $parcela_id],
-                    ['enviado' => DB::raw('NOW()')],
-                    ['codigo_rastreio' => $request->codigo_rastreio],
-                    ['empresa' => 'CORREIOS']
+                    [
+                        'enviado' => DB::raw('NOW()'),
+                        'codigo_rastreio' => $request->codigo_rastreio,
+                        'empresa' => 'CORREIOS'
+                    ]
                 );
             }
         } else {

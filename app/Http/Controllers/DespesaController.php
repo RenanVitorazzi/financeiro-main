@@ -18,6 +18,9 @@ use Maatwebsite\Excel\Excel as ExcelExcel;
 
 class DespesaController extends Controller
 {
+
+    public $formasPagamento = ['Boleto', 'Dinheiro', 'Cheque', 'Cartão de Crédito', 'Cartão de Débito', 'Depósito', 'TED', 'DOC', 'Pix'];
+
     /**
      * Display a listing of the resource.
      *
@@ -58,7 +61,7 @@ class DespesaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
         $locais = Local::all();
         $fixas = DespesaFixa::with(['local', 'despesas' => function ($query) {
@@ -71,13 +74,15 @@ class DespesaController extends Controller
             ->toJson();
 
         $contas = Conta::select('id','nome')->get();
-        
+        $formasPagamento = $this->formasPagamento;
+        $comprovante_id = NULL;
         $data = NULL;
         $descricao = NULL;
         $valor = NULL;
         $conta = NULL;
+        $forma_pagamento = NULL;
 
-        return view('despesa.create', compact('locais', 'fixas', 'data', 'descricao', 'valor', 'conta', 'contas'));
+        return view('despesa.create', compact('locais', 'fixas', 'data', 'descricao', 'valor', 'conta', 'contas', 'formasPagamento', 'comprovante_id', 'forma_pagamento'));
     }
 
     /**
@@ -110,9 +115,11 @@ class DespesaController extends Controller
     {
         $locais = Local::all();
         $despesa = ModelsDespesa::with('local')->findOrFail($id);
+        $formasPagamento = $this->formasPagamento;
+
         $contas = Conta::select('id','nome')->get();
 
-        return view('despesa.edit', compact('locais', 'despesa', 'contas'));
+        return view('despesa.edit', compact('locais', 'despesa', 'contas', 'formasPagamento'));
     }
 
     /**
@@ -171,7 +178,7 @@ class DespesaController extends Controller
 
     }
 
-    public function criarDespesaImportacao($data, $descricao, $valor, $conta)
+    public function criarDespesaImportacao($data, $descricao, $valor, $conta, $forma_pagamento, $comprovante_id)
     {
         $locais = Local::all();
         $contas = Conta::all();
@@ -180,7 +187,9 @@ class DespesaController extends Controller
             ->get()
             ->toJson();
 
-        return view('despesa.create', compact('locais', 'fixas', 'data', 'descricao', 'valor', 'conta', 'contas'));
+        $formasPagamento = $this->formasPagamento;
+
+        return view('despesa.create', compact('locais', 'fixas', 'data', 'descricao', 'valor', 'conta', 'contas', 'forma_pagamento', 'comprovante_id', 'formasPagamento'));
     }
 
     public function pdf_despesa_mensal ($mes)
@@ -197,5 +206,22 @@ class DespesaController extends Controller
         $pdf->loadView('despesa.pdf.pdf_despesa_mensal', compact('despesas', 'mes', 'local') );
 
         return $pdf->stream();
+    }
+
+    public function linkarPixIdDespesa (Request $request)
+    {
+
+        $despesa = ModelsDespesa::findOrFail($request->despesa_id);
+
+        $despesa->update([
+            'conta_id' => $request->conta_id,
+            'comprovante_id' => $request->comprovante_id
+        ]);
+
+        return response()->json([
+            'status' => 'success', 
+            'data' => $request, 
+            'message' => 'Dados atualizados!'
+        ], 200);
     }
 }

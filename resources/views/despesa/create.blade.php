@@ -11,7 +11,6 @@ Cadastro de despesa
         <li class="breadcrumb-item active" aria-current="page">Cadastro</li>
     </ol>
 </nav>
-
 <div class="btn btn-dark" id="procurarFixa">
     Procurar despesa fixa <i class="ml-2 fas fa-search"></i>
 </div>
@@ -35,8 +34,8 @@ Cadastro de despesa
         </div>
 
         <div class="col-6 form-group">
-            <label for="data_referencia">Mês de referência</label>
-            <x-input name="data_referencia" type="date" value="{{ old('data_referencia') }}"></x-input>
+            <label for="data_pagamento">Data do Pagamento</label>
+            <x-input name="data_pagamento" type="date" value="{{ old('data_pagamento', $data) }}"></x-input>
         </div>
 
         <div class="col-6 form-group">
@@ -48,10 +47,24 @@ Cadastro de despesa
                 @endforeach
             </x-select>
         </div>
-        
 
         <div class="col-6 form-group">
-            <label for="conta_id">Conta do Pagamento</label>
+            <label for="forma_pagamento">Forma de pagamento</label>
+            <x-select name="forma_pagamento">
+                {{-- <option></option> --}}
+                @foreach ($formasPagamento as $pagamento)
+                    <option value="{{ $pagamento }}" {{ old('forma_pagamento', $forma_pagamento) == $pagamento ? 'selected' : '' }}>{{ $pagamento }}</option>
+                @endforeach
+            </x-select>
+        </div>
+
+        <div class="col-6 form-group">
+            <label for="comprovante_id">Comprovante ID</label>
+            <x-input name="comprovante_id" type="text" value="{{ old('comprovante_id', $comprovante_id) }}"></x-input>
+        </div>
+
+        <div class="col-6 form-group">
+            <label for="conta_id">Conta</label>
             <x-select name="conta_id">
                 <option></option>
                 @foreach ($contas as $contaBanco)
