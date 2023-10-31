@@ -63,13 +63,7 @@
         </div>
       </div>
       
-      <div class="sidebar-header">
-        
-        <div class="user-info">
-          <span class="user-name"><b><?php echo e(auth()->user()->name); ?></b></span>
-          <span class="user-role"><?php echo e(auth()->user()->is_admin ? 'Administrador' : 'Representante'); ?></span>
-        </div>
-      </div> 
+      
      
       <!-- sidebar-header  -->
       
@@ -160,8 +154,20 @@
                     <span>Entregar/Pegar cheques</span>
                   </a>
                 </li>
-                <?php if(auth()->user()->id == 1): ?>
                 
+                
+                
+                
+                
+            
+            </ul>
+          </div>
+          <?php if(auth()->user()->id == 1): ?>
+          <li class="header-menu">
+            <span>Administração</span>
+          </li>
+            <div class="sidebar-menu">
+              <ul>
                 <li <?php if(route('import') == Request::url()): ?> class="ativo" <?php endif; ?>>
                   <a href="<?php echo e(route('import')); ?>">
                     <i class="fas fa-file-import"></i>
@@ -169,17 +175,16 @@
                   </a>
                 </li>
                 
-                <?php endif; ?>
                 <li <?php if(route('adiamentos.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
                     <a href="<?php echo e(route('adiamentos.index')); ?>">
                       <i class="fas fa-clock"></i>
                       <span>Prorrogações</span>
                     </a>
                 </li>
-                
-            
-            </ul>
-        </div>
+              </ul>
+            </div>
+          </li>
+          <?php endif; ?>
           
           <?php endif; ?>
           <?php if(auth()->user()->is_representante): ?>
