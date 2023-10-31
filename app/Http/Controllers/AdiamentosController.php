@@ -33,6 +33,7 @@ class AdiamentosController extends Controller
 
     public function store(AdiamentoFormRequest $request)
     {
+        // return $request;
         $nova_data = new DateTime($request->nova_data);
         $feriados = Feriados::all();
 

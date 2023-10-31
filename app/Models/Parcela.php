@@ -53,6 +53,7 @@ class Parcela extends Model
     {
         return $query->with('adiamentos')
             ->whereIn('status', ['Aguardando', 'Adiado'])
+            ->whereNull('recebido_representante')
             ->where('forma_pagamento', '=', 'Cheque')
             ->withMax('adiamentos', 'nova_data')
             ->whereNull('parceiro_id')

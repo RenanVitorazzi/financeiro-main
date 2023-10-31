@@ -63,16 +63,16 @@
         </div>
       </div>
       
-      <div class="sidebar-header">
-        {{-- <div class="user-pic">
+      {{-- <div class="sidebar-header">
+        <div class="user-pic">
           <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
             alt="User picture">
-        </div>  --}}
+        </div> 
         <div class="user-info">
           <span class="user-name"><b>{{ auth()->user()->name }}</b></span>
           <span class="user-role">{{ auth()->user()->is_admin ? 'Administrador' : 'Representante' }}</span>
         </div>
-      </div> 
+      </div>  --}}
      
       <!-- sidebar-header  -->
       {{-- <div class="sidebar-search">
@@ -183,22 +183,10 @@
                     <span>Entregar/Pegar cheques</span>
                   </a>
                 </li>
-                @if (auth()->user()->id == 1)
                 
-                <li @if(route('import') == Request::url()) class="ativo" @endif>
-                  <a href="{{ route('import') }}">
-                    <i class="fas fa-file-import"></i>
-                    <span>Importar Pix Bradesco</span>
-                  </a>
-                </li>
                 
-                @endif
-                <li @if(route('adiamentos.index') == Request::url()) class="ativo" @endif>
-                    <a href="{{ route('adiamentos.index') }}">
-                      <i class="fas fa-clock"></i>
-                      <span>Prorrogações</span>
-                    </a>
-                </li>
+                
+                
                 {{-- <li @if(route('devolvidos.index') == Request::url()) class="ativo" @endif>
                     <a href="{{ route('devolvidos.index') }}">
                       <i class="fas fa-undo-alt"></i>
@@ -207,7 +195,30 @@
                 </li> --}}
             
             </ul>
-        </div>
+          </div>
+          @if (auth()->user()->id == 1)
+          <li class="header-menu">
+            <span>Administração</span>
+          </li>
+            <div class="sidebar-menu">
+              <ul>
+                <li @if(route('import') == Request::url()) class="ativo" @endif>
+                  <a href="{{ route('import') }}">
+                    <i class="fas fa-file-import"></i>
+                    <span>Importar Pix Bradesco</span>
+                  </a>
+                </li>
+                
+                <li @if(route('adiamentos.index') == Request::url()) class="ativo" @endif>
+                    <a href="{{ route('adiamentos.index') }}">
+                      <i class="fas fa-clock"></i>
+                      <span>Prorrogações</span>
+                    </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          @endif
           {{-- <li class="sidebar-dropdown">
                 <a href="#">
                 <i class="fas fa-dollar-sign"></i>
