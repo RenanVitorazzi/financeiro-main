@@ -239,21 +239,25 @@ class ParceiroController extends Controller
     public function atualizar_conta_corrente (AtualizarContaCorrenteParceiro $request, $parceiro_id) {
 
         $resultado = DB::transaction(function () use ($request) {
-
-            foreach ($request->mc as $key => $parcela_id) {
-                MovimentacaoCheque::create([
-                    'status' => 'Pago parceiro',
-                    'data' => now(),
-                    'parcela_id' => $parcela_id
-                ]);
+            if ($request->mc) {
+                foreach ($request->mc as $key => $parcela_id) {
+                    MovimentacaoCheque::create([
+                        'status' => 'Pago parceiro',
+                        'data' => now(),
+                        'parcela_id' => $parcela_id
+                    ]);
+                }
             }
-
-            foreach ($request->ta as $key => $adiamento_id) {
-                ModelsTrocaAdiamento::findOrFail($adiamento_id)->update(['pago' => 1]);
+            if($request->ta) {
+                foreach ($request->ta as $key => $adiamento_id) {
+                    ModelsTrocaAdiamento::findOrFail($adiamento_id)->update(['pago' => 1]);
+                }
             }
             
-            foreach ($request->pp as $key => $pagamento_parceiro_id) {
-                ModelsPagamentosParceiros::findOrFail($pagamento_parceiro_id)->update(['baixado' => 1]);
+            if($request->pp) {
+                foreach ($request->pp as $key => $pagamento_parceiro_id) {
+                    ModelsPagamentosParceiros::findOrFail($pagamento_parceiro_id)->update(['baixado' => 1]);
+                }
             }
             
         });
