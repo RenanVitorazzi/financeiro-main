@@ -37,6 +37,9 @@
         text-align: left;
         padding-left: 5px;
     }
+    .nao_quebra {
+        page-break-inside: avoid;
+    }
 </style>
 <body>
 <h3>
@@ -109,7 +112,7 @@
     </tfoot>
 </x-table>
 
-<x-table>
+<x-table class='nao_quebra'>
     <x-table-header>
         <tr>
             <th>Mês</th>
@@ -130,7 +133,7 @@
     </tbody>
 </x-table>
 
-<x-table>
+<x-table class='nao_quebra'>
     <tr>
         <td>Total Bruto</td>
         <td>Total Juros</td>

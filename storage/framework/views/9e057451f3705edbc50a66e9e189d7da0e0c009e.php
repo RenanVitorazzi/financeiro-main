@@ -37,6 +37,9 @@
         text-align: left;
         padding-left: 5px;
     }
+    .nao_quebra {
+        page-break-inside: avoid;
+    }
 </style>
 <body>
 <h3>
@@ -102,7 +105,7 @@
 <?php $component->withName('table'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes([]); ?>
+<?php $component->withAttributes(['class' => 'nao_quebra']); ?>
     <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
 <?php $component->withName('table-header'); ?>
@@ -143,7 +146,7 @@
 <?php $component->withName('table'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes([]); ?>
+<?php $component->withAttributes(['class' => 'nao_quebra']); ?>
     <tr>
         <td>Total Bruto</td>
         <td>Total Juros</td>

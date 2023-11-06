@@ -208,23 +208,57 @@ class VendaController extends Controller
     public function pdf_relatorio_vendas($relatorio_venda_id)
     {
 
-        $vendas = DB::select( "SELECT v.data_venda, v.peso, v.fator, v.valor_total, p.nome as nome_cliente
-            FROM clientes c
-            inner join vendas v ON v.cliente_id = c.id and enviado_conta_corrente = ?
-            inner join pessoas p ON p.id = c.pessoa_id
-            ORDER BY v.data_venda",
-            [$relatorio_venda_id]
-        );
+        $vendas = Venda::with('cliente')
+            ->where('enviado_conta_corrente', $relatorio_venda_id)
+            ->orderBy('data_venda')
+            ->get();
+        $representante_id = $vendas->first()->representante_id;
 
+        $cheques = Parcela::whereIn('venda_id', $vendas->pluck('id'))->get();
+        
+        $pagamentos = Parcela::whereHas('venda', function (Builder $query) use ($representante_id, $relatorio_venda_id) {
+                $query->where('enviado_conta_corrente', $relatorio_venda_id);
+            })
+        ->get();
+            // dd($pagamentos->where('forma_pagamento', 'like', 'Dinheiro')->first()->venda->cliente->pessoa->nome);
+        $pagamentosPorForma = $pagamentos->groupBy('forma_pagamento');
 
-        $totalVendas =  DB::select( "SELECT sum(v.peso) as peso, sum(v.fator) as fator, sum(v.valor_total) as valor_total
-            FROM clientes c
-            inner join vendas v ON v.cliente_id = c.id and enviado_conta_corrente = ?",
-            [$relatorio_venda_id]
-        );
-        // dd($totalVendas);
+        $pagamentosTotal = $pagamentos->sum('valor_parcela');
+
+        $representante = Representante::findOrFail($representante_id);
+
+        $totalVendaPesoAVista = 0;
+        $totalVendaFatorAVista = 0;
+
+        foreach( $vendas->where('metodo_pagamento', 'À vista') as $venda) {
+            $totalVendaPesoAVista += ($venda->peso * $venda->cotacao_peso);
+            $totalVendaFatorAVista += ($venda->fator * $venda->cotacao_fator);
+        }
+
+        // $pesoComissao = $totalVendaPesoAVista / ;
+        // $fatorComissao = ;
+
+        $comissao_json = Storage::disk('public')
+            ->get('comissao_representantes/porcentagem.json');
+        $comissao_array = json_decode($comissao_json, true);
+
+        $comissaoRepresentante = $comissao_array[$representante->id] ?? $comissao_array["Default"];
+
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('venda.pdf.relatorio_venda', compact('vendas', 'totalVendas') );
+
+        $pdf->loadView('venda.pdf.pdf_conferencia_relatorio_vendas',
+            compact(
+                'vendas',
+                'representante',
+                'pagamentos',
+                'pagamentosTotal',
+                'pagamentosPorForma',
+                'totalVendaPesoAVista',
+                'totalVendaFatorAVista',
+                'comissaoRepresentante',
+                'cheques'
+            )
+        );
 
         return $pdf->stream();
     }
