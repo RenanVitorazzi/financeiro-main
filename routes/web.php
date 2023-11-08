@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::view('procura_cheque', 'cheque.procura_cheque')->name('procura_cheque');
         Route::get('procurarConsignado', [ConsignadoController::class, 'procurarConsignado'])->name('procurarConsignado');
         Route::get('dashboard/{representante}', [RepresentanteController::class, 'representanteDashboard'])->name('representanteDashboard');
+        Route::get('acertos_representante/{representante_id}', [VendaController::class, 'acertosRepresentante'])->name('acertosRepresentante');
 
         //? Cadastros auxiliares
         Route::resource('fornecedores', FornecedorController::class);
@@ -87,6 +88,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::view('despesa/importacao', 'despesa.importacao')->name('importacao');
         Route::get('despesas/criarDespesaImportacao/{data}/{descricao}/{valor}/{conta}/{forma_pagamento}/{comprovante_id}', [DespesaController::class, 'criarDespesaImportacao'])->name('criarDespesaImportacao');
         Route::get('recebimentos/criarRecebimentoImportacao/{data}/{descricao}/{valor}/{conta}/{forma_pagamento}/{confirmado}/{tipo_pagamento}/{comprovante_id}', [RecebimentosController::class, 'criarRecebimentoImportacao'])->name('criarRecebimentoImportacao');
+        Route::get('recebimentos/criarRecebimentoPeloAcerto/{parcela_id}', [RecebimentosController::class, 'criarRecebimentoPeloAcerto'])->name('criarRecebimentoPeloAcerto');
 
         //? PDF
         Route::get('pdf_troca/{id}', [TrocaChequeController::class, 'pdf_troca'])->name('pdf_troca');

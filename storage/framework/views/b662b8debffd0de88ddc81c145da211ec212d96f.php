@@ -75,7 +75,7 @@ Representantes
                         <a class="btn btn-dark"
                             title="Acerto de documentos"
                             target='_blank'
-                            href="<?php echo e(route('pdf_acerto_documento', $representante->id)); ?>">
+                            href="<?php echo e(route('acertosRepresentante', $representante->id)); ?>">
                             Acertos
                         </a>
                     <?php endif; ?>

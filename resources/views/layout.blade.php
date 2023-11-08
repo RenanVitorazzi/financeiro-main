@@ -167,19 +167,21 @@
                 </li>
                 <li @if(route('recebimentos.index') == Request::url()) class="ativo" @endif>
                   <a href="{{ route('recebimentos.index') }}">
-                  <i class="fas fa-exchange-alt"></i>
+                  {{-- <i class="fas fa-exchange-alt"></i> --}}
+                  <i class="fas fa-money-bill-wave"></i>
                     <span>Recebimentos</span>
                   </a>
                 </li>
                 <li @if(route('despesas.index') == Request::url()) class="ativo" @endif>
                   <a href="{{ route('despesas.index') }}">
-                    <i class="fas fa-money-bill"></i>
+                    <i class="fas fa-barcode"></i>
                     <span>Despesas</span>
                   </a>
                 </li>
                 <li @if(route('entrega_parcela.index') == Request::url()) class="ativo" @endif>
                   <a href="{{ route('entrega_parcela.index') }}">
-                    <i class="fas fa-money-bill-wave"></i>
+                    {{-- <i class="fas fa-money-bill-wave"></i> --}}
+                    <i class="fas fa-exchange-alt"></i>
                     <span>Entregar/Pegar cheques</span>
                   </a>
                 </li>
