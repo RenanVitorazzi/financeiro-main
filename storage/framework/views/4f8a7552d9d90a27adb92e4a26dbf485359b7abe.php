@@ -28,11 +28,11 @@ Adicionar recebimento
                 <div class="row">
                     <div class="col-4">
                         <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['readonly' => true,'type' => 'date','name' => 'data_parcela','value' => ''.e(old('data_parcela')).'']]); ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['readonly' => true,'type' => 'date','name' => 'data_parcela','value' => ''.e(old('data_parcela') ?? $parcela->data_parcela ?? '').'']]); ?>
 <?php $component->withName('form-group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['readonly' => true,'type' => 'date','name' => 'data_parcela','value' => ''.e(old('data_parcela')).'']); ?>Data do cheque <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['readonly' => true,'type' => 'date','name' => 'data_parcela','value' => ''.e(old('data_parcela') ?? $parcela->data_parcela ?? '').'']); ?>Data do cheque <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
@@ -41,11 +41,11 @@ Adicionar recebimento
                     </div>
                     <div class="col-4">
                         <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['readonly' => true,'type' => 'text','name' => 'nome_parcela','value' => ''.e(old('nome_parcela')).'']]); ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['readonly' => true,'type' => 'text','name' => 'nome_parcela','value' => ''.e(old('nome_parcela') ?? $parcela->nome_parcela ?? '').'']]); ?>
 <?php $component->withName('form-group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['readonly' => true,'type' => 'text','name' => 'nome_parcela','value' => ''.e(old('nome_parcela')).'']); ?>Titular do cheque <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['readonly' => true,'type' => 'text','name' => 'nome_parcela','value' => ''.e(old('nome_parcela') ?? $parcela->nome_parcela ?? '').'']); ?>Titular do cheque <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
@@ -54,11 +54,11 @@ Adicionar recebimento
                     </div>
                     <div class="col-4">
                         <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['readonly' => true,'type' => 'number','name' => 'valor_parcela','value' => ''.e(old('valor_parcela')).'']]); ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['readonly' => true,'type' => 'number','name' => 'valor_parcela','value' => ''.e(old('valor_parcela') ?? $parcela->valor_parcela ?? '').'']]); ?>
 <?php $component->withName('form-group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['readonly' => true,'type' => 'number','name' => 'valor_parcela','value' => ''.e(old('valor_parcela')).'']); ?>Valor do cheque <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['readonly' => true,'type' => 'number','name' => 'valor_parcela','value' => ''.e(old('valor_parcela') ?? $parcela->valor_parcela ?? '').'']); ?>Valor do cheque <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
@@ -67,11 +67,11 @@ Adicionar recebimento
                     </div>
                     <div class="col-4">
                         <?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
-<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['readonly' => true,'type' => 'number','name' => 'parcela_id','value' => ''.e(old('parcela_id')).'']]); ?>
+<?php $component = $__env->getContainer()->make(Illuminate\View\AnonymousComponent::class, ['view' => 'components.form-group','data' => ['readonly' => true,'type' => 'number','name' => 'parcela_id','value' => ''.e(old('parcela_id') ?? $parcela->id ?? '').'']]); ?>
 <?php $component->withName('form-group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['readonly' => true,'type' => 'number','name' => 'parcela_id','value' => ''.e(old('parcela_id')).'']); ?>Código do cheque <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['readonly' => true,'type' => 'number','name' => 'parcela_id','value' => ''.e(old('parcela_id') ?? $parcela->id ?? '').'']); ?>Código do cheque <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
@@ -88,7 +88,7 @@ Adicionar recebimento
 <?php $component->withAttributes(['readonly' => true,'name' => 'representante_id']); ?>
                             <option></option>
                             <?php $__currentLoopData = $representantes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $representante): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($representante->id); ?>" <?php echo e(old('representante_id') == $representante->id ? 'selected' : ''); ?> >
+                                <option value="<?php echo e($representante->id); ?>" <?php echo e((old('representante_id') ?? $parcela->representante_id ?? '') == $representante->id ? 'selected' : ''); ?> >
                                     <?php echo e($representante->pessoa->nome); ?>
 
                                 </option>
@@ -110,7 +110,7 @@ Adicionar recebimento
 <?php $component->withAttributes(['readonly' => true,'name' => 'parceiro_id']); ?>
                             <option value="">Carteira</option>
                             <?php $__currentLoopData = $parceiros; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $parceiro): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($parceiro->id); ?>" <?php echo e(old('parceiro_id') == $parceiro->id ? 'selected' : ''); ?> >
+                                <option value="<?php echo e($parceiro->id); ?>" <?php echo e((old('parceiro_id') ?? $parcela->parceiro_id ?? '') == $parceiro->id ? 'selected' : ''); ?> >
                                     <?php echo e($parceiro->pessoa->nome); ?>
 
                                 </option>
@@ -126,7 +126,57 @@ Adicionar recebimento
                 <hr>
             </div>
             <p></p>
-            <div id='pagamentosParcela'></div>
+            <div id='pagamentosParcela'>
+                <?php if($parcela && $parcela->pagamentos_representantes): ?>
+                    <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
+<?php $component->withName('table'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
+                        <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
+<?php $component->withName('table-header'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
+                            <tr>
+                                <th>Data</th>
+                                <th>Conta</th>
+                                <th>Forma do Pagamento</th>
+                                <th>Valor</th>
+                                <th>Confirmado?</th>
+                            </tr>
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36)): ?>
+<?php $component = $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36; ?>
+<?php unset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36); ?>
+<?php endif; ?>
+                        <tbody>
+                            <?php $__currentLoopData = $parcela->pagamentos_representantes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pagamento): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <td><?php echo date('d/m/Y', strtotime($pagamento->data)); ?></td>
+                                <td><?php echo e($pagamento->conta->nome); ?></td>
+                                <td><?php echo e($pagamento->forma_pagamento); ?></td>
+                                <td><?php echo 'R$ ' . number_format($pagamento->valor, 2, ',', '.'); ?></td>
+                                <td><?php echo e($pagamento->confirmado ? 'Sim' : 'Não'); ?></td>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                        <t-foot>
+                            <tr>
+                                <td colspan=3>Total pago</td>
+                                <td colspan=2><?php echo 'R$ ' . number_format($parcela->pagamentos_representantes_sum_valor, 2, ',', '.'); ?></td>
+                            </tr>
+                        </t-foot>
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6)): ?>
+<?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
+<?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
+<?php endif; ?>
+                   
+                <?php endif; ?>
+            </div>
             <p></p>
             <div class="row">
                 <div class="col-4">

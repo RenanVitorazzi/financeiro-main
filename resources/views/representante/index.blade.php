@@ -41,7 +41,7 @@ Representantes
                         <a class="btn btn-dark"
                             title="Acerto de documentos"
                             target='_blank'
-                            href="{{ route('pdf_acerto_documento', $representante->id) }}">
+                            href="{{ route('acertosRepresentante', $representante->id) }}">
                             Acertos
                         </a>
                     @endif

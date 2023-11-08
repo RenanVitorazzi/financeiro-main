@@ -52,6 +52,7 @@ class RecebimentosController extends Controller
         $confirmado = NULL;
         $tipo_pagamento = NULL;
         $comprovante_id = NULL;
+        $parcela = NULL;
 
         return view('recebimento.create', 
             compact('contas', 
@@ -64,6 +65,7 @@ class RecebimentosController extends Controller
             'forma_pagamento', 
             'confirmado', 
             'tipo_pagamento', 
+            'parcela',
             'comprovante_id')
         );
     }
@@ -218,6 +220,8 @@ class RecebimentosController extends Controller
         $contas = Conta::all();
         $parceiros = Parceiro::all();
         $representantes = Representante::all();
+        
+        $parcela = NULL;
 
         return view('recebimento.create', compact('contas', 
             'parceiros', 
@@ -229,6 +233,37 @@ class RecebimentosController extends Controller
             'forma_pagamento', 
             'confirmado', 
             'tipo_pagamento', 
+            'parcela',
+            'comprovante_id')
+        );
+    }
+
+    public function criarRecebimentoPeloAcerto($parcela_id)
+    {
+        $contas = Conta::all();
+        $parceiros = Parceiro::all();
+        $representantes = Representante::all();
+        $data = NULL;
+        $descricao = NULL;
+        $valor = NULL;
+        $contaImportacao = NULL;
+        $forma_pagamento = NULL;
+        $confirmado = NULL;
+        $tipo_pagamento = NULL;
+        $comprovante_id = NULL;
+        $parcela = Parcela::withSum('pagamentos_representantes','valor')->with('pagamentos_representantes')->findOrFail($parcela_id);
+        // dd($parcela);
+        return view('recebimento.create', compact('contas', 
+            'parceiros', 
+            'representantes', 
+            'data', 
+            'descricao', 
+            'valor', 
+            'contaImportacao', 
+            'forma_pagamento', 
+            'confirmado', 
+            'tipo_pagamento', 
+            'parcela',
             'comprovante_id')
         );
     }

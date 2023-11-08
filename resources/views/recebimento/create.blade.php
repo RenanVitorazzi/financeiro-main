@@ -28,23 +28,23 @@ Adicionar recebimento
                 <hr>
                 <div class="row">
                     <div class="col-4">
-                        <x-form-group readonly type="date" name="data_parcela" value="{{ old('data_parcela') }}">Data do cheque</x-form-group>
+                        <x-form-group readonly type="date" name="data_parcela" value="{{ old('data_parcela') ?? $parcela->data_parcela ?? '' }}">Data do cheque</x-form-group>
                     </div>
                     <div class="col-4">
-                        <x-form-group readonly type="text" name="nome_parcela" value="{{ old('nome_parcela') }}">Titular do cheque</x-form-group>
+                        <x-form-group readonly type="text" name="nome_parcela" value="{{ old('nome_parcela') ?? $parcela->nome_parcela ?? '' }}">Titular do cheque</x-form-group>
                     </div>
                     <div class="col-4">
-                        <x-form-group readonly type="number" name="valor_parcela" value="{{ old('valor_parcela') }}">Valor do cheque</x-form-group>
+                        <x-form-group readonly type="number" name="valor_parcela" value="{{ old('valor_parcela') ?? $parcela->valor_parcela ?? '' }}">Valor do cheque</x-form-group>
                     </div>
                     <div class="col-4">
-                        <x-form-group readonly type="number" name="parcela_id" value="{{ old('parcela_id') }}">Código do cheque</x-form-group>
+                        <x-form-group readonly type="number" name="parcela_id" value="{{ old('parcela_id') ?? $parcela->id ?? '' }}">Código do cheque</x-form-group>
                     </div>
                     <div class="col-4 form-group">
                         <label for="representante_id">Representante</label>
                         <x-select readonly name="representante_id">
                             <option></option>
                             @foreach($representantes as $representante)
-                                <option value="{{$representante->id}}" {{ old('representante_id') == $representante->id ? 'selected' : '' }} >
+                                <option value="{{$representante->id}}" {{ (old('representante_id') ?? $parcela->representante_id ?? '') == $representante->id ? 'selected' : '' }} >
                                     {{$representante->pessoa->nome}}
                                 </option>
                             @endforeach
@@ -55,7 +55,7 @@ Adicionar recebimento
                         <x-select readonly name="parceiro_id">
                             <option value="">Carteira</option>
                             @foreach($parceiros as $parceiro)
-                                <option value="{{$parceiro->id}}" {{ old('parceiro_id') == $parceiro->id ? 'selected' : '' }} >
+                                <option value="{{$parceiro->id}}" {{ (old('parceiro_id') ?? $parcela->parceiro_id ?? '') == $parceiro->id ? 'selected' : '' }} >
                                     {{$parceiro->pessoa->nome}}
                                 </option>
                             @endforeach
@@ -65,7 +65,37 @@ Adicionar recebimento
                 <hr>
             </div>
             <p></p>
-            <div id='pagamentosParcela'></div>
+            <div id='pagamentosParcela'>
+                @if($parcela && $parcela->pagamentos_representantes)
+                    <x-table>
+                        <x-table-header>
+                            <tr>
+                                <th>Data</th>
+                                <th>Conta</th>
+                                <th>Forma do Pagamento</th>
+                                <th>Valor</th>
+                                <th>Confirmado?</th>
+                            </tr>
+                        </x-table-header>
+                        <tbody>
+                            @foreach($parcela->pagamentos_representantes as $pagamento)
+                                <td>@data($pagamento->data)</td>
+                                <td>{{$pagamento->conta->nome}}</td>
+                                <td>{{$pagamento->forma_pagamento}}</td>
+                                <td>@moeda($pagamento->valor)</td>
+                                <td>{{$pagamento->confirmado ? 'Sim' : 'Não'}}</td>
+                            @endforeach
+                        </tbody>
+                        <t-foot>
+                            <tr>
+                                <td colspan=3>Total pago</td>
+                                <td colspan=2>@moeda($parcela->pagamentos_representantes_sum_valor)</td>
+                            </tr>
+                        </t-foot>
+                    </x-table>
+                   
+                @endif
+            </div>
             <p></p>
             <div class="row">
                 <div class="col-4">

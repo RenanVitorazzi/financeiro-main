@@ -363,4 +363,39 @@ class VendaController extends Controller
 
         return $pdf->stream();
     }
+
+    public function acertosRepresentante($representante_id)
+    {
+        $representante = Representante::findOrFail($representante_id);
+
+        $acertos = DB::select( "SELECT DISTINCT
+                c.id as cliente_id,
+                (SELECT UPPER(nome) from pessoas WHERE id = c.pessoa_id) as cliente
+            FROM
+                vendas v
+                    INNER JOIN parcelas p ON p.venda_id = v.id
+                    LEFT JOIN clientes c ON c.id = v.cliente_id
+                    LEFT JOIN representantes r ON r.id = v.representante_id
+            WHERE
+                p.deleted_at IS NULL
+                AND v.deleted_at IS NULL
+                AND r.id = ?
+                AND (
+                p.forma_pagamento like 'Cheque' AND p.status like 'Aguardando Envio'
+                OR
+                p.forma_pagamento != 'Cheque' AND p.status != 'Pago'
+                )
+                
+            ORDER BY 2, data_parcela , valor_parcela",
+            [$representante->id]
+        );
+        
+        $hoje = date('Y-m-d');
+        $total_divida_valor = 0;
+        $total_divida_valor_pago = 0;
+
+        return view('venda.acertos_representante', 
+            compact('representante_id', 'acertos', 'representante', 'total_divida_valor', 'total_divida_valor_pago', 'hoje')
+        );
+    }
 }
