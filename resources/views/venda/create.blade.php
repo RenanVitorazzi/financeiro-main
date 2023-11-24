@@ -44,50 +44,50 @@ Adicionar vendas
     <input type="hidden" name="balanco" value="Venda">
     <input type="hidden" name="representante_id" id="representante_id" value="{{ $representante_id }}">
         
-        <x-table class="table-striped table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Descrição</th>
-                    <th>Quantidade</th>
-                    <th>Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Peso</td>
-                    <td><x-input type="number" name="peso" step="0.001" value="{{ old('peso') }}"></x-input></td>
-                    <td><x-input type="number" name="cotacao_peso" step="0.01" value="{{ old('cotacao_peso') }}"></x-input></td>
-                </tr>
-                <tr>
-                    <td>Fator</td>
-                    <td><x-input type="number" name="fator" step="0.01" value="{{ old('fator') }}"></x-input></td>
-                    <td><x-input type="number" name="cotacao_fator" step="0.01" value="{{ old('cotacao_fator') }}"></x-input></td>
-                </tr>
-                <tr>
-                    <td colspan='2'>Total</td>
-                    <td><x-input name="valor_total" type="number" step="0.01" value="{{ old('valor_total') }}" ></x-input></td>
-                </tr>
-            </tbody>
-        </x-table>
-        <div class='row'>
-            <div class="col-4 form-group">
-                <label for="metodo_pagamento">Método de Pagamento</label>
-                <x-select name="metodo_pagamento" required>
-                    <option value=""></option>
-                    @foreach ($metodo_pagamento as $metodo)
-                        <option  {{ old('metodo_pagamento') == $metodo ? 'selected' : '' }} value="{{ $metodo }}">{{ $metodo }}</option>
-                    @endforeach
-                </x-select> 
-            </div>
-            <div class="col-4 form-group" id="groupDiaVencimento">
-                <label for="dia_vencimento">Dia de vencimento</label>
-                <x-input name="dia_vencimento" type="number" value="{{old('dia_vencimento')}}"></x-input>
-            </div>
-            <div class="col-4 form-group" id="groupParcelas">
-                <label for="parcelas">Quantidade de parcelas</label>
-                <x-input name="parcelas" type="number" value="{{old('parcelas')}}"></x-input>
-            </div>
-        </div> 
+    <x-table class="table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Descrição</th>
+                <th>Quantidade</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Peso</td>
+                <td><x-input type="number" name="peso" step="0.001" value="{{ old('peso') }}"></x-input></td>
+                <td><x-input type="number" name="cotacao_peso" step="0.01" value="{{ old('cotacao_peso') }}"></x-input></td>
+            </tr>
+            <tr>
+                <td>Fator</td>
+                <td><x-input type="number" name="fator" step="0.01" value="{{ old('fator') }}"></x-input></td>
+                <td><x-input type="number" name="cotacao_fator" step="0.01" value="{{ old('cotacao_fator') }}"></x-input></td>
+            </tr>
+            <tr>
+                <td colspan='2'>Total</td>
+                <td><x-input name="valor_total" type="number" step="0.01" value="{{ old('valor_total') }}" ></x-input></td>
+            </tr>
+        </tbody>
+    </x-table>
+    <div class='row'>
+        <div class="col-4 form-group">
+            <label for="metodo_pagamento">Método de Pagamento</label>
+            <x-select name="metodo_pagamento" required>
+                <option value=""></option>
+                @foreach ($metodo_pagamento as $metodo)
+                    <option  {{ old('metodo_pagamento') == $metodo ? 'selected' : '' }} value="{{ $metodo }}">{{ $metodo }}</option>
+                @endforeach
+            </x-select> 
+        </div>
+        <div class="col-4 form-group" id="groupDiaVencimento">
+            <label for="dia_vencimento">Dia de vencimento</label>
+            <x-input name="dia_vencimento" type="number" value="{{old('dia_vencimento')}}"></x-input>
+        </div>
+        <div class="col-4 form-group" id="groupParcelas">
+            <label for="parcelas">Quantidade de parcelas</label>
+            <x-input name="parcelas" type="number" value="{{old('parcelas')}}"></x-input>
+        </div>
+    </div> 
     
     <div id="infoCheques" class="row">
         @if (old('parcelas') && old('parcelas') > 0)
@@ -134,7 +134,7 @@ Adicionar vendas
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group {{old('forma_pagamento.'.$i) == 'Cheque' ? '' : 'd-none'}}" id="groupNumero_{{$i}}">
+                            <div class="form-group {{old('forma_pagamento.'.$i) == 'Cheque' ? '' : 'd-none'}}" id="groupBanco_{{$i}}">
                                 <label for="numero_banco[{{$i}}]">Número do Banco</label>
                                 <div class="d-flex">
                                     <x-input type="text" 
@@ -220,6 +220,11 @@ Adicionar vendas
                                 
                             </div>
                             <div class="form-group">
+                                <label for="recebido_representante[{{$i}}]">Recebido pelo representante</label>
+                                <input type="checkbox" name="recebido_representante[{{$i}}]" id="recebido_representante[{{$i}}]" class="form-control" value=1
+                                {{old('recebido_representante') == 1 ? 'checked' : ''}}>
+                            </div>
+                            <div class="form-group">
                                 <label for="observacao[{{$i}}]">Observação</label>
                                 <x-textarea name="observacao[{{$i}}]" id="observacao[{{$i}}]" class="form-control">{{old('observacao.'.$i)}}</x-textarea>
                             </div>
@@ -229,6 +234,7 @@ Adicionar vendas
             @endfor
         @endif
     </div>
+    
     @if($errors->any())
         <div class="alert alert-danger">
         @foreach ($errors->all() as $error)
@@ -369,6 +375,10 @@ Adicionar vendas
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="recebido_representante[${index}]">Recebido pelo representante</label>
+                                    <input type="checkbox" name="recebido_representante[${index}]" id="recebido_representante[${index}]" class="form-control" value=1>
+                                </div>
+                                <div class="form-group">
                                     <label for="observacao[${index}]">Observação</label>
                                     <textarea name="observacao[${index}]" id="observacao[${index}]" class="form-control"></textarea>
                                 </div>
@@ -490,6 +500,8 @@ Adicionar vendas
                             let cliente_id = $(element).data("id")
                             $(".modal").modal("hide")
                             $("#cliente_id").val(cliente_id)
+                            $("#cliente_id").trigger("change");
+
                             procurarConsignado(cliente_id, representanteId)
                         })
                     })
@@ -604,8 +616,8 @@ Adicionar vendas
     function listenerNomes () {
         $(".titularCheque").focus( (e) => {
             $(e.target).autocomplete({
-                minLength: 0,
                 source: titularDoUltimoCheque,
+                minLength: 0,
                 autoFocus: true,
             });
         })

@@ -9,17 +9,19 @@
 <style>
     * {
         text-transform: uppercase;
+       
     }
     div {
-        margin-top:5cm;
+        margin-top:55 rem;
 	    margin-left:2cm;
+        font-size:50px;
     }
 </style>
 <body>
     <div>
         <p><?php echo e($pessoa->nome); ?></p>
         <p><?php echo e($pessoa->logradouro); ?>, <?php echo e($pessoa->numero); ?></p>
-        <p><?php echo e($pessoa->bairro); ?> <?php echo e(!$pessoa->complemento ? '' : '- '. $pessoa->complemento); ?></p>
+        <p><?php echo e($pessoa->bairro); ?> <?php echo e(!$pessoa->complemento ? '' : '- : '. $pessoa->complemento); ?></p>
         <p><?php echo e($pessoa->municipio); ?> - <?php echo e($pessoa->estado); ?></p>
         <p><?php echo e($pessoa->cep); ?></p>
     </div>

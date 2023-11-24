@@ -460,7 +460,8 @@ class RepresentanteController extends Controller {
 
         $pdf->loadView('representante.pdf.pdf_cc_representante_com_cheques_devolvidos',
             compact('saldos', 'representante', 'saldo_total', 'infoRepresentante', 'contaCorrenteRepresentante')
-        )->setPaper('a4', 'landscape');
+        );
+        // )->setPaper('a4', 'landscape');
 
         return $pdf->stream();
 

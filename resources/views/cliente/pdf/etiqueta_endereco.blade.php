@@ -9,17 +9,19 @@
 <style>
     * {
         text-transform: uppercase;
+       
     }
     div {
-        margin-top:5cm;
+        margin-top:55 rem;
 	    margin-left:2cm;
+        font-size:50px;
     }
 </style>
 <body>
     <div>
         <p>{{$pessoa->nome}}</p>
         <p>{{$pessoa->logradouro}}, {{$pessoa->numero}}</p>
-        <p>{{$pessoa->bairro}} {{!$pessoa->complemento ? '' : '- '. $pessoa->complemento}}</p>
+        <p>{{$pessoa->bairro}} {{!$pessoa->complemento ? '' : '- : '. $pessoa->complemento}}</p>
         <p>{{$pessoa->municipio}} - {{$pessoa->estado}}</p>
         <p>{{$pessoa->cep}}</p>
     </div>

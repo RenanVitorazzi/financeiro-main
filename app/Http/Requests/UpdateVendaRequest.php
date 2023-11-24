@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\VendaRepresentante;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule as ValidationRule;
 
-class SalvarVendaRequest extends FormRequest
+class UpdateVendaRequest extends FormRequest
 {
     public function authorize()
     {
@@ -48,8 +46,9 @@ class SalvarVendaRequest extends FormRequest
             'numero_banco.*' => ['nullable', 'string', 'max:255'],
             'recebido_representante' => ['array', 'nullable'],
             'recebido_representante.*' => ['nullable'],
+            'parcela_id' => ['array', 'nullable'],
+            'parcela_id.*' => ['nullable'],
             'baixar' => ['nullable']
         ];
     }
-
 }

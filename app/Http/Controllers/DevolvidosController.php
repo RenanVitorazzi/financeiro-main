@@ -280,7 +280,7 @@ class DevolvidosController extends Controller
                 AND p.deleted_at IS NULL
                 AND p.status != ?
                 AND a.pago IS NULL',
-            [$representante_id, 'Devolvido', 'Pago']
+            [$representante_id, 'Pago']
         );
 
         $totalValorCheques = DB::select('SELECT
