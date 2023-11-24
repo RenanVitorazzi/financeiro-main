@@ -46,6 +46,8 @@ class SalvarVendaRequest extends FormRequest
             'nome_cheque.*' => ['required_if:forma_pagamento,Cheque', 'nullable', 'string', 'max:255'],
             'numero_banco' => ['array', 'nullable'],
             'numero_banco.*' => ['nullable', 'string', 'max:255'],
+            'recebido_representante' => ['array', 'nullable'],
+            'recebido_representante.*' => ['nullable'],
             'baixar' => ['nullable']
         ];
     }

@@ -64,23 +64,23 @@ Adicionar vendas
     <input type="hidden" name="balanco" value="Venda">
     <input type="hidden" name="representante_id" id="representante_id" value="<?php echo e($representante_id); ?>">
         
-        <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
+    <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
 <?php $component->withName('table'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes(['class' => 'table-striped table-bordered']); ?>
-            <thead class="thead-dark">
-                <tr>
-                    <th>Descrição</th>
-                    <th>Quantidade</th>
-                    <th>Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Peso</td>
-                    <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+        <thead class="thead-dark">
+            <tr>
+                <th>Descrição</th>
+                <th>Quantidade</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Peso</td>
+                <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -91,7 +91,7 @@ Adicionar vendas
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
 <?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
 <?php endif; ?></td>
-                    <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+                <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -102,10 +102,10 @@ Adicionar vendas
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
 <?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
 <?php endif; ?></td>
-                </tr>
-                <tr>
-                    <td>Fator</td>
-                    <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+            </tr>
+            <tr>
+                <td>Fator</td>
+                <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -116,7 +116,7 @@ Adicionar vendas
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
 <?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
 <?php endif; ?></td>
-                    <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+                <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -127,10 +127,10 @@ Adicionar vendas
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
 <?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
 <?php endif; ?></td>
-                </tr>
-                <tr>
-                    <td colspan='2'>Total</td>
-                    <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+            </tr>
+            <tr>
+                <td colspan='2'>Total</td>
+                <td><?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -141,37 +141,37 @@ Adicionar vendas
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
 <?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
 <?php endif; ?></td>
-                </tr>
-            </tbody>
-         <?php echo $__env->renderComponent(); ?>
+            </tr>
+        </tbody>
+     <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6)): ?>
 <?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
 <?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
 <?php endif; ?>
-        <div class='row'>
-            <div class="col-4 form-group">
-                <label for="metodo_pagamento">Método de Pagamento</label>
-                <?php if (isset($component)) { $__componentOriginal9664ac210be45add4be058f3177c16028511e71a = $component; } ?>
+    <div class='row'>
+        <div class="col-4 form-group">
+            <label for="metodo_pagamento">Método de Pagamento</label>
+            <?php if (isset($component)) { $__componentOriginal9664ac210be45add4be058f3177c16028511e71a = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Select::class, []); ?>
 <?php $component->withName('select'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes(['name' => 'metodo_pagamento','required' => true]); ?>
-                    <option value=""></option>
-                    <?php $__currentLoopData = $metodo_pagamento; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $metodo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option  <?php echo e(old('metodo_pagamento') == $metodo ? 'selected' : ''); ?> value="<?php echo e($metodo); ?>"><?php echo e($metodo); ?></option>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                 <?php echo $__env->renderComponent(); ?>
+                <option value=""></option>
+                <?php $__currentLoopData = $metodo_pagamento; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $metodo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option  <?php echo e(old('metodo_pagamento') == $metodo ? 'selected' : ''); ?> value="<?php echo e($metodo); ?>"><?php echo e($metodo); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+             <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>
 <?php $component = $__componentOriginal9664ac210be45add4be058f3177c16028511e71a; ?>
 <?php unset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a); ?>
 <?php endif; ?> 
-            </div>
-            <div class="col-4 form-group" id="groupDiaVencimento">
-                <label for="dia_vencimento">Dia de vencimento</label>
-                <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+        </div>
+        <div class="col-4 form-group" id="groupDiaVencimento">
+            <label for="dia_vencimento">Dia de vencimento</label>
+            <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -182,10 +182,10 @@ Adicionar vendas
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
 <?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
 <?php endif; ?>
-            </div>
-            <div class="col-4 form-group" id="groupParcelas">
-                <label for="parcelas">Quantidade de parcelas</label>
-                <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
+        </div>
+        <div class="col-4 form-group" id="groupParcelas">
+            <label for="parcelas">Quantidade de parcelas</label>
+            <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -196,8 +196,8 @@ Adicionar vendas
 <?php $component = $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7; ?>
 <?php unset($__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7); ?>
 <?php endif; ?>
-            </div>
-        </div> 
+        </div>
+    </div> 
     
     <div id="infoCheques" class="row">
         <?php if(old('parcelas') && old('parcelas') > 0): ?>
@@ -277,7 +277,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
-                            <div class="form-group <?php echo e(old('forma_pagamento.'.$i) == 'Cheque' ? '' : 'd-none'); ?>" id="groupNumero_<?php echo e($i); ?>">
+                            <div class="form-group <?php echo e(old('forma_pagamento.'.$i) == 'Cheque' ? '' : 'd-none'); ?>" id="groupBanco_<?php echo e($i); ?>">
                                 <label for="numero_banco[<?php echo e($i); ?>]">Número do Banco</label>
                                 <div class="d-flex">
                                     <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
@@ -433,6 +433,11 @@ unset($__errorArgs, $__bag); ?>
                                 
                             </div>
                             <div class="form-group">
+                                <label for="recebido_representante[<?php echo e($i); ?>]">Recebido pelo representante</label>
+                                <input type="checkbox" name="recebido_representante[<?php echo e($i); ?>]" id="recebido_representante[<?php echo e($i); ?>]" class="form-control" value=1
+                                <?php echo e(old('recebido_representante') == 1 ? 'checked' : ''); ?>>
+                            </div>
+                            <div class="form-group">
                                 <label for="observacao[<?php echo e($i); ?>]">Observação</label>
                                 <?php if (isset($component)) { $__componentOriginalada24a059c331be0784ec187913c2ecfacd51890 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Textarea::class, []); ?>
@@ -452,6 +457,7 @@ unset($__errorArgs, $__bag); ?>
             <?php endfor; ?>
         <?php endif; ?>
     </div>
+    
     <?php if($errors->any()): ?>
         <div class="alert alert-danger">
         <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -592,6 +598,10 @@ unset($__errorArgs, $__bag); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="recebido_representante[${index}]">Recebido pelo representante</label>
+                                    <input type="checkbox" name="recebido_representante[${index}]" id="recebido_representante[${index}]" class="form-control" value=1>
+                                </div>
+                                <div class="form-group">
                                     <label for="observacao[${index}]">Observação</label>
                                     <textarea name="observacao[${index}]" id="observacao[${index}]" class="form-control"></textarea>
                                 </div>
@@ -713,6 +723,8 @@ unset($__errorArgs, $__bag); ?>
                             let cliente_id = $(element).data("id")
                             $(".modal").modal("hide")
                             $("#cliente_id").val(cliente_id)
+                            $("#cliente_id").trigger("change");
+
                             procurarConsignado(cliente_id, representanteId)
                         })
                     })
@@ -827,8 +839,8 @@ unset($__errorArgs, $__bag); ?>
     function listenerNomes () {
         $(".titularCheque").focus( (e) => {
             $(e.target).autocomplete({
-                minLength: 0,
                 source: titularDoUltimoCheque,
+                minLength: 0,
                 autoFocus: true,
             });
         })

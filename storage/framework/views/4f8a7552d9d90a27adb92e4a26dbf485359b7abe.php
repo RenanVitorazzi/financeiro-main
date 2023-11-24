@@ -155,11 +155,13 @@ Adicionar recebimento
 <?php endif; ?>
                         <tbody>
                             <?php $__currentLoopData = $parcela->pagamentos_representantes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pagamento): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
                                 <td><?php echo date('d/m/Y', strtotime($pagamento->data)); ?></td>
                                 <td><?php echo e($pagamento->conta->nome); ?></td>
                                 <td><?php echo e($pagamento->forma_pagamento); ?></td>
                                 <td><?php echo 'R$ ' . number_format($pagamento->valor, 2, ',', '.'); ?></td>
                                 <td><?php echo e($pagamento->confirmado ? 'Sim' : 'Não'); ?></td>
+                            </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                         <t-foot>

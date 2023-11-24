@@ -79,11 +79,13 @@ Adicionar recebimento
                         </x-table-header>
                         <tbody>
                             @foreach($parcela->pagamentos_representantes as $pagamento)
+                            <tr>
                                 <td>@data($pagamento->data)</td>
                                 <td>{{$pagamento->conta->nome}}</td>
                                 <td>{{$pagamento->forma_pagamento}}</td>
                                 <td>@moeda($pagamento->valor)</td>
                                 <td>{{$pagamento->confirmado ? 'Sim' : 'Não'}}</td>
+                            </tr>
                             @endforeach
                         </tbody>
                         <t-foot>

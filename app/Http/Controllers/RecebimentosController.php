@@ -185,7 +185,7 @@ class RecebimentosController extends Controller
         PagamentosRepresentantes::where('id', $recebimento_id)
             ->update($request->validated());
 
-            $request
+        $request
         ->session()
         ->flash(
             'message',

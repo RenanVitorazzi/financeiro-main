@@ -325,7 +325,7 @@ class ChequeController extends Controller
 
     public function pdf_cheques ($representante_id, $tipo)
     {
-        
+        // $tipo = 0;
         $representante = Representante::findOrFail($representante_id);
 
         $parcelas = Parcela::with('adiamentos')
