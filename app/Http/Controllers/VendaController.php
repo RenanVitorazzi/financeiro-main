@@ -384,4 +384,26 @@ class VendaController extends Controller
             compact('representante_id', 'acertos', 'representante', 'total_divida_valor', 'total_divida_valor_pago', 'hoje')
         );
     }
+
+    public function pdf_conferencia_parcelas_relatorio_vendas($representante_id)
+    {
+        $representante = Representante::with('pessoa:id,nome')->findOrFail($representante_id);
+
+        $parcelas = Parcela::whereHas('venda', function (Builder $query) {
+            $query->whereNull('enviado_conta_corrente');
+        })
+        ->with('pagamentos_representantes')
+        ->where('representante_id', $representante_id)
+        ->get();
+
+        $vendas = Venda::with('cliente.pessoa:id,nome')
+            ->whereIn('id', $parcelas->pluck('venda_id'))
+            ->get();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView(
+            'venda.pdf.pdf_conferencia_parcelas_relatorio_vendas',compact('representante', 'parcelas', 'vendas')
+        );
+        return $pdf->stream();
+    } 
 }

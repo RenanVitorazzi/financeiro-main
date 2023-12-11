@@ -53,7 +53,7 @@ class CarteiraSeeder extends Seeder
      */
     public function run()
     {
-        $json = Storage::disk('public')->get('json/2023-10-06.json');
+        $json = Storage::disk('public')->get('json/.json');
         $json = json_decode($json, true);
 
         foreach ($json['Carteira'] as $cheque => $info) {

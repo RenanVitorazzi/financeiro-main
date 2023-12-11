@@ -30,6 +30,7 @@ class ChequeRequest extends FormRequest
             'valor_parcela' => 'numeric|required|min:0',
             'status' => 'required',
             'motivo' => 'required_if:status,Devolvido|string|nullable|',
+            'conta_id' => ['required_if:status,Depositado', 'exists:contas,id', 'nullable'],
             'observacao' => 'nullable|string',
         ];
     }

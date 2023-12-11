@@ -149,25 +149,41 @@
                                 <td colspan=4>Nenhum registro</td>
                             </tr>
                         @endforelse
-                        <tr>
+                        {{-- <tr>
                             <td>ESTOQUE</td>
                             <td>@peso($estoque->sum('peso_agregado'))</td>
                             <td>@fator($estoque->sum('fator_agregado'))</td>
                             <td>@peso($estoque->sum('peso_agregado') + ($estoque->sum('fator_agregado') / 32) )</td>
-                        </tr>
+                        </tr> --}}
                         <tfoot>
                             
-                            <tr>
+                            {{-- <tr>
                                 <td><b>Total</b></td>
                                 <td><b>@peso(abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado'))</b></td>
                                 <td><b>@fator(abs($representantes->sum('conta_corrente_sum_fator_agregado'))+ $estoque->sum('fator_agregado'))</b></td>
-                                {{-- <td>@peso($representantes->sum('conta_corrente_sum_peso_agregado'))</td> --}}
-                                {{-- <td>@fator($representantes->sum('conta_corrente_sum_fator_agregado'))</td> --}}
+                                <td>@peso($representantes->sum('conta_corrente_sum_peso_agregado'))</td>
+                                <td>@fator($representantes->sum('conta_corrente_sum_fator_agregado'))</td>
                                 <td>
                                     <b>
                                         @peso(
                                             abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado') +
                                             (abs($representantes->sum('conta_corrente_sum_fator_agregado'))/32 + $estoque->sum('fator_agregado') / 32)
+                                        )
+                                    </b>
+                                </td>
+                            </tr> 
+                            --}}
+                            <tr>
+                                <td><b>Total</b></td>
+                                <td><b>@peso(abs($representantes->sum('conta_corrente_sum_peso_agregado')))</b></td>
+                                <td><b>@fator(abs($representantes->sum('conta_corrente_sum_fator_agregado')))</b></td>
+                                {{-- <td>@peso($representantes->sum('conta_corrente_sum_peso_agregado'))</td> --}}
+                                {{-- <td>@fator($representantes->sum('conta_corrente_sum_fator_agregado'))</td> --}}
+                                <td>
+                                    <b>
+                                        @peso(
+                                            abs($representantes->sum('conta_corrente_sum_peso_agregado')) +
+                                            (abs($representantes->sum('conta_corrente_sum_fator_agregado'))/32)
                                         )
                                     </b>
                                 </td>

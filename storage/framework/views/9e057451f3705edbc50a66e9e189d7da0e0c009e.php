@@ -20,11 +20,7 @@
         border: 1px solid black;
         text-align: center;
     }
-    th {
-        background-color:black;
-        color:white;
-    }
-
+   
     tr:nth-child(even) {
         background-color: #c9ced4;
     }
@@ -43,7 +39,7 @@
 </style>
 <body>
 <h3>
-    <?php echo e($troca->titulo); ?> - <?php echo date('d/m/Y', strtotime($troca->data_troca)); ?> (Taxa: <?php echo e($troca->taxa_juros); ?>%)
+    <?php echo e($troca->parceiro->pessoa->nome ?? $troca->titulo); ?> - <?php echo date('d/m/Y', strtotime($troca->data_troca)); ?> (Taxa: <?php echo e($troca->taxa_juros); ?>%)
 </h3>
 
 

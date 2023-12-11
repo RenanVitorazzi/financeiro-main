@@ -23,51 +23,43 @@
     tr:nth-child(even) {
         background-color: #ebedf0;
     }
-    h1 {
+    h3 {
         text-align: center;
+        margin: 0 0 0 0;
     }
 </style>
 <body>
-    <h1>
+    <h3>
         Conta Corrente - {{ $representante->pessoa->nome }} 
-    </h1>
+    </h3>
 
     <br>
     <table>
         <thead>
             <tr>
                 <th>Data</th>
-                <th>Relação</th>
-                <th>Balanço</th>
                 <th>Observação</th>
+                <th>Crédito</th>
+                <th>Débito</th>
                 <th>Saldo</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($contaCorrente as $registro)
-                @if ($loop->last)
-                    <tr>
-                        <td><b>@data($registro->data)</b></td>
-                        <td><b>Peso: @peso($registro->peso)</b></td>
-                        <td><b>{{ $registro->balanco == 'Reposição' ? 'Compra' : 'Fechamento' }}</b></td>
-                        <td><b>{{ $registro->observacao }}</b></td>
-                        <td><b>@peso($registro->saldo_peso)</b></td>
-                    </tr>
-                @else
-                    <tr>
-                        <td>@data($registro->data)</td>
-                        <td>
-                            Peso: @peso($registro->peso)
-                        </td>
-                        <td>
-                            {{ $registro->balanco == 'Reposição' ? 'Compra' : 'Fechamento' }}
-                        </td>
-                        <td>{{ $registro->observacao }}</td>
-                        <td>
-                            @peso($registro->saldo_peso)
-                        </td>
-                    </tr>
-                @endif
+                <tr>
+                    <td>@data($registro->data)</td> 
+                    <td>{{ $registro->observacao }}</td>
+                    {{-- <td>@peso($registro->peso)</td> --}}
+
+                    @if ($registro->balanco == 'Reposição')
+                        <td>- @peso($registro->peso)</td>
+                        <td></td>
+                    @elseif($registro->balanco == 'Venda')
+                        <td></td>
+                        <td>@peso($registro->peso)</td>
+                    @endif
+                    <td>@peso($registro->saldo_peso)</td>
+                </tr>
             @empty
                 <tr>
                     <td colspan="5">Nenhum registro criado</td>

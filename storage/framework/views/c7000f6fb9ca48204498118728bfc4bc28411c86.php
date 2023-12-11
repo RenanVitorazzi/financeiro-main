@@ -23,52 +23,43 @@
     tr:nth-child(even) {
         background-color: #ebedf0;
     }
-    h1 {
+    h3 {
         text-align: center;
+        margin: 0 0 0 0;
     }
 </style>
 <body>
-    <h1>
+    <h3>
         Conta Corrente - <?php echo e($representante->pessoa->nome); ?> 
-    </h1>
+    </h3>
 
     <br>
     <table>
         <thead>
             <tr>
                 <th>Data</th>
-                <th>Relação</th>
-                <th>Balanço</th>
                 <th>Observação</th>
+                <th>Crédito</th>
+                <th>Débito</th>
                 <th>Saldo</th>
             </tr>
         </thead>
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $contaCorrente; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $registro): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                <?php if($loop->last): ?>
-                    <tr>
-                        <td><b><?php echo date('d/m/Y', strtotime($registro->data)); ?></b></td>
-                        <td><b>Peso: <?php echo number_format($registro->peso, 2, ',', '.'); ?></b></td>
-                        <td><b><?php echo e($registro->balanco == 'Reposição' ? 'Compra' : 'Fechamento'); ?></b></td>
-                        <td><b><?php echo e($registro->observacao); ?></b></td>
-                        <td><b><?php echo number_format($registro->saldo_peso, 2, ',', '.'); ?></b></td>
-                    </tr>
-                <?php else: ?>
-                    <tr>
-                        <td><?php echo date('d/m/Y', strtotime($registro->data)); ?></td>
-                        <td>
-                            Peso: <?php echo number_format($registro->peso, 2, ',', '.'); ?>
-                        </td>
-                        <td>
-                            <?php echo e($registro->balanco == 'Reposição' ? 'Compra' : 'Fechamento'); ?>
+                <tr>
+                    <td><?php echo date('d/m/Y', strtotime($registro->data)); ?></td> 
+                    <td><?php echo e($registro->observacao); ?></td>
+                    
 
-                        </td>
-                        <td><?php echo e($registro->observacao); ?></td>
-                        <td>
-                            <?php echo number_format($registro->saldo_peso, 2, ',', '.'); ?>
-                        </td>
-                    </tr>
-                <?php endif; ?>
+                    <?php if($registro->balanco == 'Reposição'): ?>
+                        <td>- <?php echo number_format($registro->peso, 2, ',', '.'); ?></td>
+                        <td></td>
+                    <?php elseif($registro->balanco == 'Venda'): ?>
+                        <td></td>
+                        <td><?php echo number_format($registro->peso, 2, ',', '.'); ?></td>
+                    <?php endif; ?>
+                    <td><?php echo number_format($registro->saldo_peso, 2, ',', '.'); ?></td>
+                </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="5">Nenhum registro criado</td>

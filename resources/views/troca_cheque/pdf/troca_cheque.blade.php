@@ -20,11 +20,7 @@
         border: 1px solid black;
         text-align: center;
     }
-    th {
-        background-color:black;
-        color:white;
-    }
-
+   
     tr:nth-child(even) {
         background-color: #c9ced4;
     }
@@ -43,7 +39,7 @@
 </style>
 <body>
 <h3>
-    {{ $troca->titulo }} - @data($troca->data_troca) (Taxa: {{ $troca->taxa_juros }}%)
+    {{ $troca->parceiro->pessoa->nome ?? $troca->titulo }} - @data($troca->data_troca) (Taxa: {{ $troca->taxa_juros }}%)
 </h3>
 {{-- 
 <x-table>
