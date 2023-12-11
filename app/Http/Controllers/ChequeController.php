@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChequeRepresentanteRequest;
 use App\Http\Requests\ChequeRequest;
 use App\Models\Adiamento;
+use App\Models\Conta;
 use App\Models\EntregaParcela;
 use App\Models\Parcela;
 use App\Models\Representante;
@@ -25,10 +26,12 @@ use Illuminate\Support\Facades\DB;
 class ChequeController extends Controller
 {
     public $feriados;
+    public $contas;
 
     public function __construct()
     {
         $this->feriados = Feriados::all();
+        $this->contas = Conta::all();
     }
 
     public function index()
@@ -71,20 +74,33 @@ class ChequeController extends Controller
     public function edit($id)
     {
         $cheque = Parcela::findOrFail($id);
-        $situacoesCheque = ['Adiado', 'Aguardando', 'Devolvido', 'Resgatado', 'Depositado'];
-
-        return view('cheque.edit', compact('cheque', 'situacoesCheque'));
+        $situacoesCheque = ['Adiado', 'Aguardando', 'Devolvido', 'Resgatado', 'Depositado', 'Aguardando Envio'];
+        $contas = $this->contas;
+        // $contaIdDeposito = NULL;
+        // if ($cheque->status === 'Depositado') {
+            $contaIdDeposito = MovimentacaoCheque::query()
+                ->select('conta_id')
+                ->where([
+                    ['parcela_id', $cheque->id],
+                    ['status', 'Depositado']    
+                ])
+                ->orderBy('id', 'desc')
+                ->get();
+        // }
+        // dd($contaIdDeposito);
+        return view('cheque.edit', compact('cheque', 'situacoesCheque', 'contas', 'contaIdDeposito'));
     }
 
     public function update(ChequeRequest $request, $id)
     {
+        // dd($request->conta_id);
         $cheque = Parcela::findOrFail($id);
         $status_antigo = $cheque->status;
 
         $cheque->update($request->validated());
         $arrayStatus = ['Devolvido', 'Resgatado'];
 
-        if ( in_array($cheque->status,$arrayStatus) ) {
+        if ( in_array($cheque->status, $arrayStatus) ) {
             if ( $cheque->parceiro_id != NULL ) {
                 $troca_parcela = TrocaParcela::where('parcela_id', $cheque->id)->first();
                 $troca_parcela->update(['pago' => NULL]);
@@ -101,10 +117,16 @@ class ChequeController extends Controller
             MovimentacaoCheque::create([
                 'parcela_id' => $cheque->id,
                 'status' => $cheque->status,
-                'motivo' => $cheque->motivo
+                'motivo' => $cheque->motivo,
+                'conta_id' => ($cheque->status == 'Depositado') ? $request->conta_id : NULL,
             ]);
+        } else if ($cheque->status == 'Depositado') {
+            $movCheque = MovimentacaoCheque::where([
+                ['parcela_id', $cheque->id],
+                ['status', 'Depositado'],
+            ])->update(['conta_id' => $request->conta_id]);
         }
-
+        
         return redirect()->route('cheques.index');
     }
 

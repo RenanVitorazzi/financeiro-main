@@ -81,6 +81,9 @@ Route::group(['middleware' => ['auth']], function() {
         Route::resource('entrega_parcela', EntregaParcelaController::class);
         Route::get('entrega_parcela/receber_parceiro/{parceiro_id}', [EntregaParcelaController::class, 'receber_parceiro'])->name('receber_parceiro');
         Route::get('entrega_parcela/entrega_representante/{representante_id}', [EntregaParcelaController::class, 'entrega_representante'])->name('entrega_representante');
+        
+        //? Mail
+        Route::get('mail/{parceiro_id}/{data}', [AdiamentosController::class, 'mailProrrogacao'])->name('mailProrrogacao');
 
         //? Importação
         Route::view('import', 'despesa.import')->name('import');
@@ -110,6 +113,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pdf_cheques/{representante_id}/{tipo}', [ChequeController::class, 'pdf_cheques'])->name('pdf_cheques');
         Route::get('pdf_relatorio_vendas/{enviado_conta_corrente_id}', [VendaController::class, 'pdf_relatorio_vendas'])->name('pdf_relatorio_vendas');
         Route::get('pdf_conferencia_relatorio_vendas/{representante_id}', [VendaController::class, 'pdf_conferencia_relatorio_vendas'])->name('pdf_conferencia_relatorio_vendas');
+        Route::get('pdf_conferencia_parcelas_relatorio_vendas/{representante_id}', [VendaController::class, 'pdf_conferencia_parcelas_relatorio_vendas'])->name('pdf_conferencia_parcelas_relatorio_vendas');
         Route::get('pdf_acerto_documento/{representante_id}', [VendaController::class, 'pdf_acerto_documento'])->name('pdf_acerto_documento');
         Route::get('pdf_despesa_mensal/{mes}', [DespesaController::class, 'pdf_despesa_mensal'])->name('pdf_despesa_mensal');
         Route::get('pdf_cheques_entregues/{representante_id}/{data_entrega}', [EntregaParcelaController::class, 'pdf_cheques_entregues'])->name('pdf_cheques_entregues');

@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Adiamento extends Model
 {
     protected $guarded = ['id'];
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public function parcelas() 
     {

@@ -21,10 +21,10 @@ Home
             <x-tableheader>
                 <th colspan=5>
                     Cheques para depósito
-                    <form style="display: inline-block; float:right;" action="{{ route('depositar_diario') }}" method="POST">
+                    {{-- <form style="display: inline-block; float:right;" action="{{ route('depositar_diario') }}" method="POST">
                         @csrf
                         <button class="btn btn-light">Depositar</button>
-                    </form>
+                    </form> --}}
                 </th>
             </x-tableheader>
 
@@ -39,7 +39,7 @@ Home
 
             @forelse ($depositos as $cheque)
                 <tr>
-                    <td>{{ $loop->index + 1 }} {{$cheque->id}}</td>
+                    <td>{{ $loop->index + 1 }}</td>
                     <td>{{ $cheque->nome_cheque }}</td>
                     <td>@data($cheque->data_parcela)</td>
                     <td>@moeda($cheque->valor_parcela)</td>

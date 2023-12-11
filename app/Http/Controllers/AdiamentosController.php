@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdiamentoFormRequest;
+use App\Mail\ProrrogacoesEResgates;
 use App\Models\Adiamento;
 use App\Models\Feriados;
 use App\Models\Parceiro;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use App\Models\TrocaAdiamento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AdiamentosController extends Controller
 {
@@ -184,5 +186,36 @@ class AdiamentosController extends Controller
 
             return 'success';
         });
+    }
+
+    public function mailProrrogacao($parceiro_id, $data) 
+    {
+        $cheques = Parcela::query()
+            ->where('parceiro_id', $parceiro_id)
+            ->with('movimentacoes', function($query) use ($data) {
+                $query->whereDate('data', $data)
+                ->whereIn('status', ['Resgatado', 'Adiado']);
+            })
+            ->whereHas('movimentacoes', function($query) use ($data) {
+                $query->whereDate('data', $data)
+                ->whereIn('status', ['Resgatado', 'Adiado']);
+            })
+            ->with(['adiamentos' => fn ($query)  => $query->withoutGlobalScopes()])
+        ->get();
+
+        if ($cheques->isEmpty()) {
+            return '<h1>Nenhuma prorrogação ou resgate realizados nessa data para esse parceiro!</h1>';
+        } 
+
+        $antigosAdiamentos = TrocaAdiamento::whereIn('parcela_id', $cheques->pluck('id'))
+            ->onlyTrashed()
+            ->latest()
+            ->get()
+            ->unique('parcela_id');
+
+        // dd($parceiro_id);
+        $mail = Mail::to('renan.vitorazzi1@gmail.com')->send(new ProrrogacoesEResgates($cheques, $antigosAdiamentos, $parceiro_id, $data));
+        // dd($mail);
+        return 'sucesso!';
     }
 }

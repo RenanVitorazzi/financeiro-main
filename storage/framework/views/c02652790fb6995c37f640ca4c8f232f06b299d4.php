@@ -26,10 +26,7 @@ Home
 <?php $component->withAttributes([]); ?>
                 <th colspan=5>
                     Cheques para depósito
-                    <form style="display: inline-block; float:right;" action="<?php echo e(route('depositar_diario')); ?>" method="POST">
-                        <?php echo csrf_field(); ?>
-                        <button class="btn btn-light">Depositar</button>
-                    </form>
+                    
                 </th>
              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -59,7 +56,7 @@ Home
 
             <?php $__empty_1 = true; $__currentLoopData = $depositos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cheque): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td><?php echo e($loop->index + 1); ?> <?php echo e($cheque->id); ?></td>
+                    <td><?php echo e($loop->index + 1); ?></td>
                     <td><?php echo e($cheque->nome_cheque); ?></td>
                     <td><?php echo date('d/m/Y', strtotime($cheque->data_parcela)); ?></td>
                     <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>

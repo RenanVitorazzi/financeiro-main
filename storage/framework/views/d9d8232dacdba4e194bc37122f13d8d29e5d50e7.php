@@ -143,24 +143,20 @@
                                 <td colspan=4>Nenhum registro</td>
                             </tr>
                         <?php endif; ?>
-                        <tr>
-                            <td>ESTOQUE</td>
-                            <td><?php echo number_format($estoque->sum('peso_agregado'), 2, ',', '.'); ?></td>
-                            <td><?php echo number_format($estoque->sum('fator_agregado'), 1, ',', '.'); ?></td>
-                            <td><?php echo number_format($estoque->sum('peso_agregado') + ($estoque->sum('fator_agregado') / 32), 2, ',', '.'); ?></td>
-                        </tr>
+                        
                         <tfoot>
+                            
                             
                             <tr>
                                 <td><b>Total</b></td>
-                                <td><b><?php echo number_format(abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado'), 2, ',', '.'); ?></b></td>
-                                <td><b><?php echo number_format(abs($representantes->sum('conta_corrente_sum_fator_agregado'))+ $estoque->sum('fator_agregado'), 1, ',', '.'); ?></b></td>
+                                <td><b><?php echo number_format(abs($representantes->sum('conta_corrente_sum_peso_agregado')), 2, ',', '.'); ?></b></td>
+                                <td><b><?php echo number_format(abs($representantes->sum('conta_corrente_sum_fator_agregado')), 1, ',', '.'); ?></b></td>
                                 
                                 
                                 <td>
                                     <b>
-                                        <?php echo number_format(abs($representantes->sum('conta_corrente_sum_peso_agregado')) + $estoque->sum('peso_agregado') +
-                                            (abs($representantes->sum('conta_corrente_sum_fator_agregado'))/32 + $estoque->sum('fator_agregado') / 32), 2, ',', '.'); ?>
+                                        <?php echo number_format(abs($representantes->sum('conta_corrente_sum_peso_agregado')) +
+                                            (abs($representantes->sum('conta_corrente_sum_fator_agregado'))/32), 2, ',', '.'); ?>
                                     </b>
                                 </td>
                             </tr>

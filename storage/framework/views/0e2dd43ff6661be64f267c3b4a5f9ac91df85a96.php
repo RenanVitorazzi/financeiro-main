@@ -62,9 +62,11 @@
         width: 49%;
         float: left;
     }
+    /*
     .page_break { 
         page-break-before: always; 
     }
+    */
 </style>
 <body>
     <h3>
