@@ -11,6 +11,7 @@ use App\Models\Parcela;
 use App\Models\Venda;
 use App\Models\Representante;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -249,6 +250,140 @@ class VendaController extends Controller
         return $pdf->stream();
     }
 
+    public function pdf_relatorio_vendas_deflacao($relatorio_venda_id)
+    {
+
+        $vendas = Venda::with('cliente')
+            ->where('enviado_conta_corrente', $relatorio_venda_id)
+            ->orderBy('data_venda')
+            ->get();
+        
+        $representante_id = $vendas->first()->representante_id;
+
+        $cheques = Parcela::whereIn('venda_id', $vendas->pluck('id'))->get();
+
+        $pagamentos = Parcela::whereHas('venda', function (Builder $query) use ($representante_id, $relatorio_venda_id) {
+                $query->where('enviado_conta_corrente', $relatorio_venda_id);
+            })
+        ->get();
+
+        $pagamentosPorForma = $pagamentos->groupBy('forma_pagamento');
+
+        $pagamentosTotal = $pagamentos->sum('valor_parcela');
+
+        $representante = Representante::findOrFail($representante_id);
+
+        $totalVendaPesoAVista = 0;
+        $totalVendaFatorAVista = 0;
+
+        foreach( $vendas->where('metodo_pagamento', 'À vista') as $venda) {
+            $totalVendaPesoAVista += ($venda->peso * $venda->cotacao_peso);
+            $totalVendaFatorAVista += ($venda->fator * $venda->cotacao_fator);
+        }
+
+        $comissao_json = Storage::disk('public')
+            ->get('comissao_representantes/porcentagem.json');
+        $comissao_array = json_decode($comissao_json, true);
+
+        $comissaoRepresentante = $comissao_array[$representante->id] ?? $comissao_array["Default"];
+        // dd($comissaoRepresentante);
+        $arrayDeflacao = [];
+        $taxaDeflacao = 0.025;
+        $valorGeralComissao = 0;
+        $valorGeralPesoComissao = 0;
+        $valorGeralFatorComissao = 0;
+        $somaPrazoMedio = 0;
+
+        foreach($vendas as $key => $venda) {
+
+            $arrayVendaDeflacaoPrazoMedio = [];
+
+            $dataInicio = new DateTime($venda->data_venda);
+            $totalJuros = 0;
+            $totalVenda = 0;
+            $totalDias = 0;
+
+            foreach($cheques->where('venda_id', $venda->id) as $key => $cheque) {
+                
+                $dataFim = new DateTime($cheque->data_parcela);
+
+                if ($dataFim <= $dataInicio) {
+                    $diferencaDias = 0;
+                } else {
+                    $diferencaDias = $dataInicio->diff($dataFim)->days;
+                }
+
+                $juros = ( ($cheque->valor_parcela * $taxaDeflacao) / 30 ) * $diferencaDias;
+                
+                $totalVenda += $cheque->valor_parcela;
+                $totalJuros += $juros;
+                $totalDias += $diferencaDias;
+            }
+
+            $porcentagemDeflacao = $totalJuros / $totalVenda;
+            $quantidadeParcelas = $cheques->where('venda_id', $venda->id)->count();
+
+            $prazoMedio = $totalDias / $quantidadeParcelas;
+            
+            $comissaoPeso = $comissaoRepresentante['porcentagem_peso'] * $venda->peso / 100;
+            $valorPesoLiquido = $venda->cotacao_peso - ($venda->cotacao_peso * $porcentagemDeflacao);
+            $valorComissaoPeso = $comissaoPeso * $valorPesoLiquido;
+
+            $comissaoFator = $comissaoRepresentante['porcentagem_fator'] * $venda->fator / 100;
+            $valorFatorLiquido = $venda->cotacao_fator - ($venda->cotacao_fator * $porcentagemDeflacao);
+            $valorComissaoFator = $comissaoFator * $valorFatorLiquido;
+
+            $totalComissaoLiquido = $valorComissaoPeso + $valorComissaoFator; 
+            $valorGeralComissao += $totalComissaoLiquido;
+            $valorGeralPesoComissao += $valorComissaoPeso;
+            $valorGeralFatorComissao += $valorComissaoFator;
+            $somaPrazoMedio += $prazoMedio;
+
+            $arrayDeflacao[$venda->id] = [
+                'totalDias' => $totalDias, 
+                'quantidadeParcelas' => $quantidadeParcelas,
+                'prazoMedio' => $prazoMedio, 
+                'totalJuros' => $totalJuros,
+
+                'comissaoPeso' => $comissaoPeso,
+                'valorPesoLiquido' => $valorPesoLiquido,
+                'valorComissaoPeso' => $valorComissaoPeso,
+
+                'comissaoFator' => $comissaoFator,
+                'valorFatorLiquido' => $valorFatorLiquido,
+                'valorComissaoFator' => $valorComissaoFator,
+
+                'totalComissaoLiquido' => $totalComissaoLiquido,
+                'totalVenda' => $totalVenda,
+                'porcentagemDeflacao' => $porcentagemDeflacao * 100, 
+            ];
+        }
+
+        $prazoMedioRelatorio = $somaPrazoMedio / $vendas->count();
+        $pdf = App::make('dompdf.wrapper');
+
+        $pdf->loadView('venda.pdf.pdf_relatorio_vendas_deflacao',
+            compact(
+                'vendas',
+                'representante',
+                'pagamentos',
+                'pagamentosTotal',
+                'pagamentosPorForma',
+                'totalVendaPesoAVista',
+                'totalVendaFatorAVista',
+                'comissaoRepresentante',
+                'cheques',
+                'arrayDeflacao',
+                'valorGeralComissao',
+                'valorGeralPesoComissao',
+                'valorGeralFatorComissao',
+                'prazoMedioRelatorio'
+            )
+        );
+
+        return $pdf->stream();
+    }
+
     public function pdf_conferencia_relatorio_vendas($representante_id)
     {
         $vendas = Venda::with('cliente')
@@ -406,4 +541,50 @@ class VendaController extends Controller
         );
         return $pdf->stream();
     } 
+
+    public function pdf_conferencia_relatorio_vendas_sem_avista($representante_id)
+    {
+        $vendas = Venda::with('cliente')
+            ->whereNull('enviado_conta_corrente')
+            ->where('representante_id', '=', $representante_id)
+            ->orderBy('data_venda')
+            ->get();
+            
+        $cheques = Parcela::whereIn('venda_id', $vendas->pluck('id'))->get();
+        
+        $pagamentos = Parcela::whereHas('venda', function (Builder $query) use ($representante_id) {
+                $query->whereNull('enviado_conta_corrente')
+                    ->where('representante_id', '=', $representante_id);
+            })
+        ->get();
+    
+        $pagamentosPorForma = $pagamentos->groupBy('forma_pagamento');
+
+        $pagamentosTotal = $pagamentos->sum('valor_parcela');
+
+        $representante = Representante::findOrFail($representante_id);
+
+
+        $comissao_json = Storage::disk('public')
+            ->get('comissao_representantes/porcentagem.json');
+        $comissao_array = json_decode($comissao_json, true);
+
+        $comissaoRepresentante = $comissao_array[$representante->id] ?? $comissao_array["Default"];
+
+        $pdf = App::make('dompdf.wrapper');
+
+        $pdf->loadView('venda.pdf.pdf_conferencia_relatorio_vendas_sem_avista',
+            compact(
+                'vendas',
+                'representante',
+                'pagamentos',
+                'pagamentosTotal',
+                'pagamentosPorForma',
+                'comissaoRepresentante',
+                'cheques'
+            )
+        );
+
+        return $pdf->stream();
+    }
 }

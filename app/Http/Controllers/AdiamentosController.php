@@ -218,4 +218,30 @@ class AdiamentosController extends Controller
         // dd($mail);
         return 'sucesso!';
     }
+
+    public function pdf_prorrogacao_conferencia($dia, $parceiro_id)
+    {
+        $parceiro = Parceiro::with('pessoa:id,nome')->findOrFail($parceiro_id);
+
+        $cheques = DB::select("SELECT 
+                a.nova_data, p.valor_parcela, p.data_parcela, a.deleted_at, p.status, p.nome_cheque
+            FROM
+                parcelas p
+                    LEFT JOIN
+                adiamentos a ON a.parcela_id = p.id
+            WHERE
+                (
+                    a.nova_data LIKE ? and a.deleted_at is not null 
+                    OR 
+                    p.data_parcela like ? and status in (?, ?) 
+                )
+                AND p.parceiro_id = ?
+
+            ", 
+            [$dia, $dia, 'Resgatado', 'Adiado', $parceiro->id]);
+        
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('adiamento.pdf.pdf_prorrogacao_conferencia', compact('cheques', 'dia', 'parceiro') );
+        return $pdf->stream();    
+    }
 }
