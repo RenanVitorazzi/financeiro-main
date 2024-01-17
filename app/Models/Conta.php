@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Conta extends Model
 {
-<<<<<<< HEAD
     public $timestamps = false;
     protected $guarded = ['id'];
     use HasFactory;
@@ -21,9 +20,4 @@ class Conta extends Model
         
     }
 
-=======
-    protected $guarded = ['id'];
-    use HasFactory;
-
->>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
 }
