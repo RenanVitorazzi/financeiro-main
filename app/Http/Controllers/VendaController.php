@@ -11,7 +11,10 @@ use App\Models\Parcela;
 use App\Models\Venda;
 use App\Models\Representante;
 use Carbon\Carbon;
+<<<<<<< HEAD
 use DateTime;
+=======
+>>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -250,6 +253,7 @@ class VendaController extends Controller
         return $pdf->stream();
     }
 
+<<<<<<< HEAD
     public function pdf_relatorio_vendas_deflacao($relatorio_venda_id)
     {
 
@@ -384,6 +388,8 @@ class VendaController extends Controller
         return $pdf->stream();
     }
 
+=======
+>>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
     public function pdf_conferencia_relatorio_vendas($representante_id)
     {
         $vendas = Venda::with('cliente')
@@ -541,6 +547,7 @@ class VendaController extends Controller
         );
         return $pdf->stream();
     } 
+<<<<<<< HEAD
 
     public function pdf_conferencia_relatorio_vendas_sem_avista($representante_id)
     {
@@ -587,4 +594,6 @@ class VendaController extends Controller
 
         return $pdf->stream();
     }
+=======
+>>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
 }

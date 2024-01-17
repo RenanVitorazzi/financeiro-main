@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Http\Requests\RequestContaStore;
+=======
+>>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
 use App\Models\Conta;
 use Illuminate\Http\Request;
 
 class ContaController extends Controller
 {
+<<<<<<< HEAD
     public function index(Request $request)
     {
         $contas = Conta::all();
@@ -57,6 +61,8 @@ class ContaController extends Controller
         return redirect()->route('contas.index');
     }
 
+=======
+>>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
     public function procurarContas() {
         return Conta::all()->toJson();
     }

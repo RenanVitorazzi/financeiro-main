@@ -217,6 +217,7 @@
                       <span>Prorrogações</span>
                     </a>
                 </li>
+<<<<<<< HEAD
 
                 <li @if(route('cadastros_auxiliares') == Request::url()) class="ativo" @endif>
                   <a href="{{ route('cadastros_auxiliares') }}">
@@ -224,6 +225,8 @@
                     <span>Cadastros Auxiliares</span>
                   </a>
                 </li>
+=======
+>>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
               </ul>
             </div>
           </li>
