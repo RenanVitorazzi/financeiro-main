@@ -32,7 +32,7 @@
     }
 
     .conferido {
-        background-color: rgb(156, 214, 156);
+        background-color: rgb(255, 255, 105);
     }
 
     p {
@@ -51,9 +51,9 @@
         <thead>
             <tr>
                 <th>Data</th>
+                <th>Observação</th>
                 <th>Débito</th>
                 <th>Crédito</th>
-                <th>Observação</th>
                 <th>Total</th>
             </tr>
         </thead>
@@ -66,7 +66,7 @@
                             <td>
                                 <?php echo e($conta->observacao); ?> 
                                 <?php if($conta->conferido): ?>
-                                    <p>Conta conferido dia: <?php echo e($conta->conferido); ?></p>
+                                    <p>Conta conferido dia: <?php echo e(\Carbon\Carbon::parse($conta->conferido)->format('d/m/Y')); ?></p>
                                 <?php endif; ?> 
                             </td>
                             <td><?php echo number_format($conta->peso, 2, ',', '.'); ?></td>

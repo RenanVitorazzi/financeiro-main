@@ -29,11 +29,7 @@ class TrocaChequeController extends Controller
 
     public function index()
     {
-<<<<<<< HEAD
         $trocas = Troca::whereYear('created_at', '>=',now()->year)
-=======
-        $trocas = Troca::whereYear('data_troca', '>=',now()->year)
->>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
             ->orderBy('data_troca', 'Desc')
             ->get();
         // dd($trocas);

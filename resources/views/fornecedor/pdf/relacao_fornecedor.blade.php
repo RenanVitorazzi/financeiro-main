@@ -32,7 +32,7 @@
     }
 
     .conferido {
-        background-color: rgb(156, 214, 156);
+        background-color: rgb(255, 255, 105);
     }
 
     p {
@@ -50,9 +50,9 @@
         <thead>
             <tr>
                 <th>Data</th>
+                <th>Observação</th>
                 <th>Débito</th>
                 <th>Crédito</th>
-                <th>Observação</th>
                 <th>Total</th>
             </tr>
         </thead>
@@ -65,7 +65,7 @@
                             <td>
                                 {{ $conta->observacao }} 
                                 @if ($conta->conferido)
-                                    <p>Conta conferido dia: {{ $conta->conferido }}</p>
+                                    <p>Conta conferido dia: {{ \Carbon\Carbon::parse($conta->conferido)->format('d/m/Y') }}</p>
                                 @endif 
                             </td>
                             <td>@peso($conta->peso)</td>

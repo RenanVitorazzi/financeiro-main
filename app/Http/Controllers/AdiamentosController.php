@@ -218,7 +218,6 @@ class AdiamentosController extends Controller
         // dd($mail);
         return 'sucesso!';
     }
-<<<<<<< HEAD
 
     public function pdf_prorrogacao_conferencia($dia, $parceiro_id)
     {
@@ -245,6 +244,4 @@ class AdiamentosController extends Controller
         $pdf->loadView('adiamento.pdf.pdf_prorrogacao_conferencia', compact('cheques', 'dia', 'parceiro') );
         return $pdf->stream();    
     }
-=======
->>>>>>> e3a02241119ebbfc79e912da11238c16e3deac16
 }
