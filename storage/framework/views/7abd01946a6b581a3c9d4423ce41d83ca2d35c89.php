@@ -183,6 +183,13 @@
                       <span>Prorrogações</span>
                     </a>
                 </li>
+
+                <li <?php if(route('cadastros_auxiliares') == Request::url()): ?> class="ativo" <?php endif; ?>>
+                  <a href="<?php echo e(route('cadastros_auxiliares')); ?>">
+                    <i class="fas fa-cog"></i>
+                    <span>Cadastros Auxiliares</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </li>

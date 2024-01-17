@@ -11,9 +11,11 @@ use App\Http\Controllers\ContaCorrenteRepresentanteController;
 use App\Http\Controllers\VendaController;
 use App\Http\Controllers\ChequeController;
 use App\Http\Controllers\ConsignadoController;
+use App\Http\Controllers\ContaController;
 use App\Http\Controllers\ContaCorrenteAnexoController;
 use App\Http\Controllers\ContaCorrenteRepresentanteAnexoController;
 use App\Http\Controllers\DespesaController;
+use App\Http\Controllers\DespesasFixasController;
 use App\Http\Controllers\DevolvidosController;
 use App\Http\Controllers\TrocaChequeController;
 use App\Http\Controllers\HomeController;
@@ -66,7 +68,15 @@ Route::group(['middleware' => ['auth']], function() {
         Route::resource('fornecedores', FornecedorController::class);
         Route::resource('representantes', RepresentanteController::class);
         Route::resource('parceiros', ParceiroController::class);
+        Route::resource('contas', ContaController::class);
+        Route::resource('despesas_fixas', DespesasFixasController::class);
         
+        $modulos = [
+            'Contas' => 'contas',
+            'Despesas fixas' => 'despesas_fixas',
+        ];
+        Route::view('/cadastros_auxiliares', 'cadastros_auxiliares', ['modulos' => $modulos])->name('cadastros_auxiliares');
+
         //? Financeiro
         Route::resource('conta_corrente', ContaCorrenteController::class);
         Route::resource('troca_cheques', TrocaChequeController::class);
