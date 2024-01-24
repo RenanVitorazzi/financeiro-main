@@ -347,7 +347,6 @@ class ChequeController extends Controller
 
     public function pdf_cheques ($representante_id, $tipo)
     {
-        // $tipo = 0;
         $representante = Representante::findOrFail($representante_id);
 
         $parcelas = Parcela::with('adiamentos')
@@ -357,14 +356,17 @@ class ChequeController extends Controller
             ['forma_pagamento', 'LIKE', 'Cheque'],
             ['status', 'LIKE', 'Aguardando']
         ]);
-        if ($tipo != 0) {
-            $parcelas = $parcelas->orderBy($tipo);
-        } 
+
+        if ($tipo == 1) {
+            $parcelas = $parcelas->orderBy('data_parcela')
+                ->orderBy('valor_parcela')
+                ->orderBy('nome_cheque')
+                ->get();
+        }  else {
+            $parcelas = $parcelas->orderBy($tipo)
+                ->get();
+        }
         
-        $parcelas = $parcelas->orderBy('data_parcela')
-        ->orderBy('valor_parcela')
-        ->orderBy('numero_cheque')
-        ->get();
     
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('cheque.pdf.pdf_cheques', compact('parcelas', 'representante') );
