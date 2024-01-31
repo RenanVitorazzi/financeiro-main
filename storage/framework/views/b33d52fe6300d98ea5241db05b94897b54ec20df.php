@@ -9,7 +9,7 @@
 <style>
     * {
         margin: 10;
-        padding:0;
+        /* padding: 0; */
     }
     body {
         margin-top: 1px;
@@ -25,17 +25,29 @@
         border: 1px solid black;
         text-align: center;
     }
+
     th {
         background-color: #d6d8db;
     }
+
     h3 {
         text-align: center;
     }
+
     .pagamentos, .titular {
-        font-size:10px;
+        font-size: 9px;
+        text-align:left;
+        padding-left: 2.5px;
+
+    }
+
+    .pagamentos {
         width:30%;
     }
 
+    .titular {
+        width:25%;
+    }
     .tabelaloca {
         font-size: 14px;
     } 
@@ -72,7 +84,7 @@
                 <tr>
                     <td><?php echo e($loop->index + 1); ?></td>
                     <td><?php echo date('d/m/Y', strtotime($cheque->data_parcela)); ?></td>
-                    <td class='titular'><?php echo e($cheque->nome_cheque); ?></td>
+                    <td class='titular'><?php echo e(substr($cheque->nome_cheque, 0 ,30)); ?></td>
                     <td><?php echo e($cheque->numero_cheque); ?></td>
                     <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>
                     <td class='pagamentos'>
