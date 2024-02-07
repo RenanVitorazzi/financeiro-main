@@ -128,3 +128,10 @@ Anexos
     @endforeach
 </div> --}}
 @endsection
+@section('script')
+<script>
+    @if(Session::has('message'))
+        toastr["success"]("{{ Session::get('message') }}")
+    @endif
+</script>
+@endsection

@@ -15,8 +15,9 @@ class ContaCorrenteAnexoController extends Controller
     {
         $files = ContaCorrenteAnexos::where('conta_corrente_id', $request->id)->get();
         $contaCorrente = ContaCorrente::find($request->id);
+        $message = $request->session()->get('message');
 
-        return view('conta_corrente_anexo.index', compact('files', 'contaCorrente'));
+        return view('conta_corrente_anexo.index', compact('files', 'contaCorrente', 'message'));
     }
 
     public function create(Request $request)
@@ -47,12 +48,13 @@ class ContaCorrenteAnexoController extends Controller
         
         $delete2 = ContaCorrenteAnexos::findOrFail($id)->delete();
 
-        return json_encode([
-            'icon' => 'success',
-            'title' => 'Sucesso!',
-            'text' => 'Anexo excluído com sucesso!',
-            'delete' => $delete,
-            'delete2' => $delete2,
-        ]);
+        return redirect()->back()->with('message','Anexo excluído com sucesso!');
+        // return json_encode([
+        //     'icon' => 'success',
+        //     'title' => 'Sucesso!',
+        //     'text' => 'Anexo excluído com sucesso!',
+        //     'delete' => $delete,
+        //     'delete2' => $delete2,
+        // ]);
     }
 }

@@ -15,8 +15,9 @@ class ContaCorrenteRepresentanteAnexoController extends Controller
     {
         $files = ContaCorrenteRepresentanteAnexos::where('conta_corrente_id', $request->id)->get();
         $contaCorrente = ContaCorrenteRepresentante::with('representante')->find($request->id);
-        
-        return view('conta_corrente_representante_anexo.index', compact('files', 'contaCorrente'));
+        $message = $request->session()->get('message');
+
+        return view('conta_corrente_representante_anexo.index', compact('files', 'contaCorrente', 'message'));
     }
 
     public function create(Request $request)
@@ -32,7 +33,7 @@ class ContaCorrenteRepresentanteAnexoController extends Controller
             ContaCorrenteRepresentanteAnexos::create([
                 'nome' => $file->getClientOriginalName(),
                 'conta_corrente_id' => $request->conta_corrente_id,
-                'path' => $file->store('conta_corrente/' . $request->conta_corrente_id, 'public'),
+                'path' => $file->store('conta_corrente_representante/' . $request->conta_corrente_id, 'public'),
             ]);
         }
 
@@ -46,12 +47,14 @@ class ContaCorrenteRepresentanteAnexoController extends Controller
         
         $delete2 = ContaCorrenteRepresentanteAnexos::findOrFail($id)->delete();
 
-        return json_encode([
-            'icon' => 'success',
-            'title' => 'Sucesso!',
-            'text' => 'Anexo excluído com sucesso!',
-            'delete' => $delete,
-            'delete2' => $delete2,
-        ]);
+        return redirect()->back()->with('message','Anexo excluído com sucesso!');
+        
+        // return json_encode([
+        //     'icon' => 'success',
+        //     'title' => 'Sucesso!',
+        //     'text' => 'Anexo excluído com sucesso!',
+        //     'delete' => $delete,
+        //     'delete2' => $delete2,
+        // ]);
     }
 }

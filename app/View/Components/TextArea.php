@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class TextArea extends Component
+class Textarea extends Component
 {
     /**
      * Create a new component instance.

@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class TableHeader extends Component
+class Tableheader extends Component
 {
     /**
      * Create a new component instance.

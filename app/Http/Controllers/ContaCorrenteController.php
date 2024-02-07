@@ -21,6 +21,8 @@ class ContaCorrenteController extends Controller
 
     public function store(ContaCorrenteRequest $request)
     {
+        // dd($request->hasFile('anexo'));
+        
         if ($request->balanco == 'Débito') {
             $peso_agregado = -$request->peso;
         } else {
@@ -32,7 +34,7 @@ class ContaCorrenteController extends Controller
         $contaCorrente = ContaCorrente::create(
             $request->all()
         );
-
+       
         if ($request->hasFile('anexo')) {
             foreach ($request->file('anexo') as $file) {
                 ContaCorrenteAnexos::create([

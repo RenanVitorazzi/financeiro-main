@@ -78,5 +78,12 @@ Anexos
 
 
 <?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script>
+    <?php if(Session::has('message')): ?>
+        toastr["success"]("<?php echo e(Session::get('message')); ?>")
+    <?php endif; ?>
+</script>
+<?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\CAIXA\Desktop\Sistema\financeiro-main\resources\views/conta_corrente_anexo/index.blade.php ENDPATH**/ ?>
