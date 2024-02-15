@@ -7,6 +7,7 @@ use App\Models\DespesaFixa;
 use App\Models\Local;
 use App\Models\Parcela;
 use App\Models\Despesa as ModelsDespesa;
+use App\Models\Representante;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,39 +22,18 @@ class HomeController extends Controller
 
     public function index()
     {
-        
-        $depositos = Parcela::vencidosCarteira()
-            ->get();
-        // dd($depositos);
+        if (auth()->user()->is_representante) {
+            
+            $representante = Representante::findOrFail(auth()->user()->is_representante);
+
+            return redirect()->action(
+                [RepresentanteController::class, 'representanteDashboard'], ['representante' => $representante]
+            );
+        }
+
+        $depositos = Parcela::vencidosCarteira()->get();
+
         $qtdDiasParaSexta = 5 - Carbon::now()->dayOfWeek;
-
-        // $idFixasPagas = ModelsDespesa::with('local')
-        //     ->where(DB::raw('MONTH(data_vencimento)'), DB::raw('MONTH(CURDATE())'))
-        //     ->whereNotNull('fixas_id')
-        //     ->orderBy('local_id')
-        //     ->pluck('fixas_id');
-
-        // $fixasNaoPagas = DespesaFixa::with('local')
-        //     ->whereNotIn('id', $idFixasPagas)
-        //     ->where('dia_vencimento', '<=', DB::raw('DAY(CURDATE()+7)'))
-        //     ->get();
-
-        // $adiamentos = DB::select('SELECT
-        //         data_parcela,
-        //         nome_cheque,
-        //         valor_parcela,
-        //         a.nova_data,
-        //         numero_cheque,
-        //         (SELECT nome from pessoas where pessoas.id = r.pessoa_id) as representante,
-        //         (SELECT nome from pessoas where pessoas.id = pa.pessoa_id) as parceiro
-        //     FROM
-        //         parcelas p
-        //     INNER JOIN adiamentos a ON a.parcela_id = p.id
-        //     LEFT JOIN representantes r ON r.id = p.representante_id
-        //     LEFT JOIN parceiros pa ON pa.id = p.parceiro_id
-        //     WHERE CONVERT(a.created_at, DATE) = CURDATE()
-        //     ORDER BY pa.id'
-        // );
 
         $adiamentos = Parcela::adiamentosDoDia(date('Y-m-d'))
             ->orderBy('parceiro_id')

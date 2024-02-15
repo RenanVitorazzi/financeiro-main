@@ -47,6 +47,13 @@ Route::group(['middleware' => ['auth']], function() {
     ]);
     Route::resource('consignado', ConsignadoController::class);
     Route::get('pdf_consignados/{representante_id}', [ConsignadoController::class, 'pdf_consignados'])->name('pdf_consignados');
+    
+    Route::view('procura_cheque', 'cheque.procura_cheque')->name('procura_cheque');
+    Route::get('consulta_cheque', [ChequeController::class, 'consulta_cheque'])->name('consulta_cheque');
+    Route::get('procurar_pagamento', [ChequeController::class, 'procurar_pagamento'])->name('procurar_pagamento');
+    Route::get('historico_parcela', [ChequeController::class, 'historicoParcela'])->name('historico_parcela');
+    Route::resource('representantes', RepresentanteController::class);
+    Route::get('dashboard/{representante}', [RepresentanteController::class, 'representanteDashboard'])->name('representanteDashboard');
 
     Route::group(['middleware' => ['is_admin']], function() {
         Route::get('configurar_cc_parceiros/{parceiro_id}', [ParceiroController::class, 'configurar_cc_parceiros'])->name('configurar_cc_parceiros');
@@ -59,14 +66,12 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('resgatar_cheque/{id}', [TrocaChequeController::class, 'resgatar_cheque'])->name('resgatar_cheque');
         Route::post('baixarDebitosRepresentantes/{representante_id}', [RepresentanteController::class, 'baixarDebitosRepresentantes'])->name('baixarDebitosRepresentantes');
         Route::post('depositar_diario', [ChequeController::class, 'depositar_diario'])->name('depositar_diario');
-        Route::view('procura_cheque', 'cheque.procura_cheque')->name('procura_cheque');
         Route::get('procurarConsignado', [ConsignadoController::class, 'procurarConsignado'])->name('procurarConsignado');
-        Route::get('dashboard/{representante}', [RepresentanteController::class, 'representanteDashboard'])->name('representanteDashboard');
         Route::get('acertos_representante/{representante_id}', [VendaController::class, 'acertosRepresentante'])->name('acertosRepresentante');
 
         //? Cadastros auxiliares
         Route::resource('fornecedores', FornecedorController::class);
-        Route::resource('representantes', RepresentanteController::class);
+        
         Route::resource('parceiros', ParceiroController::class);
         Route::resource('contas', ContaController::class);
         Route::resource('despesas_fixas', DespesasFixasController::class);
@@ -146,10 +151,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::resource('conta_corrente_anexo', ContaCorrenteAnexoController::class)->only([
             'index', 'create', 'store', 'destroy'
         ]);
-        Route::get('consulta_cheque', [ChequeController::class, 'consulta_cheque'])->name('consulta_cheque');
         Route::get('consulta_parcela_pagamento', [ChequeController::class, 'consulta_parcela_pagamento'])->name('consulta_parcela_pagamento');
-        Route::get('procurar_pagamento', [ChequeController::class, 'procurar_pagamento'])->name('procurar_pagamento');
-        Route::get('historico_parcela', [ChequeController::class, 'historicoParcela'])->name('historico_parcela');
+        
         Route::get('procurarCliente', [ClienteController::class, 'procurarCliente'])->name('procurarCliente');
         Route::get('titularDoUltimoCheque', [ChequeController::class, 'titularDoUltimoCheque'])->name('titularDoUltimoCheque');
         Route::get('troca_automatizada', [TrocaChequeController::class, 'troca_automatizada'])->name('troca_automatizada');

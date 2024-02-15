@@ -27,6 +27,7 @@ class RepresentanteController extends Controller {
             ->withSum('conta_corrente', 'fator_agregado')
             ->orderBy('inativo')
             ->orderBy('atacado')
+            ->orderBy('id')
             ->get();
 
         $message = $request->session()->get('message');

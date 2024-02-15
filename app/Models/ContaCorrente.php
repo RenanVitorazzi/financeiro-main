@@ -27,11 +27,36 @@ class ContaCorrente extends Model {
 
     public function scopeExtrato($query, $fornecedor_id)
     {
-        return $query->select('*', DB::raw('SUM(peso_agregado) OVER ( ORDER BY data, id) AS saldo') )
-            ->where('fornecedor_id', $fornecedor_id)
-            ->orderBy('data')
-            ->orderBy('id')
-            ->get();
+        //! PARA MYSQL 8.0 SERVER
+        // return $query->select('*', DB::raw('SUM(peso_agregado) OVER ( ORDER BY data, id) AS saldo') )
+        //     ->where('fornecedor_id', $fornecedor_id)
+        //     ->orderBy('data')
+        //     ->orderBy('id')
+        //     ->get();
+
+        //! PARA MYSQL 5.7
+        $teste =  DB::select("SELECT id,
+                data,
+                balanco,
+                peso,
+                observacao,
+                peso_agregado,
+                (SELECT SUM(peso_agregado)
+                    FROM conta_corrente
+                    WHERE fornecedor_id = ?
+                    AND deleted_at IS NULL
+                    AND (data < cc.data OR (data = cc.data AND id <= cc.id))) as saldo
+            FROM
+                conta_corrente cc
+            WHERE
+                fornecedor_id = ?
+                AND deleted_at IS NULL
+            ORDER BY data, id",
+            [$fornecedor_id, $fornecedor_id]
+        );
+
+        return $query->hydrate($teste);
+      
     }
 
 }

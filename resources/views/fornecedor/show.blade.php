@@ -30,7 +30,7 @@ Conta Corrente - {{ $fornecedor->pessoa->nome }}
     </h3>
 @endif
 <x-table>
-    <x-table-header>
+    <x-tableheader>
         <tr>
             <th>Data</th>
             <th>Quantidade (Gramas)</th>
@@ -39,7 +39,7 @@ Conta Corrente - {{ $fornecedor->pessoa->nome }}
             <th>Saldo</th>
             <th>Ações</th>
         </tr>
-    </x-table-header>
+    </x-tableheader>
     <tbody>
         @forelse ($registrosContaCorrente as $contaCorrente)
             @if ($ultimaConferencia && $contaCorrente->id == $ultimaConferencia->id && $filtrarConferencia !== true)

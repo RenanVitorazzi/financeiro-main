@@ -80,7 +80,7 @@ class FornecedorController extends Controller
         $fornecedor = Fornecedor::with('pessoa')->findOrFail($id);
 
         $registrosContaCorrente = ContaCorrente::extrato($id);
-
+        
         $ultimaConferencia = $registrosContaCorrente->whereNotNull('conferido')->last();
        
         $filtrarConferencia = !$ultimaConferencia ? true : false;

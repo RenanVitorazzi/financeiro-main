@@ -130,12 +130,15 @@
                       <span>Troca de cheques</span>
                     </a>
                 </li>
+              <?php endif; ?>
+                
                 <li <?php if(route('procura_cheque') == Request::url()): ?> class="ativo" <?php endif; ?>>
                     <a href="<?php echo e(route('procura_cheque')); ?>">
                       <i class="fas fa-search"></i>
                       <span>Procurar cheque</span>
                     </a>
                 </li>
+              <?php if(auth()->user()->is_admin): ?>
                 <li <?php if(route('recebimentos.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
                   <a href="<?php echo e(route('recebimentos.index')); ?>">
                   

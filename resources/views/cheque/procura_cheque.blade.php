@@ -238,6 +238,7 @@ Procurar cheque
                     Swal.showLoading()
                 },
                 success: (response) => {
+                    let usuario = response.user
                     let tableBody = ''
                     let arrayNomeBlackList = response.blackList[0].nome_cheque ? response.blackList[0].nome_cheque.split(',') : []
                     let arrayClienteIdBlackList = response.blackList[0].cliente_id ? response.blackList[0].cliente_id.split(',') : []
@@ -279,6 +280,13 @@ Procurar cheque
                                 data-nome="${element.nome_cheque}"
                             > <i class="far fa-clock"></i> </div>`
 
+                        let botaoEditar = `<x-botao-editar target='_blank' href='cheques/${element.id}/edit'></x-botao-editar>`
+                            
+                        if (usuario.is_representante) {
+                            botaoEditar = ''
+                            botaoAdiar = ''
+                        }
+
                         if (element.status === 'PAGO' || element.status === 'DEPOSITADO') {
                             tableBody += `
                                 <tr>
@@ -286,16 +294,13 @@ Procurar cheque
                                     <td>${dataTratada}</td>
                                     <td>${element.valor_parcela_tratado}</td>
                                     <td>${representante}</td>
-
                                     <td>${numero_banco}</td>
                                     <td>${numero_cheque}</td>
                                     <td>${ondeEstaCheque}</td>
                                     <td>${element.status}</td>
                                     <td>${botaoPagamentos}</td>
                                     <td>${botaoHistorico}</td>
-                                    <td>
-                                        <x-botao-editar target='_blank' href='cheques/${element.id}/edit'></x-botao-editar>
-                                    </td>
+                                    <td>${botaoEditar}</td>
                                 </tr>
                             `
                         } else if (element.adiamento_id) {
@@ -305,7 +310,6 @@ Procurar cheque
                                     <td><span class="text-muted">(${dataTratada})</span> ${transformaData(element.nova_data)}</td>
                                     <td>${element.valor_parcela_tratado}</td>
                                     <td>${representante}</td>
-
                                     <td>${numero_banco}</td>
                                     <td>${numero_cheque}</td>
                                     <td>${ondeEstaCheque}</td>
@@ -314,8 +318,7 @@ Procurar cheque
                                     <td>${botaoHistorico}</td>
                                     <td>
                                         ${botaoAdiar}
-                                        <x-botao-editar target='_blank' href='cheques/${element.id}/edit'></x-botao-editar>
-                                        
+                                        ${botaoEditar}
                                     </td>
                                 </tr>
                             `
@@ -326,7 +329,6 @@ Procurar cheque
                                     <td>${dataTratada}</td>
                                     <td>${element.valor_parcela_tratado}</td>
                                     <td>${representante}</td>
-
                                     <td>${numero_banco}</td>
                                     <td>${numero_cheque}</td>
                                     <td>${ondeEstaCheque}</td>
@@ -335,8 +337,7 @@ Procurar cheque
                                     <td>${botaoHistorico}</td>
                                     <td>
                                         ${botaoAdiar}
-                                        <x-botao-editar target='_blank' href='cheques/${element.id}/edit'></x-botao-editar>
-                                        
+                                        ${botaoEditar}
                                     </td>
                                 </tr>
                             `
@@ -667,5 +668,6 @@ Procurar cheque
             }
         });
     }
+
 </script>
 @endsection

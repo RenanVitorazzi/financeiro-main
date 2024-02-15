@@ -327,6 +327,7 @@ Procurar cheque
                     Swal.showLoading()
                 },
                 success: (response) => {
+                    let usuario = response.user
                     let tableBody = ''
                     let arrayNomeBlackList = response.blackList[0].nome_cheque ? response.blackList[0].nome_cheque.split(',') : []
                     let arrayClienteIdBlackList = response.blackList[0].cliente_id ? response.blackList[0].cliente_id.split(',') : []
@@ -368,22 +369,7 @@ Procurar cheque
                                 data-nome="${element.nome_cheque}"
                             > <i class="far fa-clock"></i> </div>`
 
-                        if (element.status === 'PAGO' || element.status === 'DEPOSITADO') {
-                            tableBody += `
-                                <tr>
-                                    <td>${element.nome_cheque}</td>
-                                    <td>${dataTratada}</td>
-                                    <td>${element.valor_parcela_tratado}</td>
-                                    <td>${representante}</td>
-
-                                    <td>${numero_banco}</td>
-                                    <td>${numero_cheque}</td>
-                                    <td>${ondeEstaCheque}</td>
-                                    <td>${element.status}</td>
-                                    <td>${botaoPagamentos}</td>
-                                    <td>${botaoHistorico}</td>
-                                    <td>
-                                        <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
+                        let botaoEditar = `<?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
 <?php $component->withName('botao-editar'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -393,8 +379,27 @@ Procurar cheque
 <?php if (isset($__componentOriginal13702a75d66702067dad623af293364e28e151a7)): ?>
 <?php $component = $__componentOriginal13702a75d66702067dad623af293364e28e151a7; ?>
 <?php unset($__componentOriginal13702a75d66702067dad623af293364e28e151a7); ?>
-<?php endif; ?>
-                                    </td>
+<?php endif; ?>`
+                            
+                        if (usuario.is_representante) {
+                            botaoEditar = ''
+                            botaoAdiar = ''
+                        }
+
+                        if (element.status === 'PAGO' || element.status === 'DEPOSITADO') {
+                            tableBody += `
+                                <tr>
+                                    <td>${element.nome_cheque}</td>
+                                    <td>${dataTratada}</td>
+                                    <td>${element.valor_parcela_tratado}</td>
+                                    <td>${representante}</td>
+                                    <td>${numero_banco}</td>
+                                    <td>${numero_cheque}</td>
+                                    <td>${ondeEstaCheque}</td>
+                                    <td>${element.status}</td>
+                                    <td>${botaoPagamentos}</td>
+                                    <td>${botaoHistorico}</td>
+                                    <td>${botaoEditar}</td>
                                 </tr>
                             `
                         } else if (element.adiamento_id) {
@@ -404,7 +409,6 @@ Procurar cheque
                                     <td><span class="text-muted">(${dataTratada})</span> ${transformaData(element.nova_data)}</td>
                                     <td>${element.valor_parcela_tratado}</td>
                                     <td>${representante}</td>
-
                                     <td>${numero_banco}</td>
                                     <td>${numero_cheque}</td>
                                     <td>${ondeEstaCheque}</td>
@@ -413,18 +417,7 @@ Procurar cheque
                                     <td>${botaoHistorico}</td>
                                     <td>
                                         ${botaoAdiar}
-                                        <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
-<?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
-<?php $component->withName('botao-editar'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['target' => '_blank','href' => 'cheques/${element.id}/edit']); ?> <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal13702a75d66702067dad623af293364e28e151a7)): ?>
-<?php $component = $__componentOriginal13702a75d66702067dad623af293364e28e151a7; ?>
-<?php unset($__componentOriginal13702a75d66702067dad623af293364e28e151a7); ?>
-<?php endif; ?>
-                                        
+                                        ${botaoEditar}
                                     </td>
                                 </tr>
                             `
@@ -435,7 +428,6 @@ Procurar cheque
                                     <td>${dataTratada}</td>
                                     <td>${element.valor_parcela_tratado}</td>
                                     <td>${representante}</td>
-
                                     <td>${numero_banco}</td>
                                     <td>${numero_cheque}</td>
                                     <td>${ondeEstaCheque}</td>
@@ -444,18 +436,7 @@ Procurar cheque
                                     <td>${botaoHistorico}</td>
                                     <td>
                                         ${botaoAdiar}
-                                        <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
-<?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
-<?php $component->withName('botao-editar'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php $component->withAttributes(['target' => '_blank','href' => 'cheques/${element.id}/edit']); ?> <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal13702a75d66702067dad623af293364e28e151a7)): ?>
-<?php $component = $__componentOriginal13702a75d66702067dad623af293364e28e151a7; ?>
-<?php unset($__componentOriginal13702a75d66702067dad623af293364e28e151a7); ?>
-<?php endif; ?>
-                                        
+                                        ${botaoEditar}
                                     </td>
                                 </tr>
                             `
@@ -906,6 +887,7 @@ Procurar cheque
             }
         });
     }
+
 </script>
 <?php $__env->stopSection(); ?>
 

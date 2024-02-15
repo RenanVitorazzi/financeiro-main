@@ -55,9 +55,9 @@ Conta Corrente - <?php echo e($fornecedor->pessoa->nome); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
-    <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
-<?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
-<?php $component->withName('table-header'); ?>
+    <?php if (isset($component)) { $__componentOriginalfb92ff36a55f0dcdf5fe1bf02e275a6bc7af5477 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Tableheader::class, []); ?>
+<?php $component->withName('tableheader'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
@@ -71,9 +71,9 @@ Conta Corrente - <?php echo e($fornecedor->pessoa->nome); ?>
         </tr>
      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36)): ?>
-<?php $component = $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36; ?>
-<?php unset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36); ?>
+<?php if (isset($__componentOriginalfb92ff36a55f0dcdf5fe1bf02e275a6bc7af5477)): ?>
+<?php $component = $__componentOriginalfb92ff36a55f0dcdf5fe1bf02e275a6bc7af5477; ?>
+<?php unset($__componentOriginalfb92ff36a55f0dcdf5fe1bf02e275a6bc7af5477); ?>
 <?php endif; ?>
     <tbody>
         <?php $__empty_1 = true; $__currentLoopData = $registrosContaCorrente; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contaCorrente): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>

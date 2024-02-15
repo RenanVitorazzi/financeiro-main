@@ -262,44 +262,85 @@ class ChequeController extends Controller
             : '';
             
         $nome_cliente = '%'.$request->texto_pesquisa.'%';
-
-        $cheques = DB::select('SELECT
-                par.id,
-                UPPER(par.nome_cheque) as nome_cheque,
-                par.data_parcela,
-                par.numero_cheque,
-                Concat(?,Format(valor_parcela, 2, ?) ) AS valor_parcela_tratado,
-                par.valor_parcela,
-                UPPER(par.status) AS status,
-                (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
-                (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = pa.pessoa_id) AS nome_parceiro,
-                par.numero_banco,
-                par.parceiro_id,
-                a.nova_data,
-                v.cliente_id,
-                a.id as adiamento_id
-            FROM
-                parcelas par
-            LEFT JOIN
-                representantes r ON r.id = par.representante_id
-            LEFT JOIN
-                parceiros pa ON pa.id = par.parceiro_id
-            LEFT JOIN
-                adiamentos a ON a.parcela_id = par.id
-            LEFT JOIN
-                vendas v ON par.venda_id = v.id
-            WHERE
-                NOT EXISTS( SELECT id FROM adiamentos AS M2 WHERE M2.parcela_id = a.parcela_id AND M2.id > a.id)
-                AND par.deleted_at IS NULL
-                AND par.forma_pagamento like ?
-                AND  (' . $request->tipo_select . ' = ?
-                ' . $filtrarChequesDosUltimosAnos . '
-                OR
-                    nome_cheque like ? ' . $filtrarChequesDosUltimosAnos . ')
-                ORDER BY par.data_parcela
-                LIMIT 150',
-            ['R$ ' ,'de_DE', 'Cheque', $request->texto_pesquisa, $nome_cliente]
-        );
+        
+        if ($request->user()->is_admin) {
+            $cheques = DB::select('SELECT
+                    par.id,
+                    UPPER(par.nome_cheque) as nome_cheque,
+                    par.data_parcela,
+                    par.numero_cheque,
+                    Concat(?,Format(valor_parcela, 2, ?) ) AS valor_parcela_tratado,
+                    par.valor_parcela,
+                    UPPER(par.status) AS status,
+                    (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
+                    (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = pa.pessoa_id) AS nome_parceiro,
+                    par.numero_banco,
+                    par.parceiro_id,
+                    a.nova_data,
+                    v.cliente_id,
+                    a.id as adiamento_id
+                FROM
+                    parcelas par
+                LEFT JOIN
+                    representantes r ON r.id = par.representante_id
+                LEFT JOIN
+                    parceiros pa ON pa.id = par.parceiro_id
+                LEFT JOIN
+                    adiamentos a ON a.parcela_id = par.id
+                LEFT JOIN
+                    vendas v ON par.venda_id = v.id
+                WHERE
+                    NOT EXISTS( SELECT id FROM adiamentos AS M2 WHERE M2.parcela_id = a.parcela_id AND M2.id > a.id)
+                    AND par.deleted_at IS NULL
+                    AND par.forma_pagamento like ?
+                    AND  (' . $request->tipo_select . ' = ?
+                    ' . $filtrarChequesDosUltimosAnos . '
+                    OR
+                        nome_cheque like ? ' . $filtrarChequesDosUltimosAnos . ')
+                    ORDER BY par.data_parcela
+                    LIMIT 150',
+                ['R$ ' ,'de_DE', 'Cheque', $request->texto_pesquisa, $nome_cliente]
+            );
+        } else {
+            $cheques = DB::select('SELECT
+                    par.id,
+                    UPPER(par.nome_cheque) as nome_cheque,
+                    par.data_parcela,
+                    par.numero_cheque,
+                    Concat(?,Format(valor_parcela, 2, ?) ) AS valor_parcela_tratado,
+                    par.valor_parcela,
+                    UPPER(par.status) AS status,
+                    (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
+                    (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = pa.pessoa_id) AS nome_parceiro,
+                    par.numero_banco,
+                    par.parceiro_id,
+                    a.nova_data,
+                    v.cliente_id,
+                    a.id as adiamento_id
+                FROM
+                    parcelas par
+                LEFT JOIN
+                    representantes r ON r.id = par.representante_id
+                LEFT JOIN
+                    parceiros pa ON pa.id = par.parceiro_id
+                LEFT JOIN
+                    adiamentos a ON a.parcela_id = par.id
+                LEFT JOIN
+                    vendas v ON par.venda_id = v.id
+                WHERE
+                    NOT EXISTS( SELECT id FROM adiamentos AS M2 WHERE M2.parcela_id = a.parcela_id AND M2.id > a.id)
+                    AND par.deleted_at IS NULL
+                    AND par.representante_id = ?
+                    AND par.forma_pagamento like ?
+                    AND  (' . $request->tipo_select . ' = ?
+                    ' . $filtrarChequesDosUltimosAnos . '
+                    OR
+                        nome_cheque like ? ' . $filtrarChequesDosUltimosAnos . ')
+                    ORDER BY par.data_parcela
+                    LIMIT 150',
+                ['R$ ','de_DE' ,$request->user()->is_representante ,'Cheque' ,$request->texto_pesquisa ,$nome_cliente]
+            );
+        }
         
         $blackList = DB::select('SELECT DISTINCT
                 pa.nome_cheque,
@@ -325,7 +366,12 @@ class ChequeController extends Controller
             'tudo' => $request->todosCheques ?? NULL
         ];
 
-        return json_encode(['Cheques' => $cheques, 'blackList' => $blackList, 'imprimir' => $infoImpressao]);
+        return json_encode([
+            'Cheques' => $cheques, 
+            'blackList' => $blackList, 
+            'user' => $request->user(), 
+            'imprimir' => $infoImpressao
+        ]);
     }
 
     public function depositar_diario()

@@ -159,12 +159,15 @@
                       <span>Troca de cheques</span>
                     </a>
                 </li>
+              @endif
+                
                 <li @if(route('procura_cheque') == Request::url()) class="ativo" @endif>
                     <a href="{{ route('procura_cheque') }}">
                       <i class="fas fa-search"></i>
                       <span>Procurar cheque</span>
                     </a>
                 </li>
+              @if(auth()->user()->is_admin)
                 <li @if(route('recebimentos.index') == Request::url()) class="ativo" @endif>
                   <a href="{{ route('recebimentos.index') }}">
                   {{-- <i class="fas fa-exchange-alt"></i> --}}
