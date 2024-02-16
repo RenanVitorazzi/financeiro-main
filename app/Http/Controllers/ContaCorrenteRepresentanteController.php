@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class ContaCorrenteRepresentanteController extends Controller
 {
+
     public function create(Request $request)
     {
         $representante = Representante::with('pessoa')->find($request->representante_id);
@@ -24,6 +25,7 @@ class ContaCorrenteRepresentanteController extends Controller
     public function store(ContaCorrenteRepresentanteRequest $request)
     {
         $representante = Representante::findOrFail($request->representante_id);
+
         if ($request->balanco == 'Venda' || $request->balanco == 'Devolução') {
             $peso_agregado = $request->peso;
             $fator_agregado = $request->fator;
@@ -41,6 +43,7 @@ class ContaCorrenteRepresentanteController extends Controller
         $contaCorrente = ContaCorrenteRepresentante::create($request->all());
         
         if ($request->hasFile('anexo')) {
+
             foreach ($request->file('anexo') as $file) {
                 ModelsContaCorrenteRepresentanteAnexos::create([
                     'nome' => $file->getClientOriginalName(),
@@ -48,6 +51,7 @@ class ContaCorrenteRepresentanteController extends Controller
                     'path' => $file->store('conta_corrente_representante/' . $contaCorrente->id, 'public'),
                 ]);
             }
+
         }
 
         
@@ -105,6 +109,7 @@ class ContaCorrenteRepresentanteController extends Controller
         if ($representante->atacado) {
             $impresso = 'impresso_ccr2';
         }
+
         return view('conta_corrente_representante.show', compact('contaCorrente', 'representante', 'impresso'));
     }
 

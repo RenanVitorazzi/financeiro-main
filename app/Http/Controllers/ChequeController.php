@@ -597,8 +597,14 @@ class ChequeController extends Controller
         $filtrarChequesDosUltimosAnos = ($todosCheques == 'null') 
         ? 'AND data_parcela >= CURDATE() - INTERVAL 6 MONTH'
         : '';
-            
+        
         $nome_cliente = '%'.$texto_pesquisa.'%';
+        
+        $filtrarRepresentante = '';
+
+        if (auth()->user()->is_representante) {
+            $filtrarRepresentante = 'AND par.representante_id = ' . auth()->user()->is_representante;
+        }
 
         $cheques = DB::select('SELECT
                 par.id,
@@ -628,6 +634,7 @@ class ChequeController extends Controller
             WHERE
                 NOT EXISTS( SELECT id FROM adiamentos AS M2 WHERE M2.parcela_id = a.parcela_id AND M2.id > a.id)
                 AND par.deleted_at IS NULL
+                ' . $filtrarRepresentante . '
                 AND par.forma_pagamento like ?
                 AND  (' . $tipo_select . ' = ?
                 ' . $filtrarChequesDosUltimosAnos . '
@@ -637,7 +644,7 @@ class ChequeController extends Controller
                 LIMIT 150',
             ['R$ ' ,'de_DE', 'Cheque', $texto_pesquisa, $nome_cliente]
         );
-        // dd($cheques);
+        
         $blackList = DB::select('SELECT DISTINCT
                 pa.nome_cheque,
                 GROUP_CONCAT(pa.nome_cheque) as nome_cheque,

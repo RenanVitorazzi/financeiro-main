@@ -1,8 +1,10 @@
 
+
 <?php $__env->startSection('title'); ?>
 Dashboard <?php echo e($pessoa->nome); ?>
 
 <?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('body'); ?>
 <style>
     .card_dash>.card:hover {
@@ -14,11 +16,12 @@ Dashboard <?php echo e($pessoa->nome); ?>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?php echo e(route('home')); ?>">Home</a></li>
-        <li class="breadcrumb-item"><a href="<?php echo e(route('representantes.index')); ?>">Representantes</a></li>
+        <?php if(auth()->user()->is_admin): ?>
+            <li class="breadcrumb-item"><a href="<?php echo e(route('representantes.index')); ?>">Representantes</a></li>
+        <?php endif; ?>
         <li class="breadcrumb-item active" aria-current="page">Dashboard <?php echo e($pessoa->nome); ?></li>
     </ol>
 </nav>
-
 
 <div class="row">
     <div class="col-sm-6 mb-4 col-md-6 card_dash" data-tipo='CONTA_CORRENTE'>
@@ -29,21 +32,24 @@ Dashboard <?php echo e($pessoa->nome); ?>
                     <div>Peso: <?php echo number_format($contaCorrente->sum('peso_agregado'), 2, ',', '.'); ?></div>
                     <div>Fator: <?php echo number_format($contaCorrente->sum('fator_agregado'), 1, ',', '.'); ?></div>
                 </p>
-                <a href="<?php echo e(route('conta_corrente_representante.show', $representante->id)); ?>" class="btn btn-primary">Conta Corrente</a>
+                <?php if(auth()->user()->is_admin): ?>
+                    <a href="<?php echo e(route('conta_corrente_representante.show', $representante->id)); ?>" class="btn btn-primary">Conta Corrente</a>
+                <?php endif; ?>
                 <a href="<?php echo e(route('impresso_ccr', $representante->id)); ?>" class="btn btn-primary">Impresso</a>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 mb-4 col-md-6 card_dash"  data-tipo='CONSIGNADOS'>
+
+    <div class="col-sm-6 mb-4 col-md-6 card_dash" >
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Consignados</h5>
+                <h5 class="card-title">Cheques Devolvidos</h5>
                 <p class="card-text">
-                    <div>Peso: <?php echo number_format($consignados->sum('peso'), 2, ',', '.'); ?></div>
-                    <div>Fator: <?php echo number_format($consignados->sum('fator'), 1, ',', '.'); ?></div>
+                    <div>Conta corrente: <b class='text-danger'><?php echo 'R$ ' . number_format($saldoContaCorrenteChsDevolvidos, 2, ',', '.'); ?> </b> </div>
+                    <div>Na empresa (<?php echo e($devolvidosNoEscritorio->count()); ?>): <?php echo 'R$ ' . number_format($devolvidosNoEscritorio->sum('valor_parcela'), 2, ',', '.'); ?> </div>
+                    <div>Nos parceiros (<?php echo e($devolvidosComParceiros->count()); ?>): <?php echo 'R$ ' . number_format($devolvidosComParceiros->sum('valor_parcela'), 2, ',', '.'); ?></div>
                 </p>
-                <a href="<?php echo e(route('consignado.index')); ?>" class="btn btn-primary">Consignados</a>
-                <a href="<?php echo e(route('pdf_consignados', $representante->id)); ?>" class="btn btn-primary">Impresso</a>
+                <a href="<?php echo e(route('pdf_cc_representante', $representante->id)); ?>" class="btn btn-primary">Impresso do conta corrente</a>
             </div>
         </div>
     </div>
@@ -76,20 +82,23 @@ Dashboard <?php echo e($pessoa->nome); ?>
         </div>
     </div>
 
-    <div class="col-sm-6 mb-4 col-md-6 card_dash" >
+    <div class="col-sm-6 mb-4 col-md-6 card_dash"  data-tipo='CONSIGNADOS'>
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Cheques Devolvidos</h5>
+                <h5 class="card-title">Consignados</h5>
                 <p class="card-text">
-                    <div>Conta corrente: <b class='text-danger'><?php echo 'R$ ' . number_format($saldoContaCorrenteChsDevolvidos, 2, ',', '.'); ?> </b> </div>
-                    <div>Na empresa (<?php echo e($devolvidosNoEscritorio->count()); ?>): <?php echo 'R$ ' . number_format($devolvidosNoEscritorio->sum('valor_parcela'), 2, ',', '.'); ?> </div>
-                    <div>Nos parceiros (<?php echo e($devolvidosComParceiros->count()); ?>): <?php echo 'R$ ' . number_format($devolvidosComParceiros->sum('valor_parcela'), 2, ',', '.'); ?></div>
+                    <div>Peso: <?php echo number_format($consignados->sum('peso'), 2, ',', '.'); ?></div>
+                    <div>Fator: <?php echo number_format($consignados->sum('fator'), 1, ',', '.'); ?></div>
                 </p>
-                <a href="<?php echo e(route('pdf_cc_representante', $representante->id)); ?>" class="btn btn-primary">Impresso do conta corrente</a>
+                <?php if(auth()->user()->is_admin): ?>
+                    <a href="<?php echo e(route('consignado.index')); ?>" class="btn btn-primary">Consignados</a>
+                <?php endif; ?>
+                <a href="<?php echo e(route('pdf_consignados', $representante->id)); ?>" class="btn btn-primary">Impresso</a>
             </div>
         </div>
     </div>
-
+    
+    <?php if(auth()->user()->is_admin): ?>
     <div class="col-sm-6 mb-4 col-md-6 card_dash"  data-tipo='ULTIMO_RELATORIO'>
         <div class="card">
             <div class="card-body">
@@ -103,6 +112,7 @@ Dashboard <?php echo e($pessoa->nome); ?>
             </div>
         </div>
     </div>
+    <?php endif; ?>
 </div>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>

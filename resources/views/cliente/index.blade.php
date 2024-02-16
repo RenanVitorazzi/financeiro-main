@@ -28,11 +28,13 @@ Clientes
             <td>{{ $cliente->pessoa->estado }}</td>
             <td>{{ $cliente->representante->pessoa->nome ?? 'Sem representante'}}</td>
             <td class='d-flex justify-content-center'>
+                @if (auth()->user()->is_admin)
                 <a class="btn btn-dark mr-2" title="Visualizar" href="{{ route('clientes.show', $cliente->id) }}">
                     <i class="fas fa-eye"></i>
                 </a>
                 <x-botao-editar class="mr-2" href="{{ route('clientes.edit', $cliente->id) }}"></x-botao-editar>
                 <x-botao-excluir action="{{ route('clientes.destroy', $cliente->id) }}"></x-botao-excluir>
+                @endif
             </td>
         </tr>
         @empty

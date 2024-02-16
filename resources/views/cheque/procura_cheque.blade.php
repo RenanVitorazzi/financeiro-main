@@ -461,11 +461,18 @@ Procurar cheque
                     `
                     totalPago += valorTratado;
                 })
+
                 $("#modal-header2").html(`
                     <h3>Pagamentos</h3> 
-                    <div class='btn btn-success' id='btn_adicionar_pagamento' data-id='${parcela_id}' data-totalPago='${totalPago}'>
-                        <span class='fas fa-plus'></span>
-                    </div>`)
+                `)
+
+                // $("#modal-header2").html(`
+                //     <h3>Pagamentos</h3> 
+                //     <div class='btn btn-success' id='btn_adicionar_pagamento' data-id='${parcela_id}' data-totalPago='${totalPago}'>
+                //         <span class='fas fa-plus'></span>
+                //     </div>
+                // `)
+
                 $("#modal-body2").html(`
                     <x-table>
                         <x-table-header>

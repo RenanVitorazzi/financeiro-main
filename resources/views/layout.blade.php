@@ -120,12 +120,14 @@
               <span>Clientes</span>
             </a>
           </li>
+          @if(auth()->user()->is_admin)        
           <li @if(route('consignado.index') == Request::url()) class="ativo" @endif>
             <a href="{{ route('consignado.index') }}">
               <i class="far fa-gem"></i>
               <span>Consignados</span>
             </a>
           </li>
+          @endif
           {{--
           <li @if(route('ops.index') == Request::url()) class="ativo" @endif>
             <a href="{{ route('ops.index') }}">
@@ -264,18 +266,18 @@
                 <span>Vendas</span>
                 </a>
             </li>
-            <li @if(route('conta_corrente_representante.show', auth()->user()->is_representante) == Request::url()) class="ativo" @endif>
+            {{-- <li @if(route('conta_corrente_representante.show', auth()->user()->is_representante) == Request::url()) class="ativo" @endif>
                 <a href="{{ route('conta_corrente_representante.show', auth()->user()->is_representante) }}">
                 <i class="fas fa-balance-scale"></i>
                 <span>Conta Corrente</span>
                 </a>
-            </li>
-            {{-- <li @if(route('cheques.index') == Request::url()) class="ativo" @endif>
+            </li> --}}
+            <li @if(route('cheques.index') == Request::url()) class="ativo" @endif>
                 <a href="{{ route('cheques.index') }}">
                 <i class="fas fa-money-check-alt"></i>
                 <span>Carteira de cheques</span>
                 </a>
-            </li> --}}
+            </li>
           @endif
         </ul>
       </div>

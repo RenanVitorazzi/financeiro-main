@@ -580,11 +580,18 @@ Procurar cheque
                     `
                     totalPago += valorTratado;
                 })
+
                 $("#modal-header2").html(`
                     <h3>Pagamentos</h3> 
-                    <div class='btn btn-success' id='btn_adicionar_pagamento' data-id='${parcela_id}' data-totalPago='${totalPago}'>
-                        <span class='fas fa-plus'></span>
-                    </div>`)
+                `)
+
+                // $("#modal-header2").html(`
+                //     <h3>Pagamentos</h3> 
+                //     <div class='btn btn-success' id='btn_adicionar_pagamento' data-id='${parcela_id}' data-totalPago='${totalPago}'>
+                //         <span class='fas fa-plus'></span>
+                //     </div>
+                // `)
+
                 $("#modal-body2").html(`
                     <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>

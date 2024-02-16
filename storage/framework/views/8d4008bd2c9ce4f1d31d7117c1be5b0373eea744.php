@@ -30,6 +30,18 @@ Carteira de cheques
 <?php unset($__componentOriginale4c265d4ffee8fab925ff5f69279324cd3ba69cd); ?>
 <?php endif; ?>
     </div>
+    <?php elseif(auth()->user()->is_representante): ?>
+    <?php if (isset($component)) { $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\BotaoImprimir::class, []); ?>
+<?php $component->withName('botao-imprimir'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['class' => 'mr-2','href' => ''.e(route('pdf_cheques', ['representante_id' => auth()->user()->is_representante, 'tipo' => '1'])).'']); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5)): ?>
+<?php $component = $__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5; ?>
+<?php unset($__componentOriginale7af6f5f93c3f23c2bd6667675861a3352692bb5); ?>
+<?php endif; ?>
     <?php endif; ?>
 </div>
        
@@ -68,7 +80,8 @@ Carteira de cheques
                 <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>
                 <td><?php echo e($cheque->numero_cheque); ?> <?php echo e($cheque->observacao); ?></td>
                 <td>
-                    <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
+                    <?php if(auth()->user()->is_admin): ?>        
+                        <?php if (isset($component)) { $__componentOriginal13702a75d66702067dad623af293364e28e151a7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\BotaoEditar::class, []); ?>
 <?php $component->withName('botao-editar'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -79,6 +92,7 @@ Carteira de cheques
 <?php $component = $__componentOriginal13702a75d66702067dad623af293364e28e151a7; ?>
 <?php unset($__componentOriginal13702a75d66702067dad623af293364e28e151a7); ?>
 <?php endif; ?>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

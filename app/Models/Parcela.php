@@ -176,13 +176,13 @@ class Parcela extends Model
     //     return $this->hasOneThrough(Cliente::class, Venda::class);
     // }
 
-    // protected static function booted()
-    // {
-    //     if (auth()->user()->is_representante) {
-    //         static::addGlobalScope('user', function (Builder $builder) {
-    //             $builder->where('representante_id', auth()->user()->is_representante);
-    //         });
-    //     }
-    // }
+    protected static function booted()
+    {
+        if (auth()->user()->is_representante) {
+            static::addGlobalScope('user', function (Builder $builder) {
+                $builder->where('representante_id', auth()->user()->is_representante);
+            });
+        }
+    }
 
 }

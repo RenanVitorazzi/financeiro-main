@@ -11,6 +11,8 @@ Carteira de cheques
         <x-botao-imprimir class="mr-2" href="{{ route('carteira_cheque_total') }}"></x-botao-imprimir>
         <x-botao-novo href="{{ route('cheques.create') }}"></x-botao-novo>
     </div>
+    @elseif(auth()->user()->is_representante)
+    <x-botao-imprimir class="mr-2" href="{{ route('pdf_cheques', ['representante_id' => auth()->user()->is_representante, 'tipo' => '1']) }}"></x-botao-imprimir>
     @endif
 </div>
        
@@ -34,7 +36,9 @@ Carteira de cheques
                 <td>@moeda($cheque->valor_parcela)</td>
                 <td>{{ $cheque->numero_cheque }} {{ $cheque->observacao}}</td>
                 <td>
-                    <x-botao-editar href="{{ route('cheques.edit', $cheque->id) }}"></x-botao-editar>
+                    @if(auth()->user()->is_admin)        
+                        <x-botao-editar href="{{ route('cheques.edit', $cheque->id) }}"></x-botao-editar>
+                    @endif
                 </td>
             </tr>
         @empty

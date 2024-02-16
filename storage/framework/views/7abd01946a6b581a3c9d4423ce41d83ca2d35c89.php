@@ -98,12 +98,14 @@
               <span>Clientes</span>
             </a>
           </li>
+          <?php if(auth()->user()->is_admin): ?>        
           <li <?php if(route('consignado.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
             <a href="<?php echo e(route('consignado.index')); ?>">
               <i class="far fa-gem"></i>
               <span>Consignados</span>
             </a>
           </li>
+          <?php endif; ?>
           
           <?php if(auth()->user()->is_admin): ?>
           <li <?php if(route('estoque.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
@@ -206,13 +208,13 @@
                 <span>Vendas</span>
                 </a>
             </li>
-            <li <?php if(route('conta_corrente_representante.show', auth()->user()->is_representante) == Request::url()): ?> class="ativo" <?php endif; ?>>
-                <a href="<?php echo e(route('conta_corrente_representante.show', auth()->user()->is_representante)); ?>">
-                <i class="fas fa-balance-scale"></i>
-                <span>Conta Corrente</span>
+            
+            <li <?php if(route('cheques.index') == Request::url()): ?> class="ativo" <?php endif; ?>>
+                <a href="<?php echo e(route('cheques.index')); ?>">
+                <i class="fas fa-money-check-alt"></i>
+                <span>Carteira de cheques</span>
                 </a>
             </li>
-            
           <?php endif; ?>
         </ul>
       </div>

@@ -52,6 +52,7 @@ Clientes
             <td><?php echo e($cliente->pessoa->estado); ?></td>
             <td><?php echo e($cliente->representante->pessoa->nome ?? 'Sem representante'); ?></td>
             <td class='d-flex justify-content-center'>
+                <?php if(auth()->user()->is_admin): ?>
                 <a class="btn btn-dark mr-2" title="Visualizar" href="<?php echo e(route('clientes.show', $cliente->id)); ?>">
                     <i class="fas fa-eye"></i>
                 </a>
@@ -77,6 +78,7 @@ Clientes
 <?php $component = $__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247; ?>
 <?php unset($__componentOriginalc7dfdfe339a23ddfcb22882c80952c28748ef247); ?>
 <?php endif; ?>
+                <?php endif; ?>
             </td>
         </tr>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

@@ -1,7 +1,9 @@
 @extends('layout')
+
 @section('title')
 Dashboard {{ $pessoa->nome }}
 @endsection
+
 @section('body')
 <style>
     .card_dash>.card:hover {
@@ -13,11 +15,12 @@ Dashboard {{ $pessoa->nome }}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('representantes.index') }}">Representantes</a></li>
+        @if (auth()->user()->is_admin)
+            <li class="breadcrumb-item"><a href="{{ route('representantes.index') }}">Representantes</a></li>
+        @endif
         <li class="breadcrumb-item active" aria-current="page">Dashboard {{ $pessoa->nome }}</li>
     </ol>
 </nav>
-
 
 <div class="row">
     <div class="col-sm-6 mb-4 col-md-6 card_dash" data-tipo='CONTA_CORRENTE'>
@@ -28,21 +31,24 @@ Dashboard {{ $pessoa->nome }}
                     <div>Peso: @peso($contaCorrente->sum('peso_agregado'))</div>
                     <div>Fator: @fator($contaCorrente->sum('fator_agregado'))</div>
                 </p>
-                <a href="{{ route('conta_corrente_representante.show', $representante->id) }}" class="btn btn-primary">Conta Corrente</a>
+                @if (auth()->user()->is_admin)
+                    <a href="{{ route('conta_corrente_representante.show', $representante->id) }}" class="btn btn-primary">Conta Corrente</a>
+                @endif
                 <a href="{{ route('impresso_ccr', $representante->id) }}" class="btn btn-primary">Impresso</a>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 mb-4 col-md-6 card_dash"  data-tipo='CONSIGNADOS'>
+
+    <div class="col-sm-6 mb-4 col-md-6 card_dash" >
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Consignados</h5>
+                <h5 class="card-title">Cheques Devolvidos</h5>
                 <p class="card-text">
-                    <div>Peso: @peso($consignados->sum('peso'))</div>
-                    <div>Fator: @fator($consignados->sum('fator'))</div>
+                    <div>Conta corrente: <b class='text-danger'>@moeda($saldoContaCorrenteChsDevolvidos) </b> </div>
+                    <div>Na empresa ({{ $devolvidosNoEscritorio->count() }}): @moeda($devolvidosNoEscritorio->sum('valor_parcela')) </div>
+                    <div>Nos parceiros ({{ $devolvidosComParceiros->count() }}): @moeda($devolvidosComParceiros->sum('valor_parcela'))</div>
                 </p>
-                <a href="{{route('consignado.index') }}" class="btn btn-primary">Consignados</a>
-                <a href="{{route('pdf_consignados', $representante->id) }}" class="btn btn-primary">Impresso</a>
+                <a href="{{route('pdf_cc_representante', $representante->id) }}" class="btn btn-primary">Impresso do conta corrente</a>
             </div>
         </div>
     </div>
@@ -75,20 +81,23 @@ Dashboard {{ $pessoa->nome }}
         </div>
     </div>
 
-    <div class="col-sm-6 mb-4 col-md-6 card_dash" >
+    <div class="col-sm-6 mb-4 col-md-6 card_dash"  data-tipo='CONSIGNADOS'>
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Cheques Devolvidos</h5>
+                <h5 class="card-title">Consignados</h5>
                 <p class="card-text">
-                    <div>Conta corrente: <b class='text-danger'>@moeda($saldoContaCorrenteChsDevolvidos) </b> </div>
-                    <div>Na empresa ({{ $devolvidosNoEscritorio->count() }}): @moeda($devolvidosNoEscritorio->sum('valor_parcela')) </div>
-                    <div>Nos parceiros ({{ $devolvidosComParceiros->count() }}): @moeda($devolvidosComParceiros->sum('valor_parcela'))</div>
+                    <div>Peso: @peso($consignados->sum('peso'))</div>
+                    <div>Fator: @fator($consignados->sum('fator'))</div>
                 </p>
-                <a href="{{route('pdf_cc_representante', $representante->id) }}" class="btn btn-primary">Impresso do conta corrente</a>
+                @if (auth()->user()->is_admin)
+                    <a href="{{route('consignado.index') }}" class="btn btn-primary">Consignados</a>
+                @endif
+                <a href="{{route('pdf_consignados', $representante->id) }}" class="btn btn-primary">Impresso</a>
             </div>
         </div>
     </div>
-
+    
+    @if (auth()->user()->is_admin)
     <div class="col-sm-6 mb-4 col-md-6 card_dash"  data-tipo='ULTIMO_RELATORIO'>
         <div class="card">
             <div class="card-body">
@@ -102,6 +111,7 @@ Dashboard {{ $pessoa->nome }}
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endsection
 @section('script')

@@ -68,9 +68,11 @@ Vendas - {{$representante->pessoa->nome}}
     </tbody>
 </x-table>
 
-<div id="enviarCC" class="btn btn-dark">
-    Enviar para o conta corrente
-</div>
+@if (auth()->user()->is_admin)
+    <div id="enviarCC" class="btn btn-dark">
+        Enviar para o conta corrente
+    </div>
+@endif
 @endsection
 @section('script')
 <script>

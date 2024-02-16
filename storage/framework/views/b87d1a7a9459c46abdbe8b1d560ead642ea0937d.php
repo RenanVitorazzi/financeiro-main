@@ -126,9 +126,11 @@ Vendas - <?php echo e($representante->pessoa->nome); ?>
 <?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
 <?php endif; ?>
 
-<div id="enviarCC" class="btn btn-dark">
-    Enviar para o conta corrente
-</div>
+<?php if(auth()->user()->is_admin): ?>
+    <div id="enviarCC" class="btn btn-dark">
+        Enviar para o conta corrente
+    </div>
+<?php endif; ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
 <script>

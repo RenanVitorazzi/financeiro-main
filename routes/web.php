@@ -45,14 +45,15 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('ccr_anexo', ContaCorrenteRepresentanteAnexoController::class)->only([
         'index', 'create', 'store', 'destroy'
     ]);
-    
+
     Route::view('procura_cheque', 'cheque.procura_cheque')->name('procura_cheque');
     Route::get('consulta_cheque', [ChequeController::class, 'consulta_cheque'])->name('consulta_cheque');
     Route::get('procurar_pagamento', [ChequeController::class, 'procurar_pagamento'])->name('procurar_pagamento');
     Route::get('historico_parcela', [ChequeController::class, 'historicoParcela'])->name('historico_parcela');
-    
+    Route::get('pdf_imprimir_procura_cheque/{tipo_select}/{texto_pesquisa}/{todosCheques}', [ChequeController::class, 'pdf_imprimir_procura_cheque'])->name('pdf_imprimir_procura_cheque');
+
     Route::group(['middleware' => ['is_representante']], function() {
-        Route::resource('conta_corrente_representante', ContaCorrenteRepresentanteController::class);
+        
         Route::resource('consignado', ConsignadoController::class);
         Route::resource('representantes', RepresentanteController::class);
         Route::get('dashboard/{representante}', [RepresentanteController::class, 'representanteDashboard'])->name('representanteDashboard');
@@ -61,9 +62,15 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pdf_cc_representante/{representante_id}', [RepresentanteController::class, 'pdf_cc_representante'])->name('pdf_cc_representante');
         Route::get('impresso_ccr/{id}', [ContaCorrenteRepresentanteController::class, 'impresso'])->name('impresso_ccr');
         Route::get('impresso_ccr2/{id}', [ContaCorrenteRepresentanteController::class, 'impresso2'])->name('impresso_ccr2');
+
+       
+        Route::get('pdf_cheques/{representante_id}/{tipo}', [ChequeController::class, 'pdf_cheques'])->name('pdf_cheques');
+        Route::get('pdf_cheques_entregues/{representante_id}/{data_entrega}', [EntregaParcelaController::class, 'pdf_cheques_entregues'])->name('pdf_cheques_entregues');
+
     });
 
     Route::group(['middleware' => ['is_admin']], function() {
+        Route::resource('conta_corrente_representante', ContaCorrenteRepresentanteController::class);
         Route::get('configurar_cc_parceiros/{parceiro_id}', [ParceiroController::class, 'configurar_cc_parceiros'])->name('configurar_cc_parceiros');
         Route::post('atualizar_conta_corrente/{parceiro_id}', [ParceiroController::class, 'atualizar_conta_corrente'])->name('atualizar_conta_corrente');
 
@@ -132,14 +139,13 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('adiamento_impresso/{representante_id}', [AdiamentosController::class, 'adiamento_impresso'])->name('adiamento_impresso');
         Route::get('cheques_devolvidos/{representante_id}', [DevolvidosController::class, 'cheques_devolvidos'])->name('cheques_devolvidos');
         Route::get('fechamento_representante/{representante_id}', [DevolvidosController::class, 'fechamento_representante'])->name('fechamento_representante');
-        Route::get('pdf_cheques/{representante_id}/{tipo}', [ChequeController::class, 'pdf_cheques'])->name('pdf_cheques');
+        
         Route::get('pdf_relatorio_vendas/{enviado_conta_corrente_id}', [VendaController::class, 'pdf_relatorio_vendas'])->name('pdf_relatorio_vendas');
         Route::get('pdf_relatorio_vendas_deflacao/{enviado_conta_corrente_id}', [VendaController::class, 'pdf_relatorio_vendas_deflacao'])->name('pdf_relatorio_vendas_deflacao');
         Route::get('pdf_conferencia_relatorio_vendas/{representante_id}', [VendaController::class, 'pdf_conferencia_relatorio_vendas'])->name('pdf_conferencia_relatorio_vendas');
         Route::get('pdf_conferencia_relatorio_vendas_sem_avista/{representante_id}', [VendaController::class, 'pdf_conferencia_relatorio_vendas_sem_avista'])->name('pdf_conferencia_relatorio_vendas_sem_avista');
         Route::get('pdf_conferencia_parcelas_relatorio_vendas/{representante_id}', [VendaController::class, 'pdf_conferencia_parcelas_relatorio_vendas'])->name('pdf_conferencia_parcelas_relatorio_vendas');
         Route::get('pdf_despesa_mensal/{mes}', [DespesaController::class, 'pdf_despesa_mensal'])->name('pdf_despesa_mensal');
-        Route::get('pdf_cheques_entregues/{representante_id}/{data_entrega}', [EntregaParcelaController::class, 'pdf_cheques_entregues'])->name('pdf_cheques_entregues');
         Route::get('pdf_estoque/{tipo}', [EstoqueController::class, 'pdf_estoque'])->name('pdf_estoque');
         Route::get('pdf_relatorio_mensal/{mes}/{ano}', [FornecedorController::class, 'pdf_relatorio_mensal'])->name('pdf_relatorio_mensal');
         Route::get('pdf_confirmar_depositos', [RecebimentosController::class, 'pdf_confirmar_depositos'])->name('pdf_confirmar_depositos');
@@ -150,7 +156,6 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('relacao_deb_cred_fornecedores/{data}', [FornecedorController::class, 'relacao_deb_cred_fornecedores'])->name('relacao_deb_cred_fornecedores');
         Route::get('relacao_deb_cred_representantes/{data}', [RepresentanteController::class, 'relacao_deb_cred_representantes'])->name('relacao_deb_cred_representantes');
         Route::get('etiqueta_endereco/{pessoa_id}', [ClienteController::class, 'etiqueta_endereco'])->name('etiqueta_endereco');
-        Route::get('pdf_imprimir_procura_cheque/{tipo_select}/{texto_pesquisa}/{todosCheques}', [ChequeController::class, 'pdf_imprimir_procura_cheque'])->name('pdf_imprimir_procura_cheque');
         Route::get('pdf_prorrogacao_conferencia/{dia}/{parceiro_id}', [AdiamentosController::class, 'pdf_prorrogacao_conferencia'])->name('pdf_prorrogacao_conferencia');
 
         //? Anexos
