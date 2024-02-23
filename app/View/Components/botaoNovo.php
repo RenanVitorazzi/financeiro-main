@@ -23,6 +23,8 @@ class botaoNovo extends Component
      */
     public function render()
     {
-        return view('components.botao-novo');
+        if (!auth()->user()->is_readyonly) {
+            return view('components.botao-novo');
+        }
     }
 }

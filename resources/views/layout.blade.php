@@ -229,6 +229,13 @@
                     <span>Cadastros Auxiliares</span>
                   </a>
                 </li>
+
+                <li @if(route('relatorios') == Request::url()) class="ativo" @endif>
+                  <a href="{{ route('relatorios') }}">
+                    <i class="fas fa-file"></i>
+                    <span>Relatórios</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </li>
@@ -278,6 +285,7 @@
                 <span>Carteira de cheques</span>
                 </a>
             </li>
+            
           @endif
         </ul>
       </div>

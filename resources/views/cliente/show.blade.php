@@ -15,11 +15,47 @@
 </nav>
 <div class='mb-2 d-flex justify-content-between'>
     <h3 class='d-inline' style="color:#212529">Histórico - {{$cliente->pessoa->nome}} </h3> 
+ 
     <div>
 
         <a class='mr-2 btn btn-dark' href="{{route('etiqueta_endereco', $cliente->pessoa_id)}}" target="_blank">Etiqueta</a>
         <x-botao-imprimir href="{{route('pdf_historico_cliente', $cliente->id)}}" target="_blank">Histórico</x-botao-imprimir>
     </div>
+</div>
+<div class='mb-2 d-flex justify-content-between'>
+
+    <div class='flex-fill'> 
+        <div class='mb-2'>
+            <h5 class='d-inline'>Endereço</h5>
+            @if ($cliente->pessoa->lat && $cliente->pessoa->lng)
+                <a 
+                    href="https://www.google.com/maps/search/?api=1&query={{ $cliente->pessoa->lat }},{{ $cliente->pessoa->lng }}" 
+                    target='_blank'
+                    class="badge badge-success">
+                        Cliente geolocalizado 
+                        <i class="fas fa-map-marker-alt"></i>
+                </a>
+            @endif
+        </div>
+        <p>{{$cliente->pessoa->logradouro}} {{$cliente->pessoa->numero}}, {{$cliente->pessoa->bairro}}</p>
+        <p>{{$cliente->pessoa->complemento}}</p>
+        <p>{{$cliente->pessoa->municipio}} - {{$cliente->pessoa->estado}}</p>
+        <p>CEP: {{$cliente->pessoa->cep}}</p>
+    </div>
+
+    <div class='flex-fill'>
+        <div class='mb-2'>
+            <h5 class='d-inline'>Dados pessoais</h5>
+        </div>
+        @if ($cliente->pessoa->tipoCadastro == 'Pessoa Física')
+            <p>CPF: {{$cliente->pessoa->cpf}} </p>
+        @elseif($cliente->pessoa->tipoCadastro == 'Pessoa Jurídica')
+            <p>CNPJ: {{$cliente->pessoa->cnpj}} </p>
+        @endif
+        <p>Tel: {{$cliente->pessoa->telefone}}</p>
+        <p>Cel: {{$cliente->pessoa->celular}}</p>
+    </div>
+    
 </div>
     @if(Session::has('message'))
         <p class="alert alert-success">{{ Session::get('message') }}</p>

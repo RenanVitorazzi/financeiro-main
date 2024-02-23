@@ -72,31 +72,21 @@
                 <table>
                     <thead>
                         <tr>
-                            <th colspan=2>Fornecedores</th>
+                            <th colspan=2>Fornecedores (Débito)</th>
                         </tr>
                         <tr>
                             <th>Nome</th>
                             <th>Saldo</th>
-                            <!-- <th>%</th> -->
-                            {{-- <th>30/60</th> --}}
+                            
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($fornecedores as $fornecedor)
-                            @if ($fornecedor->conta_corrente_sum_peso_agregado != 0)
-                                <tr>
-                                    <td>{{ $fornecedor->pessoa->nome }}</td>
-                                    <td>@peso($fornecedor->conta_corrente_sum_peso_agregado)</td>
-                                    <!-- <td> {{ number_format($fornecedor->conta_corrente_sum_peso_agregado / $fornecedores->sum('conta_corrente_sum_peso_agregado') * 100, 2) }} % </td> -->
-                                    {{-- <td>
-                                        @foreach ($pagamentoMed as $pagamento_fornecedor)
-                                            @if ($pagamento_fornecedor->fornecedor_id === $fornecedor->id)
-                                                {{ $pagamento_fornecedor->total }}
-                                            @endif
-                                        @endforeach
-                                    </td> --}}
-                                </tr>
-                            @endif
+                        @forelse ($fornecedores->where('conta_corrente_sum_peso_agregado', '<', 0) as $fornecedor)
+                            <tr>
+                                <td>{{ $fornecedor->pessoa->nome }}</td>
+                                <td>@peso($fornecedor->conta_corrente_sum_peso_agregado)</td>
+                                
+                            </tr>
                         @empty
                             <tr>
                                 <td colspan=2>Nenhum registro</td>
@@ -105,9 +95,9 @@
                         <tfoot>
                             <tr>
                                 <td><b>Total</b></td>
-                                <td><b>@peso($fornecedores->sum('conta_corrente_sum_peso_agregado'))</b></td>
-                                {{-- <td></td> --}}
-                                <!-- <td></td> -->
+                                <td><b>@peso($fornecedores->where('conta_corrente_sum_peso_agregado', '<', 0)->sum('conta_corrente_sum_peso_agregado'))</b></td>
+                            
+                                
                             </tr>
                         </tfoot>
                     </tbody>
@@ -235,6 +225,49 @@
         </tr>
     </table>
 
+    <table>
+        <tr>
+            <td class='tabela_invisivel'>
+
+            </td>
+            <td class='tabela_invisivel'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan=2>Fornecedores (Crédito)</th>
+                        </tr>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Saldo</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($fornecedores->where('conta_corrente_sum_peso_agregado', '>', 0.005) as $fornecedor)
+                            <tr>
+                                <td>{{ $fornecedor->pessoa->nome }}</td>
+                                <td>@peso($fornecedor->conta_corrente_sum_peso_agregado)</td>
+                                
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan=2>Nenhum registro</td>
+                            </tr>
+                        @endforelse
+                        <tfoot>
+                            <tr>
+                                <td><b>Total</b></td>
+                                <td><b>@peso($fornecedores->where('conta_corrente_sum_peso_agregado', '>', 0.005)->sum('conta_corrente_sum_peso_agregado'))</b></td>
+                            
+                                
+                            </tr>
+                        </tfoot>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    
 </body>
 </html>
 

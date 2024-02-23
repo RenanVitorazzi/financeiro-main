@@ -23,6 +23,8 @@ class botaoExcluir extends Component
      */
     public function render()
     {
-        return view('components.botao-excluir');
+        if (!auth()->user()->is_readyonly) {
+            return view('components.botao-excluir');
+        }
     }
 }

@@ -13,7 +13,7 @@ Procurar cheque
     <?php echo csrf_field(); ?>
 
     <div class="row">
-        <div class="col-lg-3 col-sm-6 form-group">
+        <div class="col-lg-2 col-md-6 col-sm-6 form-group">
             <?php if (isset($component)) { $__componentOriginal9664ac210be45add4be058f3177c16028511e71a = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Select::class, []); ?>
 <?php $component->withName('select'); ?>
@@ -24,8 +24,8 @@ Procurar cheque
                 <option value="numero_cheque">Número</option>
                 <option value="nome_cheque">Titular</option>
                 <option value="data_parcela">Data</option>
-                <option value="representante_id">Representante</option>
-                <option value="status">Status</option>
+                
+                
              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginal9664ac210be45add4be058f3177c16028511e71a)): ?>
@@ -34,7 +34,7 @@ Procurar cheque
 <?php endif; ?>
         </div>
 
-        <div class="col-lg-7 col-sm-6 form-group">
+        <div class="col-lg-7 col-md-6 col-sm-6 form-group">
             <?php if (isset($component)) { $__componentOriginal11c02d5af8eef3b9ca8b54c54983d5cb581e68d7 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Input::class, []); ?>
 <?php $component->withName('input'); ?>
@@ -48,14 +48,14 @@ Procurar cheque
 <?php endif; ?>
         </div>
         
-        <div class="form-check mt-2">
+        <div class="form-check mt-2 col-lg-1 col-md-6 col-sm-6 form-group">
             <input class="form-check-input" type="checkbox" value="1" name="todosCheques" id="todosCheques">
             <label class="form-check-label" for="todosCheques">
                 Todos?
             </label>
         </div>
 
-        <div class="form-group ml-2">
+        <div class="form-group col-lg-2 col-md-6 col-sm-6">
             <input type="submit" class='btn btn-dark' value='Procurar'>
         </div>
     </div>

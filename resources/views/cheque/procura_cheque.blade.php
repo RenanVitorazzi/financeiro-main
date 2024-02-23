@@ -14,29 +14,29 @@ Procurar cheque
     @csrf
 
     <div class="row">
-        <div class="col-lg-3 col-sm-6 form-group">
+        <div class="col-lg-2 col-md-6 col-sm-6 form-group">
             <x-select name="tipo_select" type="number" value="{{ old('tipo_select') }}">
                 <option value="valor_parcela">Valor</option>
                 <option value="numero_cheque">Número</option>
                 <option value="nome_cheque">Titular</option>
                 <option value="data_parcela">Data</option>
-                <option value="representante_id">Representante</option>
-                <option value="status">Status</option>
+                {{-- <option value="representante_id">Representante</option> --}}
+                {{-- <option value="status">Status</option> --}}
             </x-select>
         </div>
 
-        <div class="col-lg-7 col-sm-6 form-group">
+        <div class="col-lg-7 col-md-6 col-sm-6 form-group">
             <x-input name="texto_pesquisa"></x-input>
         </div>
         
-        <div class="form-check mt-2">
+        <div class="form-check mt-2 col-lg-1 col-md-6 col-sm-6 form-group">
             <input class="form-check-input" type="checkbox" value="1" name="todosCheques" id="todosCheques">
             <label class="form-check-label" for="todosCheques">
                 Todos?
             </label>
         </div>
 
-        <div class="form-group ml-2">
+        <div class="form-group col-lg-2 col-md-6 col-sm-6">
             <input type="submit" class='btn btn-dark' value='Procurar'>
         </div>
     </div>

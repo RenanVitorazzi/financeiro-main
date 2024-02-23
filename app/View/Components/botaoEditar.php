@@ -23,6 +23,8 @@ class botaoEditar extends Component
      */
     public function render()
     {
-        return view('components.botao-editar');
+        if (!auth()->user()->is_readyonly) {
+            return view('components.botao-editar');
+        }
     }
 }

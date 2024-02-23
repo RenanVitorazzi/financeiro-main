@@ -72,25 +72,21 @@
                 <table>
                     <thead>
                         <tr>
-                            <th colspan=2>Fornecedores</th>
+                            <th colspan=2>Fornecedores (Débito)</th>
                         </tr>
                         <tr>
                             <th>Nome</th>
                             <th>Saldo</th>
-                            <!-- <th>%</th> -->
                             
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $__empty_1 = true; $__currentLoopData = $fornecedores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fornecedor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <?php if($fornecedor->conta_corrente_sum_peso_agregado != 0): ?>
-                                <tr>
-                                    <td><?php echo e($fornecedor->pessoa->nome); ?></td>
-                                    <td><?php echo number_format($fornecedor->conta_corrente_sum_peso_agregado, 2, ',', '.'); ?></td>
-                                    <!-- <td> <?php echo e(number_format($fornecedor->conta_corrente_sum_peso_agregado / $fornecedores->sum('conta_corrente_sum_peso_agregado') * 100, 2)); ?> % </td> -->
-                                    
-                                </tr>
-                            <?php endif; ?>
+                        <?php $__empty_1 = true; $__currentLoopData = $fornecedores->where('conta_corrente_sum_peso_agregado', '<', 0); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fornecedor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <tr>
+                                <td><?php echo e($fornecedor->pessoa->nome); ?></td>
+                                <td><?php echo number_format($fornecedor->conta_corrente_sum_peso_agregado, 2, ',', '.'); ?></td>
+                                
+                            </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan=2>Nenhum registro</td>
@@ -99,9 +95,9 @@
                         <tfoot>
                             <tr>
                                 <td><b>Total</b></td>
-                                <td><b><?php echo number_format($fornecedores->sum('conta_corrente_sum_peso_agregado'), 2, ',', '.'); ?></b></td>
+                                <td><b><?php echo number_format($fornecedores->where('conta_corrente_sum_peso_agregado', '<', 0)->sum('conta_corrente_sum_peso_agregado'), 2, ',', '.'); ?></b></td>
+                            
                                 
-                                <!-- <td></td> -->
                             </tr>
                         </tfoot>
                     </tbody>
@@ -207,6 +203,49 @@
         </tr>
     </table>
 
+    <table>
+        <tr>
+            <td class='tabela_invisivel'>
+
+            </td>
+            <td class='tabela_invisivel'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan=2>Fornecedores (Crédito)</th>
+                        </tr>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Saldo</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__empty_1 = true; $__currentLoopData = $fornecedores->where('conta_corrente_sum_peso_agregado', '>', 0.005); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fornecedor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <tr>
+                                <td><?php echo e($fornecedor->pessoa->nome); ?></td>
+                                <td><?php echo number_format($fornecedor->conta_corrente_sum_peso_agregado, 2, ',', '.'); ?></td>
+                                
+                            </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <tr>
+                                <td colspan=2>Nenhum registro</td>
+                            </tr>
+                        <?php endif; ?>
+                        <tfoot>
+                            <tr>
+                                <td><b>Total</b></td>
+                                <td><b><?php echo number_format($fornecedores->where('conta_corrente_sum_peso_agregado', '>', 0.005)->sum('conta_corrente_sum_peso_agregado'), 2, ',', '.'); ?></b></td>
+                            
+                                
+                            </tr>
+                        </tfoot>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    
 </body>
 </html>
 

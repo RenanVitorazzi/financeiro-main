@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth']], function() {
         'index', 'create', 'store', 'destroy'
     ]);
 
+   
     Route::view('procura_cheque', 'cheque.procura_cheque')->name('procura_cheque');
     Route::get('consulta_cheque', [ChequeController::class, 'consulta_cheque'])->name('consulta_cheque');
     Route::get('procurar_pagamento', [ChequeController::class, 'procurar_pagamento'])->name('procurar_pagamento');
@@ -86,7 +87,6 @@ Route::group(['middleware' => ['auth']], function() {
 
         //? Cadastros auxiliares
         Route::resource('fornecedores', FornecedorController::class);
-        
         Route::resource('parceiros', ParceiroController::class);
         Route::resource('contas', ContaController::class);
         Route::resource('despesas_fixas', DespesasFixasController::class);
@@ -97,6 +97,8 @@ Route::group(['middleware' => ['auth']], function() {
         ];
         Route::view('/cadastros_auxiliares', 'cadastros_auxiliares', ['modulos' => $modulos])->name('cadastros_auxiliares');
 
+        Route::view('/relatorios', 'relatorios')->name('relatorios');
+        
         //? Financeiro
         Route::resource('conta_corrente', ContaCorrenteController::class);
         Route::resource('troca_cheques', TrocaChequeController::class);
@@ -139,7 +141,6 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('adiamento_impresso/{representante_id}', [AdiamentosController::class, 'adiamento_impresso'])->name('adiamento_impresso');
         Route::get('cheques_devolvidos/{representante_id}', [DevolvidosController::class, 'cheques_devolvidos'])->name('cheques_devolvidos');
         Route::get('fechamento_representante/{representante_id}', [DevolvidosController::class, 'fechamento_representante'])->name('fechamento_representante');
-        
         Route::get('pdf_relatorio_vendas/{enviado_conta_corrente_id}', [VendaController::class, 'pdf_relatorio_vendas'])->name('pdf_relatorio_vendas');
         Route::get('pdf_relatorio_vendas_deflacao/{enviado_conta_corrente_id}', [VendaController::class, 'pdf_relatorio_vendas_deflacao'])->name('pdf_relatorio_vendas_deflacao');
         Route::get('pdf_conferencia_relatorio_vendas/{representante_id}', [VendaController::class, 'pdf_conferencia_relatorio_vendas'])->name('pdf_conferencia_relatorio_vendas');

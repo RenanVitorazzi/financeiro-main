@@ -25,13 +25,6 @@
         font-size: 10px;
     }
 
-    /* td:first-child {
-        width:15%;
-    }
-
-    td:nth-child(2) {
-        width:40%;
-    }     */
 </style>
 <body>
     <h3> <?php echo e($parceiro->pessoa->nome); ?> - <?php echo date('d/m/Y', strtotime($dia)); ?> </h3>

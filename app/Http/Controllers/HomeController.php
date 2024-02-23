@@ -8,6 +8,7 @@ use App\Models\Local;
 use App\Models\Parcela;
 use App\Models\Despesa as ModelsDespesa;
 use App\Models\Representante;
+use App\Models\UserLoginLog;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,6 +23,9 @@ class HomeController extends Controller
 
     public function index()
     {
+        
+        UserLoginLog::create(['user_id' => auth()->user()->id]);
+
         if (auth()->user()->is_representante) {
             
             $representante = Representante::findOrFail(auth()->user()->is_representante);

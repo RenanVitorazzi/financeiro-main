@@ -166,7 +166,7 @@ class FornecedorController extends Controller
             ->withSum('contaCorrente', 'peso_agregado')
             ->get()
             ->sortBy('conta_corrente_sum_peso_agregado');
-
+        // dd($fornecedores);
         $carteira = DB::select('SELECT
                 sum(valor_parcela) as total_mes,
                 MONTH(IF(par.status = ?,
@@ -335,11 +335,24 @@ class FornecedorController extends Controller
                 $totalGeralDeTodosChequesDevolvidos += $totalGeralDevolvidos;
             }
         }
+
+        // $acertos = Parcela::query()
+        // ->with('venda')
+        // ->where([
+        //     ['forma_pagamento', 'LIKE', 'Cheque'], 
+        //     ['status', 'LIKE', 'Aguardando Envio']
+        // ])
+        // ->orWhere([
+        //     ['forma_pagamento', 'NOT LIKE', 'Cheque'], 
+        //     ['status', 'NOT LIKE', 'Pago']
+        // ])
+        // ->get();
+        //     dd($acertos->groupBy('representante_id'));
         // dd($chequesEmAberto[1]);
         $pdf = App::make('dompdf.wrapper');
         $pdf->setPaper('A4', 'landscape');
         $pdf->loadView(
-            'fornecedor.pdf.diario3',
+            'fornecedor.pdf.diario4',
             compact(
                 'estoque',
                 'fornecedores',

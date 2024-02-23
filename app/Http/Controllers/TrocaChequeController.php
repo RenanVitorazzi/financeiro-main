@@ -76,6 +76,7 @@ class TrocaChequeController extends Controller
     {
         $porcetagem_padrao = $request->taxa_juros;
         $taxa = $porcetagem_padrao / 100;
+        $arrayParceirosDescontamFeriado = [3, 4, 9];
 
         $cheques = Parcela::find($request->cheque_id);
         $dataInicio = new DateTime($request->data_troca);
@@ -97,7 +98,11 @@ class TrocaChequeController extends Controller
 
             $dataFim = new DateTime($dataDoCheque);
 
-            if ($request->parceiro_id == 3 || $request->parceiro_id == 4 || !$request->parceiro_id ) {
+            if ($request->parceiro_id == 9) {
+                $dataFim->modify('+1 day');
+            }
+            
+            if ( in_array($request->parceiro_id, $arrayParceirosDescontamFeriado) || !$request->parceiro_id ) {
                 //* Confere se é sábado ou domingo ou se o próximo dia útil não é feriado
                 while (in_array($dataFim->format('w'), [0, 6]) || !$this->feriados->where('data_feriado', $dataFim->format('Y-m-d'))->isEmpty()) {
                     $dataFim->modify('+1 weekday');
@@ -151,6 +156,7 @@ class TrocaChequeController extends Controller
     public function update(EditTrocaChequeRequest $request, $id)
     {
         $troca = Troca::findOrFail($id);
+        $arrayParceirosDescontamFeriado = [3, 4, 9];
 
         if  (($troca->data_troca !== $request->data_troca) || $troca->taxa_juros != $request->taxa_juros) {
             $cheques = TrocaParcela::with('parcelas')
@@ -169,7 +175,11 @@ class TrocaChequeController extends Controller
 
                 $dataFim = new DateTime($dataDoCheque);
 
-                if ($request->parceiro_id == 3 || $request->parceiro_id == 4 || !$request->parceiro_id ) {
+                if ($request->parceiro_id == 9) {
+                    $dataFim->modify('+1 day');
+                }
+
+                if ( in_array($request->parceiro_id, $arrayParceirosDescontamFeriado) || !$request->parceiro_id ) {
                     //* Confere se é sábado ou domingo ou se o próximo dia útil não é feriado
                     while (in_array($dataFim->format('w'), [0, 6]) || !$this->feriados->where('data_feriado', $dataFim->format('Y-m-d'))->isEmpty()) {
                         $dataFim->modify('+1 weekday');
