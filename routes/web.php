@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth']], function() {
         ];
         Route::view('/cadastros_auxiliares', 'cadastros_auxiliares', ['modulos' => $modulos])->name('cadastros_auxiliares');
 
-        Route::view('/relatorios', 'relatorios')->name('relatorios');
+        // Route::view('/relatorios', 'relatorios')->name('relatorios');
         
         //? Financeiro
         Route::resource('conta_corrente', ContaCorrenteController::class);

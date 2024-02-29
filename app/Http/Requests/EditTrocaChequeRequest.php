@@ -29,6 +29,10 @@ class EditTrocaChequeRequest extends FormRequest
             "parceiro_id" => ["nullable", "numeric"],
             "observacao" => ["string", "nullable"],
             "taxa_juros" => ["required", "numeric", "min:0", "max:100"],
+            "cheque_troca_id" => ["nullable", "array"],
+            "cheque_troca_id.*" => ["required", "numeric"],
+            "cheque_carteira_id" => ["nullable", "array"],
+            "cheque_carteira_id.*" => ["nullable", "numeric"],
         ];
     }
 }

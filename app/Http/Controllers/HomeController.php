@@ -49,7 +49,7 @@ class HomeController extends Controller
                 $query->whereBetween('data_parcela', [Carbon::now()->startOfWeek()->format('Y-m-d'), Carbon::now()->endOfWeek()->format('Y-m-d')]);
                 $query->orWhere('data_parcela', '<',  Carbon::now()->format('Y-m-d'));
              })
-            ->whereIn('representante_id', [5,20,25])
+            ->whereIn('representante_id', [5,20,25,21])
             ->orderBy('data_parcela')
             ->orderBy('representante_id')
             ->get();

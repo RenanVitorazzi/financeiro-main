@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 
+use function PHPSTORM_META\map;
+
 class TrocaChequeController extends Controller
 {
     public $feriados;
@@ -42,32 +44,34 @@ class TrocaChequeController extends Controller
             ->get();
 
         $cheques = DB::select('SELECT
-            par.id,
-            par.nome_cheque,
-            par.numero_cheque,
-            par.valor_parcela,
-            par.observacao,
-            par.status,
-            par.venda_id,
-            (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
-            IF(par.status = ?,
-                (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
-                par.data_parcela
-            ) as data_parcela,
-            p.nome
-        FROM
-            parcelas par
+                par.id,
+                par.nome_cheque,
+                par.numero_cheque,
+                par.valor_parcela,
+                par.observacao,
+                par.status,
+                par.venda_id,
+                (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
+                IF(par.status = ?,
+                    (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
+                    par.data_parcela
+                ) as data_parcela,
+                p.nome
+            FROM
+                parcelas par
+                    LEFT JOIN
+                representantes r ON r.id = par.representante_id
                 LEFT JOIN
-            representantes r ON r.id = par.representante_id
-            LEFT JOIN
-            pessoas p ON p.id = r.pessoa_id
-        WHERE
-            (par.status LIKE ? or par.status LIKE ?)
-                AND par.deleted_at IS NULL
-                AND par.forma_pagamento like ?
-                AND r.deleted_at IS NULL
-                AND parceiro_id IS NULL
-        ORDER BY data_parcela ASC, valor_parcela ASC', ['Adiado','Adiado', 'Aguardando', 'Cheque']);
+                pessoas p ON p.id = r.pessoa_id
+            WHERE
+                (par.status LIKE ? or par.status LIKE ?)
+                    AND par.deleted_at IS NULL
+                    AND par.forma_pagamento like ?
+                    AND r.deleted_at IS NULL
+                    AND parceiro_id IS NULL
+            ORDER BY data_parcela ASC, valor_parcela ASC', 
+            ['Adiado','Adiado', 'Aguardando', 'Cheque']
+        );
         // dd($cheques);
         return view('troca_cheque.create', compact('cheques', 'parceiros') );
     }
@@ -149,20 +153,115 @@ class TrocaChequeController extends Controller
     {
         $troca = Troca::findOrFail($id);
         $parceiros = Parceiro::with('pessoa')->get();
+        
+        $chequesCarteira = DB::select('SELECT
+                        par.id,
+                        par.nome_cheque,
+                        par.numero_cheque,
+                        par.valor_parcela,
+                        par.observacao,
+                        par.status,
+                        par.venda_id,
+                        (SELECT UPPER(p.nome) FROM pessoas p WHERE p.id = r.pessoa_id) AS nome_representante,
+                        IF(par.status = ?,
+                            (SELECT nova_data FROM adiamentos WHERE parcela_id = par.id ORDER BY id desc LIMIT 1),
+                            par.data_parcela
+                        ) as data_parcela,
+                        p.nome
+                    FROM
+                        parcelas par
+                            LEFT JOIN
+                        representantes r ON r.id = par.representante_id
+                            LEFT JOIN
+                        pessoas p ON p.id = r.pessoa_id
+                    WHERE
+                        (par.status LIKE ? or par.status LIKE ?)
+                            AND par.deleted_at IS NULL
+                            AND par.forma_pagamento like ?
+                            AND r.deleted_at IS NULL
+                            AND parceiro_id IS NULL
+                    ORDER BY data_parcela ASC, valor_parcela ASC', 
+                    ['Adiado','Adiado', 'Aguardando', 'Cheque']
+        );
 
-        return view('troca_cheque.edit', compact('troca', 'parceiros'));
+        $chequesTroca = Parcela::whereHas('troca', function($query) use ($id) {
+            $query->where('troca_id', '=', $id);
+        })->get();
+        
+        return view('troca_cheque.edit', compact('troca', 'parceiros', 'chequesCarteira', 'chequesTroca'));
     }
 
     public function update(EditTrocaChequeRequest $request, $id)
     {
-        $troca = Troca::findOrFail($id);
-        $arrayParceirosDescontamFeriado = [3, 4, 9];
+        // dd($request->cheque_troca_id);
+        DB::transaction(function() use ($request, $id) {
 
-        if  (($troca->data_troca !== $request->data_troca) || $troca->taxa_juros != $request->taxa_juros) {
+            $troca = Troca::findOrFail($id);
+            $arrayParceirosDescontamFeriado = [3, 4, 9];
+            $dataInicio = new DateTime($request->data_troca);
+            $porcetagem_padrao = $request->taxa_juros;
+            $taxa = $porcetagem_padrao / 100;
+
+            $arrayParcelaIdNaTroca = TrocaParcela::where('troca_id', $troca->id)
+                ->pluck('parcela_id')
+                ->toArray();
+            
+            //* CONFERIR SE TEVE ALGUMA ALTERAÇÃO NA ARRAY DE CHEQUES NA TROCA
+            if ($request->cheque_troca_id) {
+                $chequesRetiradosDaTroca = array_diff($arrayParcelaIdNaTroca, $request->cheque_troca_id);
+                Parcela::whereIn('id', $chequesRetiradosDaTroca)->update(['parceiro_id' => NULL]);
+                TrocaParcela::whereIn('parcela_id', $chequesRetiradosDaTroca)->update(['deleted_at' => now()]);
+            } else {
+                
+            }
+            
+            //* CONFERIR SE TEVE NOVO CHEQUE LANÇADO DA CARTEIRA
+            if ($request->cheque_carteira_id) {
+                $chequesAdicionadosNaTroca = Parcela::find($request->cheque_carteira_id);
+                foreach ($chequesAdicionadosNaTroca as $chequeAdicionado) {
+                    //* Se o cheque foi adiado, seleciona a nova data
+                    $dataDoCheque =  $chequeAdicionado->status == 'Adiado' ? $chequeAdicionado->adiamentos->nova_data : $chequeAdicionado->data_parcela;
+
+                    $dataFim = new DateTime($dataDoCheque);
+
+                    if ($request->parceiro_id == 9) {
+                        $dataFim->modify('+1 day');
+                    }
+                    
+                    if ( in_array($request->parceiro_id, $arrayParceirosDescontamFeriado) || !$request->parceiro_id ) {
+                        //* Confere se é sábado ou domingo ou se o próximo dia útil não é feriado
+                        while (in_array($dataFim->format('w'), [0, 6]) || !$this->feriados->where('data_feriado', $dataFim->format('Y-m-d'))->isEmpty()) {
+                            $dataFim->modify('+1 weekday');
+                        }
+                    }
+
+                    if ($dataFim <= $dataInicio) {
+                        $diferencaDias = 0;
+                    } else {
+                        $diferencaDias = $dataInicio->diff($dataFim)->days;
+                    }
+
+                    $juros = ( ($chequeAdicionado->valor_parcela * $taxa) / 30 ) * $diferencaDias;
+                    $valorLiquido = $chequeAdicionado->valor_parcela - $juros;
+
+                    TrocaParcela::create([
+                        'parcela_id' => $chequeAdicionado->id,
+                        'troca_id' => $troca->id,
+                        'dias' => $diferencaDias,
+                        'valor_liquido' => $valorLiquido,
+                        'valor_juros' => $juros
+                    ]);
+
+                    $chequeAdicionado->update([
+                        'parceiro_id' => $request->parceiro_id
+                    ]);
+                }
+            }
+
             $cheques = TrocaParcela::with('parcelas')
                 ->where('troca_id', $troca->id)
                 ->orderBy('dias')
-            ->get();
+                ->get();
 
             $totalJuros = 0;
             $totalLiquido = 0;
@@ -217,9 +316,8 @@ class TrocaChequeController extends Controller
                 'valor_juros' => $totalJuros,
             ]);
 
-        }
-
-        $troca->update($request->all());
+            $troca->update($request->all());
+        });
         return redirect()->route('troca_cheques.index');
     }
 

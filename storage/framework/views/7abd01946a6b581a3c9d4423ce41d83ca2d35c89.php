@@ -196,12 +196,6 @@
                   </a>
                 </li>
 
-                <li <?php if(route('relatorios') == Request::url()): ?> class="ativo" <?php endif; ?>>
-                  <a href="<?php echo e(route('relatorios')); ?>">
-                    <i class="fas fa-file"></i>
-                    <span>Relatórios</span>
-                  </a>
-                </li>
               </ul>
             </div>
           </li>

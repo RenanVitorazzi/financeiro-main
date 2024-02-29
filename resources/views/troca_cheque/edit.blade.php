@@ -50,6 +50,70 @@ Editar Troca
                     <x-input name="taxa_juros" type="number" value="{{ $troca->taxa_juros }}" max="100" step="0.01"></x-input>
                 </div>
 
+                <x-table id="tabelaChequesTroca">
+                    <x-table-header>
+                        <tr>
+                            <th colspan=6>Cheques Troca</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Data</th>
+                            <th>Titular</th>
+                            <th>Número</th>
+                            <th>Valor</th>
+                        </tr>
+                    </x-table-header>
+                    <tbody>
+                        @forelse  ($chequesTroca as $chequeTroca)
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="cheque_troca_id[]" value={{ $chequeTroca->id }} checked>
+                            </td>
+                            <td>@data($chequeTroca->data_parcela)</td>
+                            <td>{{ $chequeTroca->nome_cheque }}</td>
+                            <td>{{ $chequeTroca->numero_cheque }}</td>
+                            <td>@moeda($chequeTroca->valor_parcela)</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan=6>Nenhum registro</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </x-table>
+
+                <x-table id="tabelaChequesCarteira">
+                    <x-table-header>
+                        <tr>
+                            <th colspan=6>Cheques Carteira - Cheques que serão adicionados a troca</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Data</th>
+                            <th>Titular</th>
+                            <th>Número</th>
+                            <th>Valor</th>
+                        </tr>
+                    </x-table-header>
+                    <tbody>
+                        @forelse  ($chequesCarteira as $chequeCarteira)
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="cheque_carteira_id[]" value={{ $chequeCarteira->id }}>
+                            </td>
+                            <td>@data($chequeCarteira->data_parcela)</td>
+                            <td>{{ $chequeCarteira->nome_cheque }}</td>
+                            <td>{{ $chequeCarteira->numero_cheque }}</td>
+                            <td>@moeda($chequeCarteira->valor_parcela)</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan=6>Nenhum registro</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </x-table>
+
                 <div class="form-group col-12">
                     <label for="observacao">Observação</label>
                     <x-text-area name="observacao">{{ old('observacao') }}</x-text-area>

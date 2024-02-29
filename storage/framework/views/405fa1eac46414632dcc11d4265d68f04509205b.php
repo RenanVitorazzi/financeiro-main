@@ -90,6 +90,110 @@ Editar Troca
 <?php endif; ?>
                 </div>
 
+                <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
+<?php $component->withName('table'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['id' => 'tabelaChequesTroca']); ?>
+                    <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
+<?php $component->withName('table-header'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
+                        <tr>
+                            <th colspan=6>Cheques Troca</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Data</th>
+                            <th>Titular</th>
+                            <th>Número</th>
+                            <th>Valor</th>
+                        </tr>
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36)): ?>
+<?php $component = $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36; ?>
+<?php unset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36); ?>
+<?php endif; ?>
+                    <tbody>
+                        <?php $__empty_1 = true; $__currentLoopData = $chequesTroca; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chequeTroca): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="cheque_troca_id[]" value=<?php echo e($chequeTroca->id); ?> checked>
+                            </td>
+                            <td><?php echo date('d/m/Y', strtotime($chequeTroca->data_parcela)); ?></td>
+                            <td><?php echo e($chequeTroca->nome_cheque); ?></td>
+                            <td><?php echo e($chequeTroca->numero_cheque); ?></td>
+                            <td><?php echo 'R$ ' . number_format($chequeTroca->valor_parcela, 2, ',', '.'); ?></td>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <tr>
+                            <td colspan=6>Nenhum registro</td>
+                        </tr>
+                        <?php endif; ?>
+                    </tbody>
+                 <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6)): ?>
+<?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
+<?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
+<?php endif; ?>
+
+                <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
+<?php $component->withName('table'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes(['id' => 'tabelaChequesCarteira']); ?>
+                    <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
+<?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
+<?php $component->withName('table-header'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php $component->withAttributes([]); ?>
+                        <tr>
+                            <th colspan=6>Cheques Carteira - Cheques que serão adicionados a troca</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Data</th>
+                            <th>Titular</th>
+                            <th>Número</th>
+                            <th>Valor</th>
+                        </tr>
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36)): ?>
+<?php $component = $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36; ?>
+<?php unset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36); ?>
+<?php endif; ?>
+                    <tbody>
+                        <?php $__empty_1 = true; $__currentLoopData = $chequesCarteira; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chequeCarteira): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="cheque_carteira_id[]" value=<?php echo e($chequeCarteira->id); ?>>
+                            </td>
+                            <td><?php echo date('d/m/Y', strtotime($chequeCarteira->data_parcela)); ?></td>
+                            <td><?php echo e($chequeCarteira->nome_cheque); ?></td>
+                            <td><?php echo e($chequeCarteira->numero_cheque); ?></td>
+                            <td><?php echo 'R$ ' . number_format($chequeCarteira->valor_parcela, 2, ',', '.'); ?></td>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <tr>
+                            <td colspan=6>Nenhum registro</td>
+                        </tr>
+                        <?php endif; ?>
+                    </tbody>
+                 <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6)): ?>
+<?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
+<?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
+<?php endif; ?>
+
                 <div class="form-group col-12">
                     <label for="observacao">Observação</label>
                     <?php if (isset($component)) { $__componentOriginal3d2c91b5536e3d54aed1822705c324a24f801405 = $component; } ?>
