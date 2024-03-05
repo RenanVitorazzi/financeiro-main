@@ -7,6 +7,9 @@
     <title>Relação de cheques empresa <?php echo e($representante->pessoa->nome); ?></title>
 </head>
 <style>
+    * {
+        margin: 5 10 0 5;
+    }
     table {
         width:100%;
         border-collapse: collapse;
@@ -34,6 +37,7 @@
 </style>
 <body>
     <h3>CHEQUES DEVOLVIDOS NO ESCRITÓRIO - <?php echo e($representante->pessoa->nome); ?> <?php echo date('d/m/Y', strtotime($hoje)); ?></h3>
+    <br>
     <table>
         <thead>
             <tr>
@@ -51,11 +55,11 @@
                 <tr>
                     <td><?php echo date('d/m/Y', strtotime($cheque->data_parcela)); ?></td>
                     <td class='titular'><?php echo e($cheque->nome_cheque); ?> </td>
-                    <td><?php echo e($cheque->numero_cheque); ?></td>
+                    <td><?php echo e(substr($cheque->numero_cheque, 0, 25)); ?></td>
                     <td><?php echo 'R$ ' . number_format($cheque->valor_parcela, 2, ',', '.'); ?></td>
                     <td>
                         <?php $__empty_2 = true; $__currentLoopData = $cheque->pagamentos_representantes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pagamentos): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_2 = false; ?>
-                            <p><?php echo date('d/m/Y', strtotime($pagamentos->data)); ?> - <?php echo 'R$ ' . number_format($pagamentos->valor, 2, ',', '.'); ?> <?php echo e($pagamentos->confirmado == 1 ? '' : '(Não confirmado)'); ?></p>
+                            <p><?php echo date('d/m/Y', strtotime($pagamentos->data)); ?> - <?php echo 'R$ ' . number_format($pagamentos->valor, 2, ',', '.'); ?> - <?php echo e($pagamentos->forma_pagamento); ?> <?php echo e($pagamentos->conta->nome ?? ''); ?> <?php echo e($pagamentos->confirmado == 1 ? '' : '(Não confirmado)'); ?></p>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_2): ?>
                         <?php endif; ?>
                     </td>

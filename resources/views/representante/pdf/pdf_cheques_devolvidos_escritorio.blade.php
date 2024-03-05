@@ -34,6 +34,7 @@
 </style>
 <body>
     <h3>CHEQUES DEVOLVIDOS NO ESCRITÓRIO - {{$representante->pessoa->nome}} @data($hoje)</h3>
+    <br>
     <table>
         <thead>
             <tr>
@@ -51,11 +52,11 @@
                 <tr>
                     <td>@data($cheque->data_parcela)</td>
                     <td class='titular'>{{$cheque->nome_cheque}} </td>
-                    <td>{{ $cheque->numero_cheque }}</td>
+                    <td>{{ substr($cheque->numero_cheque, 0, 25) }}</td>
                     <td>@moeda($cheque->valor_parcela)</td>
                     <td>
                         @forelse ($cheque->pagamentos_representantes as $pagamentos)
-                            <p>@data($pagamentos->data) - @moeda($pagamentos->valor) {{ $pagamentos->confirmado == 1 ? '' : '(Não confirmado)'}}</p>
+                            <p>@data($pagamentos->data) - @moeda($pagamentos->valor) - {{ $pagamentos->forma_pagamento }} {{ $pagamentos->conta->nome ?? '' }} {{ $pagamentos->confirmado == 1 ? '' : '(Não confirmado)'}}</p>
                         @empty
                         @endforelse
                     </td>
