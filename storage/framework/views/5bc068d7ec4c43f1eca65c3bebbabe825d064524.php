@@ -17,52 +17,54 @@ Editar recebimento
     <div class="card mb-2">
         <div class="card-body">
             <h5 class="card-title">Editar pagamento</h5>
-            <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
+            <?php if($pagamentosRepresentantes->parcela()->exists()): ?>
+                <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
 <?php $component->withName('table'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
-                <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
+                    <?php if (isset($component)) { $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\TableHeader::class, []); ?>
 <?php $component->withName('table-header'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
-                    <tr>
-                        <th colspan=6>Informações do cheque</th>
-                    </tr>
-                    <tr>
-                        <th>Nome titular</th>
-                        <th>Data</th>
-                        <th>Valor</th>
-                        <th>Representante</th>
-                        <th>Parceiro</th>
-                        <th>Status</th>
-                    </tr>
-                 <?php echo $__env->renderComponent(); ?>
+                        <tr>
+                            <th colspan=6>Informações do cheque</th>
+                        </tr>
+                        <tr>
+                            <th>Nome titular</th>
+                            <th>Data</th>
+                            <th>Valor</th>
+                            <th>Representante</th>
+                            <th>Parceiro</th>
+                            <th>Status</th>
+                        </tr>
+                     <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36)): ?>
 <?php $component = $__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36; ?>
 <?php unset($__componentOriginalc30ad8c2a191ad4361a1cb232afac54beb39ce36); ?>
 <?php endif; ?> 
-                <tbody>
-                    <tr>
-                        <td><?php echo e($pagamentosRepresentantes->parcela->nome_cheque ?? $pagamentosRepresentantes->parcela->venda->cliente->pessoa->nome); ?></td>
-                        <td><?php echo date('d/m/Y', strtotime($pagamentosRepresentantes->parcela->data_parcela)); ?></td>
-                        <td><?php echo 'R$ ' . number_format($pagamentosRepresentantes->parcela->valor_parcela, 2, ',', '.'); ?></td>
-                        <td><?php echo e($pagamentosRepresentantes->parcela->representante->pessoa->nome); ?></td>
-                        <td><?php echo e($pagamentosRepresentantes->parcela->parceiro->pessoa->nome ?? 'Carteira'); ?></td>
-                        <td><?php echo e($pagamentosRepresentantes->parcela->status); ?></td>
-                    </tr>
-                </tbody>
-             <?php echo $__env->renderComponent(); ?>
+                    <tbody>
+                        <tr>
+                            <td><?php echo e($pagamentosRepresentantes->parcela->nome_cheque ?? $pagamentosRepresentantes->parcela->venda->cliente->pessoa->nome); ?></td>
+                            <td><?php echo date('d/m/Y', strtotime($pagamentosRepresentantes->parcela->data_parcela)); ?></td>
+                            <td><?php echo 'R$ ' . number_format($pagamentosRepresentantes->parcela->valor_parcela, 2, ',', '.'); ?></td>
+                            <td><?php echo e($pagamentosRepresentantes->parcela->representante->pessoa->nome); ?></td>
+                            <td><?php echo e($pagamentosRepresentantes->parcela->parceiro->pessoa->nome ?? 'Carteira'); ?></td>
+                            <td><?php echo e($pagamentosRepresentantes->parcela->status); ?></td>
+                        </tr>
+                    </tbody>
+                 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6)): ?>
 <?php $component = $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6; ?>
 <?php unset($__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6); ?>
 <?php endif; ?>
-            <?php if(!$outrosPagamentos->isEmpty()): ?>
+            <?php endif; ?>
+            <?php if(!$outrosPagamentos->isEmpty() && $pagamentosRepresentantes->parcela()->exists()): ?>
                 <?php if (isset($component)) { $__componentOriginale53a9d2e6d6c51019138cc2fcd3ba8ac893391c6 = $component; } ?>
 <?php $component = $__env->getContainer()->make(App\View\Components\Table::class, []); ?>
 <?php $component->withName('table'); ?>
@@ -94,7 +96,7 @@ Editar recebimento
                             <tr>
                                 <td><?php echo date('d/m/Y', strtotime($outroPagamento->data)); ?></td>
                                 <td><?php echo 'R$ ' . number_format($outroPagamento->valor, 2, ',', '.'); ?></td>
-                                <td><?php echo e($outroPagamento->conta->nome); ?></td>
+                                <td><?php echo e($outroPagamento->conta->nome ?? ''); ?></td>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>

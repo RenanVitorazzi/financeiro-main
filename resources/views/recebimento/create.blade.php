@@ -101,15 +101,15 @@ Adicionar recebimento
             <p></p>
             <div class="row">
                 <div class="col-4">
-                    <x-form-group type="date" name="data" value="{{ old('data', $data) ?? date('Y-m-d') }}">Data</x-form-group>
+                    <x-form-group type="date" class="changeListeners" name="data" value="{{ old('data', $data) ?? date('Y-m-d') }}">Data</x-form-group>
                 </div>
                 <div class="col-4">
-                    <x-form-group name="valor" value="{{ old('valor', $valor) }}">Valor</x-form-group>
+                    <x-form-group name="valor" class="changeListeners" value="{{ old('valor', $valor) }}">Valor</x-form-group>
                 </div>
 
                 <div class="col-4 form-group">
                     <label for="conta_id">Conta</label>
-                    <x-select name="conta_id">
+                    <x-select name="conta_id" class="changeListeners">
                         <option></option>
                         @foreach($contas as $conta)
                             <option value={{ $conta->id }} {{ old('conta_id', $contaImportacao) == $conta->id ? 'selected' : '' }}>{{ $conta->nome }}</option>
@@ -179,257 +179,340 @@ Adicionar recebimento
 @endsection
 @section('script')
 <script>
-    $("#modal-body2").html(`
-        <form id="form_procura_cheque" method="POST" action="{{ route('consulta_parcela_pagamento') }}">
-            @csrf
+    $(document).ready( function () {
+        $("#modal-body2").html(`
+            <form id="form_procura_cheque" method="POST" action="{{ route('consulta_parcela_pagamento') }}">
+                @csrf
 
-            <div class="row">
-                <div class="col-3 form-group">
-                    <x-select name="tipo_select" type="number" value="{{ old('tipo_select') }}">
-                        <option value="valor_parcela">Valor</option>
-                        <option value="numero_cheque">Número</option>
-                        <option value="nome_cheque">Titular</option>
-                        <option value="data_parcela">Data</option>
-                        <option value="representante_id">Representante</option>
-                        <option value="status">Status</option>
-                    </x-select>
+                <div class="row">
+                    <div class="col-3 form-group">
+                        <x-select name="tipo_select" type="number" value="{{ old('tipo_select') }}">
+                            <option value="valor_parcela">Valor</option>
+                            <option value="numero_cheque">Número</option>
+                            <option value="nome_cheque">Titular</option>
+                            <option value="data_parcela">Data</option>
+                            <option value="representante_id">Representante</option>
+                            <option value="status">Status</option>
+                        </x-select>
+                    </div>
+
+                    <div class="col-7 form-group">
+                        <x-input name="texto_pesquisa"></x-input>
+                    </div>
+                    <div class="col-2 form-group">
+                        <input type="submit" class='btn btn-dark'>
+                    </div>
                 </div>
 
-                <div class="col-7 form-group">
-                    <x-input name="texto_pesquisa"></x-input>
-                </div>
-                <div class="col-2 form-group">
-                    <input type="submit" class='btn btn-dark'>
-                </div>
-            </div>
+            </form>
+            <div id="table_div"></div>
+        `)
 
-        </form>
-        <div id="table_div"></div>
-    `)
+        $("#form_procura_cheque").submit( (e) => {
 
-    $("#form_procura_cheque").submit( (e) => {
+            e.preventDefault()
+            let dataForm = $(e.target).serialize()
 
-        e.preventDefault()
-        let dataForm = $(e.target).serialize()
+            $.ajax({
+                type: 'GET',
+                url: e.target.action,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: dataForm,
+                dataType: 'json',
+                beforeSend: () => {
+                    Swal.showLoading()
+                },
+                success: (response) => {
+                    let tableBody = ''
+                    if (response.length > 0) {
 
-        $.ajax({
-            type: 'GET',
-            url: e.target.action,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: dataForm,
-            dataType: 'json',
-            beforeSend: () => {
-                Swal.showLoading()
-            },
-            success: (response) => {
-                let tableBody = ''
-                if (response.length > 0) {
+                        response.forEach(element => {
 
-                    response.forEach(element => {
+                            let nome = element.nome_cheque ?? element.venda.cliente.pessoa.nome
+                            let representante = ''
+                            let parceiro = 'Carteira'
 
-                        let nome = element.nome_cheque ?? element.venda.cliente.pessoa.nome
-                        let representante = ''
-                        let parceiro = 'Carteira'
+                            if (element.representante_id) {
+                                representante = element.representante.pessoa.nome
+                            }
 
-                        if (element.representante_id) {
-                            representante = element.representante.pessoa.nome
-                        }
+                            if (element.parceiro_id) {
+                                parceiro = element.parceiro.pessoa.nome
+                            }
 
-                        if (element.parceiro_id) {
-                            parceiro = element.parceiro.pessoa.nome
-                        }
+                            tableBody += `
+                                <tr>
+                                    <td>${nome}</td>
+                                    <td>${transformaData(element.data_parcela)}</td>
+                                    <td>${moeda.format(element.valor_parcela)}</td>
+                                    <td>${representante}</td>
+                                    <td>${parceiro}</td>
+                                    <td>${element.forma_pagamento} ${element.numero_cheque}</td>
+                                    <td>
+                                        <div class="btn btn-dark btn-selecionar-cheque"
+                                            data-id="${element.id}"
+                                            data-dia="${element.data_parcela}"
+                                            data-valor="${element.valor_parcela}"
+                                            data-nome="${nome}"
+                                            data-parceiro_id="${element.parceiro_id}"
+                                            data-representante_id="${element.representante_id}"
+                                        > Selecionar </div>
+                                    </td>
+                                </tr>
+                            `
+                        })
 
+                    } else {
                         tableBody += `
                             <tr>
-                                <td>${nome}</td>
-                                <td>${transformaData(element.data_parcela)}</td>
-                                <td>${moeda.format(element.valor_parcela)}</td>
-                                <td>${representante}</td>
-                                <td>${parceiro}</td>
-                                <td>${element.forma_pagamento} ${element.numero_cheque}</td>
-                                <td>
-                                    <div class="btn btn-dark btn-selecionar-cheque"
-                                        data-id="${element.id}"
-                                        data-dia="${element.data_parcela}"
-                                        data-valor="${element.valor_parcela}"
-                                        data-nome="${nome}"
-                                        data-parceiro_id="${element.parceiro_id}"
-                                        data-representante_id="${element.representante_id}"
-                                    > Selecionar </div>
-                                </td>
+                                <td colspan=7>Nenhum resultado</td>
                             </tr>
                         `
+                    }
+
+                    $(".modal-body > #table_div").html(`
+                        <x-table>
+                            <x-table-header>
+                                <tr>
+                                    <th colspan=10>Número total de resultado: ${response.length}</th>
+                                </tr>
+                                <tr>
+                                    <th>Titular</th>
+                                    <th>Data</th>
+                                    <th>Valor</th>
+                                    <th>Representante</th>
+                                    <th>Parceiro</th>
+                                    <th>Pgto</th>
+                                    <th><i class="fas fa-check"></i></th>
+                                </tr>
+                            </x-table-header>
+                            <tbody>
+                                ${tableBody}
+                            </tbody>
+                        </x-table>
+                    `)
+
+                    $(".btn-selecionar-cheque").each( (index, element) => {
+                        $(element).click( (e) => {
+                            $("#nome_parcela").val($(e.target).data('nome'))
+                            $("#valor_parcela").val($(e.target).data('valor'))
+
+                            $("#data_parcela").val($(e.target).data('dia'))
+                            $("#parcela_id").val($(e.target).data('id'))
+                            $("#representante_id").val($(e.target).data('representante_id'))
+                            $("#parceiro_id").val($(e.target).data('parceiro_id'))
+
+                            if (!$("#valor").val()) {
+                                $("#valor").val($(e.target).data('valor'))
+                            }
+
+                            $("#modal2").modal("hide")
+
+                            let pagamentos = procurarPagamentos($(e.target).data('id'))
+                        })
+
                     })
 
-                } else {
-                    tableBody += `
-                        <tr>
-                            <td colspan=7>Nenhum resultado</td>
-                        </tr>
-                    `
+                    Swal.close()
+
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    console.error(jqXHR)
+                    console.error(textStatus)
+                    console.error(errorThrown)
                 }
+            });
 
-                $(".modal-body > #table_div").html(`
-                    <x-table>
-                        <x-table-header>
+        })
+
+        $('.informar_parcela').click( () => {
+            $("#modal2").modal('show')
+            $("#modal-header2").text(`Procurar Cheque`)
+
+        })
+
+        function procurarPagamentos(parcela_id) {
+            let tableBodyPagamentos = '';
+            let totalPago = 0;
+
+            $.ajax({
+                type: 'GET',
+                url: '/procurar_pagamento',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    'parcela_id': parcela_id
+                },
+                dataType: 'json',
+                beforeSend: () => {
+                    Swal.showLoading()
+                },
+                success: (response) => {
+
+                    response.forEach(element => {
+                        let valorTratado = parseFloat(element.valor)
+
+                        tableBodyPagamentos += `
+                            <tr class = ${element.confirmado ? '' : 'table-danger'}>
+                                <td>${transformaData(element.data)}</td>
+                                <td>${moeda.format(valorTratado)}</td>
+                                <td>${element.conta.nome}</td>
+                                <td>${element.forma_pagamento}</td>
+                                <td>${element.confirmado ? 'Sim' : 'Não'}</td>
                             <tr>
-                                <th colspan=10>Número total de resultado: ${response.length}</th>
-                            </tr>
-                            <tr>
-                                <th>Titular</th>
-                                <th>Data</th>
-                                <th>Valor</th>
-                                <th>Representante</th>
-                                <th>Parceiro</th>
-                                <th>Pgto</th>
-                                <th><i class="fas fa-check"></i></th>
-                            </tr>
-                        </x-table-header>
-                        <tbody>
-                            ${tableBody}
-                        </tbody>
-                    </x-table>
-                `)
-
-                $(".btn-selecionar-cheque").each( (index, element) => {
-                    $(element).click( (e) => {
-                        $("#nome_parcela").val($(e.target).data('nome'))
-                        $("#valor_parcela").val($(e.target).data('valor'))
-
-                        $("#data_parcela").val($(e.target).data('dia'))
-                        $("#parcela_id").val($(e.target).data('id'))
-                        $("#representante_id").val($(e.target).data('representante_id'))
-                        $("#parceiro_id").val($(e.target).data('parceiro_id'))
-
-                        if (!$("#valor").val()) {
-                            $("#valor").val($(e.target).data('valor'))
-                        }
-
-                        $("#modal2").modal("hide")
-
-                        let pagamentos = procurarPagamentos($(e.target).data('id'))
+                        `
+                        totalPago += valorTratado;
                     })
 
-                })
+                    $("#pagamentosParcela").html(`
+                        <x-table>
+                            <x-table-header>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Conta</th>
+                                    <th>Forma do Pagamento</th>
+                                    <th>Valor</th>
+                                    <th>Confirmado?</th>
+                                </tr>
+                            </x-table-header>
+                            <tbody>
+                                ${tableBodyPagamentos}
+                            </tbody>
+                            <t-foot>
+                                <tr>
+                                    <td colspan=3>Total pago</td>
+                                    <td colspan=2>${moeda.format(totalPago)}</td>
+                                </tr>
+                            </t-foot>
+                        </x-table>
+                    `)
 
-                Swal.close()
+                    Swal.close()
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    console.error(jqXHR)
+                    console.error(textStatus)
+                    console.error(errorThrown)
+                }
+            });
+        }
 
-            },
-            error: (jqXHR, textStatus, errorThrown) => {
-                console.error(jqXHR)
-                console.error(textStatus)
-                console.error(errorThrown)
-            }
+        let moeda = Intl.NumberFormat('en-GB', {
+            style: 'currency',
+            currency: 'BRL',
         });
 
-    })
+        function transformaData (data) {
+            var parts = data.split("-");
+            return parts[2]+'/'+parts[1]+'/'+parts[0];
+        }
 
-    $('.informar_parcela').click( () => {
-        $("#modal2").modal('show')
-        $("#modal-header2").text(`Procurar Cheque`)
-
-    })
-
-    function procurarPagamentos(parcela_id) {
-        let tableBodyPagamentos = '';
-        let totalPago = 0;
-
-        $.ajax({
-            type: 'GET',
-            url: '/procurar_pagamento',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: {
-                'parcela_id': parcela_id
-            },
-            dataType: 'json',
-            beforeSend: () => {
-                Swal.showLoading()
-            },
-            success: (response) => {
-
-                response.forEach(element => {
-                    let valorTratado = parseFloat(element.valor)
-
-                    tableBodyPagamentos += `
-                        <tr class = ${element.confirmado ? '' : 'table-danger'}>
-                            <td>${transformaData(element.data)}</td>
-                            <td>${moeda.format(valorTratado)}</td>
-                            <td>${element.conta.nome}</td>
-                            <td>${element.forma_pagamento}</td>
-                            <td>${element.confirmado ? 'Sim' : 'Não'}</td>
-                        <tr>
-                    `
-                    totalPago += valorTratado;
-                })
-
-                $("#pagamentosParcela").html(`
-                    <x-table>
-                        <x-table-header>
-                            <tr>
-                                <th>Data</th>
-                                <th>Conta</th>
-                                <th>Forma do Pagamento</th>
-                                <th>Valor</th>
-                                <th>Confirmado?</th>
-                            </tr>
-                        </x-table-header>
-                        <tbody>
-                            ${tableBodyPagamentos}
-                        </tbody>
-                        <t-foot>
-                            <tr>
-                                <td colspan=3>Total pago</td>
-                                <td colspan=2>${moeda.format(totalPago)}</td>
-                            </tr>
-                        </t-foot>
-                    </x-table>
-                `)
-
-                Swal.close()
-            },
-            error: (jqXHR, textStatus, errorThrown) => {
-                console.error(jqXHR)
-                console.error(textStatus)
-                console.error(errorThrown)
+        function carteiraOuParceiro (id, nome) {
+            if (id === null) {
+                return 'CARTEIRA'
             }
-        });
-    }
 
-    let moeda = Intl.NumberFormat('en-GB', {
-        style: 'currency',
-        currency: 'BRL',
-    });
-
-    function transformaData (data) {
-        var parts = data.split("-");
-        return parts[2]+'/'+parts[1]+'/'+parts[0];
-    }
-
-    function carteiraOuParceiro (id, nome) {
-        if (id === null) {
-            return 'CARTEIRA'
+            return nome
         }
 
-        return nome
-    }
-
-    function tratarNulo (valor) {
-        if (valor === null) {
-            return '';
+        function tratarNulo (valor) {
+            if (valor === null) {
+                return '';
+            }
+            return valor
         }
-        return valor
-    }
 
-    $("#tipo_pagamento").change( (e) => {
-        let valor = $(e.target).val()
-        if (valor === 2) {
-            $("#parceiro_id").fadeIn();
+        $("#tipo_pagamento").change( (e) => {
+            let valor = $(e.target).val()
+            if (valor === 2) {
+                $("#parceiro_id").fadeIn();
+            }
+            console.log($(e.target).val());
+        })
+
+        $(".changeListeners").change( (e) => {
+            let data = $("#data").val()
+            let valor = $("#valor").val()
+            let conta_id = $("#conta_id").val()
+
+            if (!data || !valor || !conta_id) {
+                return;
+            }
+            
+            procurarRecebimentos(data, valor, conta_id)
+        })
+
+        function procurarRecebimentos(dataProcura, valorProcura, contaIdProcura) {
+            let card = ``
+            
+            $.ajax({
+                type: 'GET',
+                url: '/procurarRecebimento',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    valor: valorProcura,
+                    data: dataProcura,
+                    conta_id: contaIdProcura,
+                    confirmado: 2
+                },
+                dataType: 'json',
+                beforeSend: () => {
+                    Swal.showLoading()
+                },
+                success: (response) => {
+                    console.log(response)
+                    if (response.length !== 0) {
+                        
+                        response.forEach(element => {
+                            let conta = (element.conta) ? element.conta.nome : 'Não informada'
+                            let confirmado = (element.confirmado == 1) ? 'Sim' : 'Não'
+                            let data = transformarData(element.data)
+                            card += `
+                                <br> 
+                                <card class='card text-left'>
+                                    <div class='row'>
+                                        <div class='col-6'>Data: ${data}</div>
+                                        <div class='col-6'>Valor: ${element.valor}</div>
+                                        <div class='col-6'>Conta: ${element.conta.nome}</div>
+                                        <div class='col-6'>Representante: ${element.representante.pessoa.nome}</div>
+                                        <div class='col-6'>Confirmado: ${confirmado}</div>
+                                        <div class='col-6'>Forma de pgto: ${element.forma_pagamento}</div>
+                                        <div class='col-6'>Ref: ${element.parcela_id}</div>
+                                    </div>
+                                </card>
+                                 
+                            `
+                        });
+                    
+                      
+                        swal.fire({
+                            'title': 'Atenção!',
+                            'icon': 'warning',
+                            'html': `Existe pelo menos um pagamento semelhante no sistema ...
+                            <br>
+                            ${card}
+                            `
+                        })
+                    } else {
+                        swal.close()
+                    }
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    console.error(jqXHR)
+                    console.error(textStatus)
+                    console.error(errorThrown)
+                }
+            });
         }
-        console.log($(e.target).val());
-    })
+        function transformarData (data) {
+            var parts = data.split("-");
+            return parts[2]+'/'+parts[1]+'/'+parts[0];
+        }
+    } );
 </script>
 @endsection

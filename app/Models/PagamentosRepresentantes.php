@@ -28,6 +28,10 @@ class PagamentosRepresentantes extends Model
         return $this->belongsTo(Representante::class);
     }
 
+    public function pessoa() {
+        return $this->belongsTo(Representante::class);
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {

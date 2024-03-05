@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProcurarRecebimentoRequest;
 use App\Http\Requests\RecebimentosApiRequestStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -26,12 +27,15 @@ class RecebimentosController extends Controller
      */
     public function index()
     {
+        $representantes = Representante::all();
+        $contas = Conta::all();
+
         $pgtoRepresentante = PagamentosRepresentantes::with('parcela')
             ->orderBy('id', 'desc')
             ->take(25)
             ->get();
 
-        return view('recebimento.index', compact('pgtoRepresentante'));
+        return view('recebimento.index', compact('pgtoRepresentante', 'representantes', 'contas'));
     }
 
     /**
@@ -166,10 +170,13 @@ class RecebimentosController extends Controller
         $representantes = Representante::all();
         $pagamentosRepresentantes = PagamentosRepresentantes::findOrFail($request);
         $formasPagamento = ['Pix', 'TED', 'Depósito', 'DOC', 'Dinheiro', 'Cheque'];
-        $outrosPagamentos =  PagamentosRepresentantes::where('parcela_id', $pagamentosRepresentantes->parcela_id)
-            ->where('id', '<>', $pagamentosRepresentantes->id)
+        $outrosPagamentos =  PagamentosRepresentantes::where([
+            ['parcela_id', $pagamentosRepresentantes->parcela_id], 
+            ['representante_id', $pagamentosRepresentantes->representante_id]
+        ])    
+            // ->where('id', '=', $pagamentosRepresentantes->id)
             ->get();
-
+        // dd($pagamentosRepresentantes);
         return view('recebimento.edit', compact('pagamentosRepresentantes', 'contas', 'parceiros', 'representantes', 'formasPagamento', 'outrosPagamentos'));
     }
 
@@ -323,6 +330,36 @@ class RecebimentosController extends Controller
             'data' => [], 
             'message' => 'Dados atualizados!'
         ], 200);
+    }
+
+    public function procurarRecebimento(ProcurarRecebimentoRequest $request)
+    {
+        // return json_encode($request->confirmado);
+        $recebimentos = PagamentosRepresentantes::with('representante', 'representante.pessoa', 'conta');
+            
+        if ($request->valor) {
+            $recebimentos = $recebimentos->where('valor', $request->valor);
+        }
+
+        if ($request->data) {
+            $recebimentos = $recebimentos->whereDate('data', $request->data);
+        }
+
+        if ($request->representante_id) {
+            $recebimentos = $recebimentos->where('representante_id', $request->representante_id);
+        }
+
+        if ($request->conta_id) {
+            $recebimentos = $recebimentos->where('conta_id', $request->conta_id);
+        }
+
+        if (in_array($request->confirmado, [0, 1])) {
+            $recebimentos = $recebimentos->where('confirmado', $request->confirmado);
+        }
+
+        // return json_encode([$recebimentos->dd()]); 
+        return $recebimentos->orderBy('data')->take(50)->get()->toJson();
+
     }
     
 }

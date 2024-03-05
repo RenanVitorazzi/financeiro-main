@@ -18,32 +18,34 @@ Editar recebimento
     <div class="card mb-2">
         <div class="card-body">
             <h5 class="card-title">Editar pagamento</h5>
-            <x-table>
-                <x-table-header>
-                    <tr>
-                        <th colspan=6>Informações do cheque</th>
-                    </tr>
-                    <tr>
-                        <th>Nome titular</th>
-                        <th>Data</th>
-                        <th>Valor</th>
-                        <th>Representante</th>
-                        <th>Parceiro</th>
-                        <th>Status</th>
-                    </tr>
-                </x-table-header> 
-                <tbody>
-                    <tr>
-                        <td>{{ $pagamentosRepresentantes->parcela->nome_cheque ?? $pagamentosRepresentantes->parcela->venda->cliente->pessoa->nome}}</td>
-                        <td>@data($pagamentosRepresentantes->parcela->data_parcela)</td>
-                        <td>@moeda($pagamentosRepresentantes->parcela->valor_parcela)</td>
-                        <td>{{ $pagamentosRepresentantes->parcela->representante->pessoa->nome }}</td>
-                        <td>{{ $pagamentosRepresentantes->parcela->parceiro->pessoa->nome ?? 'Carteira'}}</td>
-                        <td>{{ $pagamentosRepresentantes->parcela->status }}</td>
-                    </tr>
-                </tbody>
-            </x-table>
-            @if (!$outrosPagamentos->isEmpty())
+            @if ($pagamentosRepresentantes->parcela()->exists())
+                <x-table>
+                    <x-table-header>
+                        <tr>
+                            <th colspan=6>Informações do cheque</th>
+                        </tr>
+                        <tr>
+                            <th>Nome titular</th>
+                            <th>Data</th>
+                            <th>Valor</th>
+                            <th>Representante</th>
+                            <th>Parceiro</th>
+                            <th>Status</th>
+                        </tr>
+                    </x-table-header> 
+                    <tbody>
+                        <tr>
+                            <td>{{ $pagamentosRepresentantes->parcela->nome_cheque ?? $pagamentosRepresentantes->parcela->venda->cliente->pessoa->nome}}</td>
+                            <td>@data($pagamentosRepresentantes->parcela->data_parcela)</td>
+                            <td>@moeda($pagamentosRepresentantes->parcela->valor_parcela)</td>
+                            <td>{{ $pagamentosRepresentantes->parcela->representante->pessoa->nome }}</td>
+                            <td>{{ $pagamentosRepresentantes->parcela->parceiro->pessoa->nome ?? 'Carteira'}}</td>
+                            <td>{{ $pagamentosRepresentantes->parcela->status }}</td>
+                        </tr>
+                    </tbody>
+                </x-table>
+            @endif
+            @if (!$outrosPagamentos->isEmpty() && $pagamentosRepresentantes->parcela()->exists())
                 <x-table>
                     <x-table-header>
                         <tr>
@@ -60,7 +62,7 @@ Editar recebimento
                             <tr>
                                 <td>@data($outroPagamento->data)</td>
                                 <td>@moeda($outroPagamento->valor)</td>
-                                <td>{{ $outroPagamento->conta->nome }}</td>
+                                <td>{{ $outroPagamento->conta->nome ?? ''}}</td>
                             </tr>
                         @endforeach
                     </tbody>

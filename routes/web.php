@@ -166,6 +166,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('consulta_parcela_pagamento', [ChequeController::class, 'consulta_parcela_pagamento'])->name('consulta_parcela_pagamento');
         
         Route::get('procurarCliente', [ClienteController::class, 'procurarCliente'])->name('procurarCliente');
+        Route::get('procurarRecebimento', [RecebimentosController::class, 'procurarRecebimento'])->name('procurarRecebimento');
         Route::get('titularDoUltimoCheque', [ChequeController::class, 'titularDoUltimoCheque'])->name('titularDoUltimoCheque');
         Route::get('troca_automatizada', [TrocaChequeController::class, 'troca_automatizada'])->name('troca_automatizada');
         
